@@ -62,8 +62,8 @@ namespace steamdirectoryfinder
 
             public DoubleWriter(TextWriter one, TextWriter two)
             {
-                this._one = one;
-                this._two = two;
+                _one = one;
+                _two = two;
             }
 
             public override Encoding Encoding

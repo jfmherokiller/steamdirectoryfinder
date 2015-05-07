@@ -1,7 +1,7 @@
-﻿using Microsoft.Win32;
-using System;
+﻿using System;
 using System.IO;
 using System.Runtime.InteropServices;
+using Microsoft.Win32;
 
 /*
  Steamworks and NativeWrapper classes provided by Rick - http://gib.me/
@@ -29,13 +29,13 @@ namespace Steam4Net
 
             try
             {
-                installPath = (string)Registry.GetValue(
-                    @"HKEY_LOCAL_MACHINE\Software\Valve\Steam",
-                    "InstallPath",
-                    null);
+                var myKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32);
+
+                installPath = myKey.OpenSubKey(@"Software\Valve\Steam",false).GetValue("InstallPath").ToString();
             }
             catch
             {
+                installPath = "";
             }
 
             return installPath;

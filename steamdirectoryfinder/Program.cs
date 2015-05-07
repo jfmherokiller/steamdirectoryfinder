@@ -1,10 +1,10 @@
-﻿using Microsoft.Win32;
-using steamdirectoryfinder.Properties;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using Microsoft.Win32;
+using steamdirectoryfinder.Properties;
 
 namespace steamdirectoryfinder
 {
@@ -68,6 +68,7 @@ namespace steamdirectoryfinder
         [STAThread]
         public static void Main(string[] args)
         {
+            AppDomain.CurrentDomain.ProcessExit += new EventHandler(Shutdown); 
             using (new ConsoleCopy("mylogfile.txt"))
             {
                 Perfominitializations();
@@ -88,7 +89,7 @@ namespace steamdirectoryfinder
                 else if (args[0].ToLower().Contains("-client"))
                 {
                     Client();
-                    Shutdown();
+                    Shutdown(null,null);
                 }
                 else if (args[0].ToLower().Contains("-server"))
                 {
@@ -130,7 +131,7 @@ namespace steamdirectoryfinder
 
                 }
             }
-            Shutdown();
+            Shutdown(null,null);
         }
 
         private static void Perfominitializations()
@@ -151,7 +152,9 @@ namespace steamdirectoryfinder
                 }
             };
             task.Start();
+            
             task.WaitForExit();
+            task.Close();
         }
         public static void Performtasks(string prog, string ass)
         {
@@ -171,6 +174,7 @@ namespace steamdirectoryfinder
             task.OutputDataReceived += (sender, e) => Console.WriteLine(e.Data);
             task.BeginOutputReadLine();
             task.WaitForExit();
+            task.Close();
             Console.SetIn(new StreamReader(Console.OpenStandardInput()));
         }
 
@@ -206,7 +210,7 @@ namespace steamdirectoryfinder
             Steamstuff.InitClient();
         }
 
-        private static void Shutdown()
+        private static void Shutdown(Object sender,EventArgs a)
         {
             Steamstuff.Shutdown();
             DeleteFile("HLExtract.exe");
@@ -376,7 +380,7 @@ namespace steamdirectoryfinder
                 Console.WriteLine(@"Please provide the oc server install path subdirectory");
                 var input = Console.ReadLine();
                 Server(input);
-                Shutdown();
+                Shutdown(null,null);
             }
         }
 
@@ -417,71 +421,7 @@ namespace steamdirectoryfinder
                 var fun = new ServerStuff(installpath,username,password,false,mounts);
                 fun.RunFun();
             }
-            Shutdown();
+            Shutdown(null,null);
         }
-
-        //private class ClientMount
-        //{
-        //    private uint gameid;
-        //    private String game;
-        //    private StringBuilder mypath;
-        //        //store the sourcesdk2007 path seporately so it can be called throughout the program
-        //    private string Sourcesdk2007Installationpath;
-        //    private string ocinstall;
-        //    public ClientMount(uint id)
-        //    {
-        //        gameid = id;
-        //        mypath = new StringBuilder(256);
-        //        Steamstuff.SteamApps.GetAppInstallDir(218, mypath);
-        //        Sourcesdk2007Installationpath = mypath.ToString();
-        //        Steamstuff.SteamApps.GetAppInstallDir(gameid, mypath);
-        //    }
-
-        //    public void installmount()
-        //    {
-        //        ocinstall = Registry.CurrentUser.OpenSubKey("Software\\Valve\\Steam").GetValue("SourceModInstallPath")+ "\\obsidian";
-        //        if (gameid == 220)
-        //        {
-        //            game = "\\hl2";
-        //        }
-        //        else if (gameid == 240)
-        //        {
-        //            game = "\\cstrike";
-        //        }
-        //        else if (gameid == 280)
-        //        {
-        //            game = "\\hl1";
-        //        }
-        //        else if (gameid == 300)
-        //        {
-        //            game = "\\dod";
-        //        }
-        //        else if (gameid == 340)
-        //        {
-        //            game = "\\lostcoast";
-        //        }
-        //        else if (gameid == 380)
-        //        {
-        //            game = "\\episodic";
-        //        }
-        //        else if (gameid == 420)
-        //        {
-        //            game = "\\ep2";
-        //        }
-        //        DeleteDir(Sourcesdk2007Installationpath + game, false);
-        //        Runoneachvpk(Returndirvpks(mypath + game));
-        //        Otherstuff.CreateSymbolicLink(Sourcesdk2007Installationpath + game, mypath + game,
-        //            Otherstuff.SymbolicLinkFlag.Directory);
-        //        Console.WriteLine(mypath + game);
-        //        Console.WriteLine(Sourcesdk2007Installationpath + game);
-        //        if (game != "\\hl2")
-        //        {
-        //            File.Create(ocinstall + "\\mounts" + game);
-        //        }else if (game == "\\hl1")
-        //        {
-        //            File.Create(ocinstall + "\\mounts\\hls");
-        //        }
-        //    }
-        //}
     }
 }

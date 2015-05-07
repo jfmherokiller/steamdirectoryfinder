@@ -1,5 +1,5 @@
-﻿using Steam4Net;
-using System;
+﻿using System;
+using Steam4Net;
 
 namespace steamdirectoryfinder
 {

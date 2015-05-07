@@ -32,8 +32,7 @@ namespace Steam4Net
         private IntPtr DTorISteamMatchmakingServerListResponse0013;
     };
 
-    public class SteamMatchmakingServerListResponse001 :
-        InteropHelp.NativeWrapper<SteamMatchmakingServerListResponse001VTable>
+    public class SteamMatchmakingServerListResponse001 : InteropHelp.NativeWrapper<SteamMatchmakingServerListResponse001VTable>
     {
         public void ServerResponded(int iServer)
         {
@@ -69,8 +68,7 @@ namespace Steam4Net
         private IntPtr DTorISteamMatchmakingServerListResponse0023;
     };
 
-    public class SteamMatchmakingServerListResponse002 :
-        InteropHelp.NativeWrapper<SteamMatchmakingServerListResponse002VTable>
+    public class SteamMatchmakingServerListResponse002 : InteropHelp.NativeWrapper<SteamMatchmakingServerListResponse002VTable>
     {
         public void ServerResponded(byte[] hRequest)
         {

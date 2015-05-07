@@ -1,11 +1,14 @@
-﻿namespace steamdirectoryfinder
+﻿using System.ComponentModel;
+using System.Windows.Forms;
+
+namespace steamdirectoryfinder
 {
     partial class ServerConfiguration
     {
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        private IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
@@ -209,19 +212,19 @@
 
         #endregion
 
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.RadioButton radioButton1;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.CheckBox ep1;
-        private System.Windows.Forms.CheckBox lostcoast;
-        private System.Windows.Forms.CheckBox ep2;
-        private System.Windows.Forms.CheckBox css;
-        private System.Windows.Forms.CheckBox dod;
-        private System.Windows.Forms.CheckBox hl1;
+        private Label label1;
+        private TextBox textBox1;
+        private TextBox textBox2;
+        private Button button1;
+        private Label label2;
+        private Label label3;
+        private RadioButton radioButton1;
+        private GroupBox groupBox1;
+        private CheckBox ep1;
+        private CheckBox lostcoast;
+        private CheckBox ep2;
+        private CheckBox css;
+        private CheckBox dod;
+        private CheckBox hl1;
     }
 }
