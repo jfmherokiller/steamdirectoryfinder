@@ -142,7 +142,7 @@ namespace steamdirectoryfinder
                 {
                     Console.WriteLine(e);
                 }
-            });
+            }
         }
     }
 }
