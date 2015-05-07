@@ -63,7 +63,7 @@ A new window will appear asking for a valid steam username and password. To proc
 
 PRIVACY & DATA PROTECTION LEGAL DISCLAIMER: 
 The steam username and password that is requested by the mountfix is only ever used for the login to Official Valve SteamCMD background commands and is never logged or stored in any way shape or form.
-Tle login details entered are automaticly purged when the mountfix has completed the SteamCMD downloading tasks.
+The login details entered are automaticly purged when the mountfix has completed the SteamCMD downloading tasks.
 We respect people's privacy and data protection.
 
 
