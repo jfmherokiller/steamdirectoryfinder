@@ -110,7 +110,7 @@ namespace steamdirectoryfinder
 
         public static void CreateNeededFiles(string installpath)
         {
-            var myIp = new WebClient().DownloadString(@"http://icanhazip.com").Trim();
+            var myIp = new WebClient().DownloadString(@"http://ipv4.icanhazip.com").Trim();
             var startBat = "srcds.exe -console -condebug -game obsidian -ip " + myIp +" -port 27015 +map oc_lobby +maxplayers 32 +hostname \"(SteamPipe) Basic Server\"";
             File.WriteAllText(installpath + "\\StartServer.bat", startBat);
         }
