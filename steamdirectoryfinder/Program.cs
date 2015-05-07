@@ -68,7 +68,7 @@ namespace steamdirectoryfinder
         [STAThread]
         public static void Main(string[] args)
         {
-            AppDomain.CurrentDomain.ProcessExit += new EventHandler(Shutdown); 
+            AppDomain.CurrentDomain.ProcessExit += Shutdown; 
             using (new ConsoleCopy("mylogfile.txt"))
             {
                 Perfominitializations();
@@ -89,7 +89,6 @@ namespace steamdirectoryfinder
                 else if (args[0].ToLower().Contains("-client"))
                 {
                     Client();
-                    Shutdown(null,null);
                 }
                 else if (args[0].ToLower().Contains("-server"))
                 {
@@ -380,7 +379,6 @@ namespace steamdirectoryfinder
                 Console.WriteLine(@"Please provide the oc server install path subdirectory");
                 var input = Console.ReadLine();
                 Server(input);
-                Shutdown(null,null);
             }
         }
 
@@ -421,7 +419,6 @@ namespace steamdirectoryfinder
                 var fun = new ServerStuff(installpath,username,password,false,mounts);
                 fun.RunFun();
             }
-            Shutdown(null,null);
         }
     }
 }
