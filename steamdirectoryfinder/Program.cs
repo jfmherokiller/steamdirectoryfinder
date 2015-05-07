@@ -130,7 +130,6 @@ namespace steamdirectoryfinder
 
                 }
             }
-            Shutdown(null,null);
         }
 
         private static void Perfominitializations()
@@ -226,12 +225,13 @@ namespace steamdirectoryfinder
             var vpkwithoutextend = ass;
             vpkwithoutextend = vpkwithoutextend.Remove(vpkwithoutextend.IndexOf('.'));
             var gamedir = Path.GetDirectoryName(vpkwithoutextend);
-            var xcopyargs = PutIntoQuotes(gamedir + "\\root\\*") + " " + PutIntoQuotes(gamedir + "\\") + " /f /s /i /y";
+            var robocopyargs = PutIntoQuotes(gamedir + "\\root") + " " + PutIntoQuotes(gamedir) + "  /E /MOVE /IS";
+            //var xcopyargs = PutIntoQuotes(gamedir + "\\root\\*") + " " + PutIntoQuotes(gamedir + "\\") + " /f /s /i /y";
             var hlExtractargs = "-p " + quotedVpk + " -d " + PutIntoQuotes(gamedir) + " " + "-e \"\"";
             Performtasks("HLExtract.exe", hlExtractargs);
-
-            Performtasks("xcopy", xcopyargs);
-            Directory.Delete(gamedir + "\\root", true);
+            Performtasks("robocopy",robocopyargs);
+           // Performtasks("xcopy", xcopyargs);
+            //Directory.Delete(gamedir + "\\root", true);
             //Performtasks("rd", "/q /s " )
         }
 
@@ -274,95 +274,93 @@ namespace steamdirectoryfinder
         private static void Client()
         {
             var key = Registry.CurrentUser.OpenSubKey("Software\\Valve\\Steam");
-            if (key != null)
+            if (key == null) return;
+            var ocinstall = key.GetValue("SourceModInstallPath") + "\\obsidian";
+            //initalize the steam api binding code.
+            SetupClient();
+            //mypath is used to store the location of the game installation directory
+            var mypath = new StringBuilder(25555);
+            //use the steam api to read the location of the source sdk 2007 directory
+            Steamstuff.SteamApps.GetAppInstallDir(SourceSdk2007Id, mypath);
+            //store the sourcesdk2007 path seporately so it can be called throughout the program
+            _sourcesdk2007Installationpath = mypath.ToString();
+            foreach (var mymount in Requiredmountids)
             {
-                var ocinstall = key.GetValue("SourceModInstallPath") + "\\obsidian";
-                //initalize the steam api binding code.
-                SetupClient();
-                //mypath is used to store the location of the game installation directory
-                var mypath = new StringBuilder(25555);
-                //use the steam api to read the location of the source sdk 2007 directory
-                Steamstuff.SteamApps.GetAppInstallDir(SourceSdk2007Id, mypath);
-                //store the sourcesdk2007 path seporately so it can be called throughout the program
-                _sourcesdk2007Installationpath = mypath.ToString();
-                foreach (var mymount in Requiredmountids)
+                Steamstuff.SteamApps.GetAppInstallDir(mymount, mypath);
+                switch (Gamename(mymount))
                 {
-                    Steamstuff.SteamApps.GetAppInstallDir(mymount, mypath);
-                    switch (Gamename(mymount))
-                    {
-                        case "Half-Life 2":
-                            DeleteDir(_sourcesdk2007Installationpath + "\\hl2", true);
-                            Runoneachvpk(Returndirvpks(mypath + "\\hl2"));
-                            NativeMethods.Otherstuff.CreateSymbolicLink(_sourcesdk2007Installationpath + "\\hl2", mypath + "\\hl2",
-                                NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
-                            Console.WriteLine(mypath + "\\hl2");
-                            Console.WriteLine(_sourcesdk2007Installationpath + "\\hl2");
-                            break;
+                    case "Half-Life 2":
+                        DeleteDir(_sourcesdk2007Installationpath + "\\hl2", true);
+                        Runoneachvpk(Returndirvpks(mypath + "\\hl2"));
+                        NativeMethods.Otherstuff.CreateSymbolicLink(_sourcesdk2007Installationpath + "\\hl2", mypath + "\\hl2",
+                            NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
+                        Console.WriteLine(mypath + "\\hl2");
+                        Console.WriteLine(_sourcesdk2007Installationpath + "\\hl2");
+                        break;
 
-                        case "Day of Defeat: Source":
-                            DeleteDir(_sourcesdk2007Installationpath + "\\dod", false);
-                            Runoneachvpk(Returndirvpks(mypath + "\\dod"));
-                            NativeMethods.Otherstuff.CreateSymbolicLink(_sourcesdk2007Installationpath + "\\dod", mypath + "\\dod",
-                                NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
-                            Console.WriteLine(mypath + "\\dod");
-                            Console.WriteLine(_sourcesdk2007Installationpath + "\\dod");
-                            File.Create(ocinstall + "\\mounts\\dod");
-                            break;
+                    case "Day of Defeat: Source":
+                        DeleteDir(_sourcesdk2007Installationpath + "\\dod", false);
+                        Runoneachvpk(Returndirvpks(mypath + "\\dod"));
+                        NativeMethods.Otherstuff.CreateSymbolicLink(_sourcesdk2007Installationpath + "\\dod", mypath + "\\dod",
+                            NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
+                        Console.WriteLine(mypath + "\\dod");
+                        Console.WriteLine(_sourcesdk2007Installationpath + "\\dod");
+                        File.Create(ocinstall + "\\mounts\\dod");
+                        break;
 
-                        case "Counter-Strike: Source":
-                            DeleteDir(_sourcesdk2007Installationpath + "\\cstrike", false);
-                            Runoneachvpk(Returndirvpks(mypath + "\\cstrike"));
-                            NativeMethods.Otherstuff.CreateSymbolicLink(_sourcesdk2007Installationpath + "\\cstrike", mypath + "\\cstrike",
-                                NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
-                            Console.WriteLine(mypath + "\\cstrike");
-                            Console.WriteLine(_sourcesdk2007Installationpath + "\\cstrike");
-                            File.Create(ocinstall + "\\mounts\\css");
-                            break;
+                    case "Counter-Strike: Source":
+                        DeleteDir(_sourcesdk2007Installationpath + "\\cstrike", false);
+                        Runoneachvpk(Returndirvpks(mypath + "\\cstrike"));
+                        NativeMethods.Otherstuff.CreateSymbolicLink(_sourcesdk2007Installationpath + "\\cstrike", mypath + "\\cstrike",
+                            NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
+                        Console.WriteLine(mypath + "\\cstrike");
+                        Console.WriteLine(_sourcesdk2007Installationpath + "\\cstrike");
+                        File.Create(ocinstall + "\\mounts\\css");
+                        break;
 
-                        case "Half-Life: Source":
-                            DeleteDir(_sourcesdk2007Installationpath + "\\hl1", false);
-                            Runoneachvpk(Returndirvpks(mypath + "\\hl1"));
-                            NativeMethods.Otherstuff.CreateSymbolicLink(_sourcesdk2007Installationpath + "\\hl1", mypath + "\\hl1",
-                                NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
-                            Console.WriteLine(mypath + "\\hl1");
-                            Console.WriteLine(_sourcesdk2007Installationpath + "\\hl1");
-                            File.Create(ocinstall + "\\mounts\\hls");
-                            break;
+                    case "Half-Life: Source":
+                        DeleteDir(_sourcesdk2007Installationpath + "\\hl1", false);
+                        Runoneachvpk(Returndirvpks(mypath + "\\hl1"));
+                        NativeMethods.Otherstuff.CreateSymbolicLink(_sourcesdk2007Installationpath + "\\hl1", mypath + "\\hl1",
+                            NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
+                        Console.WriteLine(mypath + "\\hl1");
+                        Console.WriteLine(_sourcesdk2007Installationpath + "\\hl1");
+                        File.Create(ocinstall + "\\mounts\\hls");
+                        break;
 
-                        case "Half-Life 2: Lost Coast":
-                            DeleteDir(_sourcesdk2007Installationpath + "\\lostcoast", false);
-                            Runoneachvpk(Returndirvpks(mypath + "\\lostcoast"));
-                            NativeMethods.Otherstuff.CreateSymbolicLink(_sourcesdk2007Installationpath + "\\lostcoast", mypath + "\\lostcoast",
-                                NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
-                            Console.WriteLine(mypath + "\\lostcoast");
-                            Console.WriteLine(_sourcesdk2007Installationpath + "\\lostcoast");
-                            File.Create(ocinstall + "\\mounts\\lostcoast");
-                            break;
+                    case "Half-Life 2: Lost Coast":
+                        DeleteDir(_sourcesdk2007Installationpath + "\\lostcoast", false);
+                        Runoneachvpk(Returndirvpks(mypath + "\\lostcoast"));
+                        NativeMethods.Otherstuff.CreateSymbolicLink(_sourcesdk2007Installationpath + "\\lostcoast", mypath + "\\lostcoast",
+                            NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
+                        Console.WriteLine(mypath + "\\lostcoast");
+                        Console.WriteLine(_sourcesdk2007Installationpath + "\\lostcoast");
+                        File.Create(ocinstall + "\\mounts\\lostcoast");
+                        break;
 
-                        case "Half-Life 2: Episode One":
-                            DeleteDir(_sourcesdk2007Installationpath + "\\episodic", false);
-                            Runoneachvpk(Returndirvpks(mypath + "\\episodic"));
-                            NativeMethods.Otherstuff.CreateSymbolicLink(_sourcesdk2007Installationpath + "\\episodic", mypath + "\\episodic",
-                                NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
-                            Console.WriteLine(mypath + "\\episodic");
-                            Console.WriteLine(_sourcesdk2007Installationpath + "\\episodic");
-                            File.Create(ocinstall + "\\mounts\\episodic");
-                            break;
+                    case "Half-Life 2: Episode One":
+                        DeleteDir(_sourcesdk2007Installationpath + "\\episodic", false);
+                        Runoneachvpk(Returndirvpks(mypath + "\\episodic"));
+                        NativeMethods.Otherstuff.CreateSymbolicLink(_sourcesdk2007Installationpath + "\\episodic", mypath + "\\episodic",
+                            NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
+                        Console.WriteLine(mypath + "\\episodic");
+                        Console.WriteLine(_sourcesdk2007Installationpath + "\\episodic");
+                        File.Create(ocinstall + "\\mounts\\episodic");
+                        break;
 
-                        case "Half-Life 2: Episode Two":
-                            DeleteDir(_sourcesdk2007Installationpath + "\\ep2", false);
-                            Runoneachvpk(Returndirvpks(mypath + "\\ep2"));
-                            NativeMethods.Otherstuff.CreateSymbolicLink(_sourcesdk2007Installationpath + "\\ep2", mypath + "\\ep2",
-                                NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
-                            Console.WriteLine(mypath + "\\ep2");
-                            Console.WriteLine(_sourcesdk2007Installationpath + "\\ep2");
-                            File.Create(ocinstall + "\\mounts\\ep2");
-                            break;
+                    case "Half-Life 2: Episode Two":
+                        DeleteDir(_sourcesdk2007Installationpath + "\\ep2", false);
+                        Runoneachvpk(Returndirvpks(mypath + "\\ep2"));
+                        NativeMethods.Otherstuff.CreateSymbolicLink(_sourcesdk2007Installationpath + "\\ep2", mypath + "\\ep2",
+                            NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
+                        Console.WriteLine(mypath + "\\ep2");
+                        Console.WriteLine(_sourcesdk2007Installationpath + "\\ep2");
+                        File.Create(ocinstall + "\\mounts\\ep2");
+                        break;
 
-                        default:
-                            Console.WriteLine(Gamename(mymount) + mypath);
-                            break;
-                    }
+                    default:
+                        Console.WriteLine(Gamename(mymount) + mypath);
+                        break;
                 }
             }
         }
