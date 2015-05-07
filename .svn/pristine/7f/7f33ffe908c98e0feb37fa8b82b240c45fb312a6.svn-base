@@ -1,0 +1,126 @@
+﻿using Steam4NET;
+using System;
+
+namespace steamdirectoryfinder
+{
+    [Serializable]
+    internal class SteamException : Exception
+    {
+        public SteamException(string msg)
+            : base(msg)
+        {
+        }
+    }
+
+    public static class Steamstuff
+    {
+        public static ISteamClient009 SteamClient { get; private set; }
+
+        public static int Pipe { get; private set; }
+
+        public static int User { get; private set; }
+
+        public static ISteamUser016 SteamUser { get; private set; }
+
+        public static ISteamApps005 SteamApps { get; private set; }
+
+        public static ISteamApps001 SteamApps2 { get; private set; }
+
+        public static void InitServer(String loadpath)
+        {
+            if (!Steamworks.LoadSteamClientF(loadpath))
+            {
+                throw new SteamException("Unable to load steamclient library.");
+            }
+            if (!Steamworks.LoadSteamF(loadpath))
+            {
+                throw new SteamException("Unable to load steam.");
+            }
+            SetupSteamInterfaces();
+        }
+
+        private static void SetupSteamInterfaces()
+        {
+            if (SteamClient == null)
+            {
+                SteamClient = Steamworks.CreateInterface<ISteamClient009>();
+
+                if (SteamClient == null)
+                {
+                    throw new SteamException("Unable to get ISteamClient interface.");
+                }
+            }
+
+            if (Pipe == 0)
+            {
+                Pipe = SteamClient.CreateSteamPipe();
+
+                if (Pipe == 0)
+                {
+                    throw new SteamException("Unable to create steam pipe.");
+                }
+            }
+
+            if (User == 0)
+            {
+                User = SteamClient.ConnectToGlobalUser(Pipe);
+
+                if (User == 0)
+                {
+                    throw new SteamException("Unable to connect to global user.");
+                }
+            }
+            if (SteamApps == null)
+            {
+                SteamApps = SteamClient.GetISteamApps<ISteamApps005>(User, Pipe);
+
+                if (SteamApps == null)
+                {
+                    throw new SteamException("Unable to get ISteamApps interface.");
+                }
+            }
+            if (SteamApps2 == null)
+            {
+                SteamApps2 = SteamClient.GetISteamApps<ISteamApps001>(User, Pipe);
+
+                if (SteamApps2 == null)
+                {
+                    throw new SteamException("Unable to get ISteamApps interface.");
+                }
+            }
+            SteamUser = SteamClient.GetISteamUser<ISteamUser016>(User, Pipe);
+            if (SteamUser == null)
+            {
+                Console.WriteLine("steamuser is null !");
+            }
+        }
+
+        public static void InitClient()
+        {
+            if (!Steamworks.Load())
+            {
+                throw new SteamException("Unable to load steamclient library.");
+            }
+            if (!Steamworks.LoadSteam())
+            {
+                throw new SteamException("Unable to load steam.");
+            }
+            SetupSteamInterfaces();
+        }
+
+        public static void Shutdown()
+        {
+            CallbackDispatcher.StopDispatchThread(Pipe);
+
+            if (SteamClient != null && User != 0)
+            {
+                SteamClient.ReleaseUser(Pipe, User);
+            }
+
+            if (SteamClient != null && Pipe != 0)
+            {
+                SteamClient.BReleaseSteamPipe(Pipe);
+            }
+        }
+    }
+}

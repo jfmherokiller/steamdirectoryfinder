@@ -1,0 +1,45 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace steamdirectoryfinder
+{
+    public partial class Server_Configuration : Form
+    {
+        public static String ServerInstallPath;
+        public Server_Configuration()
+        {
+            InitializeComponent();
+        }
+        public static void DownloadSteamcmd()
+        {
+            using (WebClient Client = new WebClient())
+            {
+                Client.DownloadFile("http://media.steampowered.com/installer/steamcmd.zip", "steamcmd.zip");
+                Client.DownloadFile("http://www.gsptalk.com/mirror/sourcemod/mmsource-1.10.4-windows.zip", "mmsource.zip");
+                Client.DownloadFile("http://www.gsptalk.com/mirror/sourcemod/sourcemod-1.7.1-windows.zip", "sourcemod.zip");
+            }
+        }
+        public static void ExtractServerResources(String fun)
+        {
+            File.WriteAllBytes("7za.exe", steamdirectoryfinder.Properties.Resources._7za);
+            Program.Performtasks("7za.exe", "x steamcmd.zip -o " + Directory.GetParent(fun).FullName);
+            //Performtasks("7za.exe","x mmsource.zip -o "+ fun);
+            //Performtasks("7za.exe", "x sourcemod.zip -o " + fun);
+        }
+        private void button2_Click(object sender, EventArgs e)
+        {
+            DownloadSteamcmd();
+            ExtractServerResources(Program.destinationlocationbase);
+            Program.InstallServer(textBox1.Text, textBox1.Text, Directory.GetParent(Program.destinationlocationbase).FullName);
+        }
+    }
+}

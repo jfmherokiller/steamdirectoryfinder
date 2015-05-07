@@ -1,0 +1,151 @@
+﻿using System;
+using System.IO;
+using System.Runtime.InteropServices;
+using System.Text;
+
+namespace steamdirectoryfinder
+{
+    internal class ConsoleCopy : IDisposable
+    {
+        private FileStream _fileStream;
+        private StreamWriter _fileWriter;
+        private TextWriter doubleWriter;
+        private TextWriter oldOut;
+
+        private class DoubleWriter : TextWriter
+        {
+            private TextWriter one;
+            private TextWriter two;
+
+            public DoubleWriter(TextWriter one, TextWriter two)
+            {
+                this.one = one;
+                this.two = two;
+            }
+
+            public override Encoding Encoding
+            {
+                get { return one.Encoding; }
+            }
+
+            public override void Flush()
+            {
+                one.Flush();
+                two.Flush();
+            }
+
+            public override void Write(char value)
+            {
+                one.Write(value);
+                two.Write(value);
+            }
+        }
+
+        public ConsoleCopy(string path)
+        {
+            oldOut = Console.Out;
+
+            try
+            {
+                _fileStream = File.Create(path);
+
+                _fileWriter = new StreamWriter(_fileStream);
+                _fileWriter.AutoFlush = true;
+
+                doubleWriter = new DoubleWriter(_fileWriter, oldOut);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Cannot open file for writing");
+                Console.WriteLine(e.Message);
+                return;
+            }
+            Console.SetOut(doubleWriter);
+        }
+
+        public void Dispose()
+        {
+            Console.SetOut(oldOut);
+            if (doubleWriter != null)
+            {
+                doubleWriter.Flush();
+                doubleWriter.Close();
+                doubleWriter = null;
+            }
+            if (_fileWriter != null)
+            {
+                _fileWriter.Flush();
+                _fileWriter.Close();
+                _fileWriter = null;
+            }
+            if (_fileStream != null)
+            {
+                _fileStream.Close();
+                _fileStream = null;
+            }
+        }
+    }
+
+    internal static class Mp3play
+    {
+        static private string _command;
+        static private bool _isOpen;
+
+        [DllImport("winmm.dll")]
+        private static extern long mciSendString(string strCommand, StringBuilder strReturn, int iReturnLength, IntPtr hwndCallback);
+
+        static public void Close()
+        {
+            _command = "close MediaFile";
+            mciSendString(_command, null, 0, IntPtr.Zero);
+            _isOpen = false;
+        }
+
+        static public void Open(string sFileName)
+        {
+            _command = "open \"" + sFileName + "\" type mpegvideo alias MediaFile";
+            mciSendString(_command, null, 0, IntPtr.Zero);
+            _isOpen = true;
+        }
+
+        static public void Play(bool loop)
+        {
+            if (_isOpen)
+            {
+                _command = "play MediaFile";
+                if (loop)
+                    _command += " REPEAT";
+                mciSendString(_command, null, 0, IntPtr.Zero);
+            }
+        }
+    }
+
+    internal static class Otherstuff
+    {
+        public static String GetShortPathName(String longPath)
+        {
+            StringBuilder shortPath = new StringBuilder(longPath.Length + 1);
+
+            if (0 == Otherstuff.GetShortPathName(longPath, shortPath, shortPath.Capacity))
+            {
+                return longPath;
+            }
+
+            return shortPath.ToString();
+        }
+
+        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        private static extern Int32 GetShortPathName(String path, StringBuilder shortPath, Int32 shortPathLength);
+
+        public enum SymbolicLinkFlag
+        {
+            File = 0,
+            Directory = 1
+        }
+
+        [DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool CreateSymbolicLink(string lpSymlinkFileName, string lpTargetFileName,
+            SymbolicLinkFlag dwFlags);
+    }
+}

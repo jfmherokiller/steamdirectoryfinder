@@ -1,0 +1,117 @@
+﻿using steamdirectoryfinder.Properties;
+using System;
+using System.IO;
+using System.Net;
+
+namespace steamdirectoryfinder
+{
+    internal class ServerStuff
+    {
+        private static string OcServerInstallPath;
+        private static string MainFolder;
+        private string _username;
+        private string _password;
+
+        public ServerStuff(String path, String username, String password)
+        {
+            OcServerInstallPath = path;
+            MainFolder = Directory.GetParent(OcServerInstallPath).FullName;
+            _username = username;
+            _password = password;
+        }
+
+        public static void InstallServer(string username, string password, string serverdirectory)
+        {
+            const string endofcmd = "validate +quit";
+            var basecmd = " +login " + username + " " + password + " +force_install_dir " + serverdirectory +
+                          " +app_update ";
+            var steamcmdbase = Directory.GetCurrentDirectory() + "\\steamcmd" + "\\steamcmd.exe";
+            Program.Performtasks(steamcmdbase, basecmd + "220 " + endofcmd);
+            Program.Performtasks(steamcmdbase, basecmd + "380 " + endofcmd);
+            Program.Performtasks(steamcmdbase, basecmd + "340 " + endofcmd);
+            Program.Performtasks(steamcmdbase, basecmd + "420 " + endofcmd);
+            Program.Performtasks(steamcmdbase, basecmd + "280 " + endofcmd);
+            Program.Performtasks(steamcmdbase, basecmd + "240 " + endofcmd);
+            Program.Performtasks(steamcmdbase, basecmd + "300 " + endofcmd);
+            Program.Performtasks(steamcmdbase, basecmd + "310 " + endofcmd);
+        }
+
+        public static void DownloadSteamcmd()
+        {
+            using (var client = new WebClient())
+            {
+                client.DownloadFile("http://media.steampowered.com/installer/steamcmd.zip", "steamcmd.zip");
+                // client.DownloadFile("http://www.gsptalk.com/mirror/sourcemod/mmsource-1.10.4-windows.zip", "mmsource.zip");
+                //client.DownloadFile("http://www.gsptalk.com/mirror/sourcemod/sourcemod-1.7.1-windows.zip","sourcemod.zip");
+            }
+        }
+
+        public static void CheckifDirectoryexistsorcreateit(String fun)
+        {
+            Directory.CreateDirectory(fun);
+        }
+
+        public static void ExtractServerResources()
+        {
+            File.WriteAllBytes("7za.exe", Resources._7za);
+            Program.Performtasks("7za.exe", "x steamcmd.zip -o" + Program.PutIntoQuotes(Directory.GetCurrentDirectory() + "\\steamcmd"));
+            //Performtasks("7za.exe","x mmsource.zip -o "+ fun);
+            //Performtasks("7za.exe", "x sourcemod.zip -o " + fun);
+        }
+
+        public void RunFun()
+        {
+            CheckifDirectoryexistsorcreateit(OcServerInstallPath);
+            CheckifDirectoryexistsorcreateit(Directory.GetCurrentDirectory() + "\\steamcmd");
+            DownloadSteamcmd();
+            ExtractServerResources();
+            InstallServer(_username, _password, MainFolder);
+            ExtractAndDelete(OcServerInstallPath);
+        }
+
+        private static void CreateNeededFiles()
+        {
+            String StartBat = "srcds.exe -console -condebug -game obsidian -ip 127.0.0.1 -port 27015 +map oc_lobby +maxplayers 32 +hostname \"(SteamPipe) Basic Server\"";
+        }
+
+        public static void ExtractAndDelete(String fucky)
+        {
+            MainFolder = Directory.GetParent(fucky).FullName;
+            Program.ExtractClientResources();
+
+            Program.Runoneachvpk(Program.Returndirvpks(MainFolder));
+            Program.DeleteVpks(Program.Returnallvpks(MainFolder));
+
+            Program.DeleteFile(MainFolder + "\\hl2\\maps\\d2_coast_02.bsp");
+            Program.DeleteFile(MainFolder + "\\hl1\\maps\\c4a1y.bsp");
+            Program.DeleteDir(MainFolder + "\\demo", true);
+            Program.DeleteDir(MainFolder + "\\drivers", true);
+            Program.DeleteDir(MainFolder + "\\hl1_hd", true);
+            Program.DeleteDir(MainFolder + "\\resources", true);
+            Program.DeleteDir(MainFolder + "\\Soundtrack", true);
+            Program.DeleteDir(MainFolder + "\\sourcetest", true);
+            Program.DeleteDir(MainFolder + "\\steamapps", true);
+            Program.DeleteDir(MainFolder + "\\tools", true);
+            var binfolder = Directory.GetFiles(MainFolder + "\\bin", "*.*", SearchOption.AllDirectories);
+            foreach (String ass in binfolder)
+            {
+                if ((ass.EndsWith("AdminServer.dll") != false) && (ass.EndsWith("binkw32.dll") != false) &&
+                    (ass.EndsWith("datacache.dll") != false) && (ass.EndsWith("datamodel.dll") != false) &&
+                    (ass.EndsWith("dedicated.dll") != false) && (ass.EndsWith("dmserializers.dll") != false) &&
+                    (ass.EndsWith("engine.dll") != false) && (ass.EndsWith("inputsystem.dll") != false) &&
+                    (ass.EndsWith("MaterialSystem.dll") != false) && (ass.EndsWith("parsifal.dll") != false) &&
+                    (ass.EndsWith("scenefilecache.dll") != false) && (ass.EndsWith("shaderapiempty.dll") != false) &&
+                    (ass.EndsWith("SoundEmitterSystem.dll") != false) && (ass.EndsWith("stdshader_dbg.dll") != false) &&
+                    (ass.EndsWith("stdshader_dx6.dll") != false) && (ass.EndsWith("stdshader_dx7.dll") != false) &&
+                    (ass.EndsWith("stdshader_dx8.dll") != false) && (ass.EndsWith("stdshader_dx9.dll") != false) &&
+                    (ass.EndsWith("steam_api.dll") != false) && (ass.EndsWith("StudioRender.dll") != false) &&
+                    (ass.EndsWith("tier0.dll") != false) && (ass.EndsWith("vgui2.dll") != false) &&
+                    (ass.EndsWith("vphysics.dll") != false) && (ass.EndsWith("vstdlib.dll") != false))
+                {
+                    continue;
+                }
+                Program.DeleteFile(ass);
+            }
+        }
+    }
+}
