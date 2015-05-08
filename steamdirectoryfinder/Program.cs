@@ -14,15 +14,15 @@ namespace steamdirectoryfinder
         private static readonly uint[] Requiredmountids = { 220, 240, 280, 300, 340, 380, 420 };
         private static string _sourcesdk2007Installationpath = "";
 
-        public static void DeleteDir(string fun, bool hex)
+        public static void DeleteDir(string fun)
         {
-            try
+            if (System.IO.File.GetAttributes(fun).HasFlag(FileAttributes.ReparsePoint))
             {
-                Directory.Delete(fun, hex);
+                Directory.Delete(fun, false);
             }
-            catch (DirectoryNotFoundException)
+            else
             {
-                Console.WriteLine(@"opps symlink Directory not Found");
+                Directory.Delete(fun,true);
             }
         }
 
@@ -299,7 +299,7 @@ namespace steamdirectoryfinder
                 {
                     case "Half-Life 2":
                         var gamesubdir = "\\hl2";
-                        DeleteDir(_sourcesdk2007Installationpath + gamesubdir, true);
+                        DeleteDir(_sourcesdk2007Installationpath + gamesubdir);
                         Runoneachvpk(Returndirvpks(gameinstalldir + gamesubdir));
                         NativeMethods.Otherstuff.CreateSymbolicLink(_sourcesdk2007Installationpath + gamesubdir, gameinstalldir + gamesubdir,
                             NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
@@ -309,7 +309,7 @@ namespace steamdirectoryfinder
 
                     case "Day of Defeat: Source":
                         gamesubdir = "\\dod";
-                        DeleteDir(_sourcesdk2007Installationpath + gamesubdir, false);
+                        DeleteDir(_sourcesdk2007Installationpath + gamesubdir);
                         Runoneachvpk(Returndirvpks(gameinstalldir + gamesubdir));
                         NativeMethods.Otherstuff.CreateSymbolicLink(_sourcesdk2007Installationpath + gamesubdir, gameinstalldir + gamesubdir,
                             NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
@@ -320,7 +320,7 @@ namespace steamdirectoryfinder
 
                     case "Counter-Strike: Source":
                         gamesubdir = "\\cstrike";
-                        DeleteDir(_sourcesdk2007Installationpath + gamesubdir, false);
+                        DeleteDir(_sourcesdk2007Installationpath + gamesubdir);
                         Runoneachvpk(Returndirvpks(gameinstalldir + gamesubdir));
                         NativeMethods.Otherstuff.CreateSymbolicLink(_sourcesdk2007Installationpath + gamesubdir, gameinstalldir + gamesubdir,
                             NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
@@ -331,7 +331,7 @@ namespace steamdirectoryfinder
 
                     case "Half-Life: Source":
                         gamesubdir = "\\hl1";
-                        DeleteDir(_sourcesdk2007Installationpath + gamesubdir, false);
+                        DeleteDir(_sourcesdk2007Installationpath + gamesubdir);
                         Runoneachvpk(Returndirvpks(gameinstalldir + gamesubdir));
                         NativeMethods.Otherstuff.CreateSymbolicLink(_sourcesdk2007Installationpath + gamesubdir, gameinstalldir + gamesubdir,
                             NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
@@ -342,7 +342,7 @@ namespace steamdirectoryfinder
 
                     case "Half-Life 2: Lost Coast":
                         gamesubdir = "\\lostcoast";
-                        DeleteDir(_sourcesdk2007Installationpath + gamesubdir, false);
+                        DeleteDir(_sourcesdk2007Installationpath + gamesubdir);
                         Runoneachvpk(Returndirvpks(gameinstalldir + gamesubdir));
                         NativeMethods.Otherstuff.CreateSymbolicLink(_sourcesdk2007Installationpath + gamesubdir, gameinstalldir + gamesubdir,
                             NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
@@ -353,7 +353,7 @@ namespace steamdirectoryfinder
 
                     case "Half-Life 2: Episode One":
                         gamesubdir = "\\episodic";
-                        DeleteDir(_sourcesdk2007Installationpath + gamesubdir, false);
+                        DeleteDir(_sourcesdk2007Installationpath + gamesubdir);
                         Runoneachvpk(Returndirvpks(gameinstalldir + gamesubdir));
                         NativeMethods.Otherstuff.CreateSymbolicLink(_sourcesdk2007Installationpath + gamesubdir, gameinstalldir + gamesubdir,
                             NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
@@ -364,7 +364,7 @@ namespace steamdirectoryfinder
 
                     case "Half-Life 2: Episode Two":
                         gamesubdir = "\\ep2";
-                        DeleteDir(_sourcesdk2007Installationpath + gamesubdir, false);
+                        DeleteDir(_sourcesdk2007Installationpath + gamesubdir);
                         Runoneachvpk(Returndirvpks(gameinstalldir + gamesubdir));
                         NativeMethods.Otherstuff.CreateSymbolicLink(_sourcesdk2007Installationpath + gamesubdir, gameinstalldir + gamesubdir,
                             NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);

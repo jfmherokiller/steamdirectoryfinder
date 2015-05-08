@@ -133,7 +133,7 @@ namespace steamdirectoryfinder
                 {
                     if (attr.HasFlag(FileAttributes.Directory))
                     {
-                        Program.DeleteDir(Path.Combine(theserverfolder, lines), true);
+                        Program.DeleteDir(Path.Combine(theserverfolder, lines));
                     }
                     else
                     {
