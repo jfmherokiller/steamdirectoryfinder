@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using Steam4Net;
 
 namespace steamdirectoryfinder
@@ -10,10 +11,10 @@ namespace steamdirectoryfinder
         public static SteamApps005 SteamApps { get; private set; }
 
         public static SteamApps001 SteamApps2 { get; private set; }
-
         private static SteamClient009 SteamClient { get; set; }
 
         public static SteamUser016 SteamUser { get; private set; }
+        public static ClientAppManager AppManager { get; set; }
 
         private static int User { get; set; }
 
@@ -69,7 +70,6 @@ namespace steamdirectoryfinder
                     throw new SteamException("Unable to get ISteamClient interface.");
                 }
             }
-
             if (Pipe == 0)
             {
                 Pipe = SteamClient.CreateSteamPipe();
@@ -107,10 +107,14 @@ namespace steamdirectoryfinder
                     throw new SteamException("Unable to get ISteamApps interface.");
                 }
             }
-            SteamUser = SteamClient.GetISteamUser<SteamUser016>(User, Pipe);
             if (SteamUser == null)
             {
-                Console.WriteLine(@"steamuser is null !");
+                SteamUser = SteamClient.GetISteamUser<SteamUser016>(User, Pipe);
+
+                if (SteamUser == null)
+                {
+                    throw new SteamException("steamuser is null !");
+                }
             }
         }
     }

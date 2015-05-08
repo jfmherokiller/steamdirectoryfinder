@@ -39,11 +39,15 @@ namespace steamdirectoryfinder
             {
                 selectedmounts += "dod";
             }
+            if (hl2.Checked)
+            {
+                selectedmounts += "hl2";
+            }
             ServerStuff.DownloadSteamcmd();
             ServerStuff.ExtractServerResources(_ocServerInstallPath);
             ServerStuff.CheckifDirectoryexistsorcreateit(_ocServerInstallPath);
             ServerStuff.CheckifDirectoryexistsorcreateit(Directory.GetCurrentDirectory() + "\\steamcmd");
-            if (radioButton1.Checked)
+            if (SteamAuth.Checked)
             {
                 ServerStuff.InstallServer(textBox1.Text,textBox2.Text,_mainFolder,true,selectedmounts);
             }
@@ -64,16 +68,6 @@ namespace steamdirectoryfinder
         private void ServerConfiguration_Load(object sender, EventArgs e)
         {
             
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }

@@ -37,14 +37,15 @@ namespace steamdirectoryfinder
             this.button1 = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.SteamAuth = new System.Windows.Forms.RadioButton();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.ep1 = new System.Windows.Forms.CheckBox();
-            this.ep2 = new System.Windows.Forms.CheckBox();
-            this.lostcoast = new System.Windows.Forms.CheckBox();
-            this.dod = new System.Windows.Forms.CheckBox();
-            this.css = new System.Windows.Forms.CheckBox();
             this.hl1 = new System.Windows.Forms.CheckBox();
+            this.css = new System.Windows.Forms.CheckBox();
+            this.dod = new System.Windows.Forms.CheckBox();
+            this.lostcoast = new System.Windows.Forms.CheckBox();
+            this.ep2 = new System.Windows.Forms.CheckBox();
+            this.ep1 = new System.Windows.Forms.CheckBox();
+            this.hl2 = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -101,19 +102,20 @@ namespace steamdirectoryfinder
             this.label3.TabIndex = 5;
             this.label3.Text = "Please insert your Steam username and password";
             // 
-            // radioButton1
+            // SteamAuth
             // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(119, 49);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(96, 17);
-            this.radioButton1.TabIndex = 7;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "Steam Auth Fix";
-            this.radioButton1.UseVisualStyleBackColor = true;
+            this.SteamAuth.AutoSize = true;
+            this.SteamAuth.Location = new System.Drawing.Point(119, 49);
+            this.SteamAuth.Name = "SteamAuth";
+            this.SteamAuth.Size = new System.Drawing.Size(96, 17);
+            this.SteamAuth.TabIndex = 7;
+            this.SteamAuth.TabStop = true;
+            this.SteamAuth.Text = "Steam Auth Fix";
+            this.SteamAuth.UseVisualStyleBackColor = true;
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.hl2);
             this.groupBox1.Controls.Add(this.hl1);
             this.groupBox1.Controls.Add(this.css);
             this.groupBox1.Controls.Add(this.dod);
@@ -127,45 +129,15 @@ namespace steamdirectoryfinder
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Disabled Mounts";
             // 
-            // ep1
+            // hl1
             // 
-            this.ep1.AutoSize = true;
-            this.ep1.Location = new System.Drawing.Point(7, 16);
-            this.ep1.Name = "ep1";
-            this.ep1.Size = new System.Drawing.Size(44, 17);
-            this.ep1.TabIndex = 0;
-            this.ep1.Text = "ep1";
-            this.ep1.UseVisualStyleBackColor = true;
-            // 
-            // ep2
-            // 
-            this.ep2.AutoSize = true;
-            this.ep2.Location = new System.Drawing.Point(58, 16);
-            this.ep2.Name = "ep2";
-            this.ep2.Size = new System.Drawing.Size(44, 17);
-            this.ep2.TabIndex = 1;
-            this.ep2.Text = "ep2";
-            this.ep2.UseVisualStyleBackColor = true;
-            // 
-            // lostcoast
-            // 
-            this.lostcoast.AutoSize = true;
-            this.lostcoast.Location = new System.Drawing.Point(108, 16);
-            this.lostcoast.Name = "lostcoast";
-            this.lostcoast.Size = new System.Drawing.Size(68, 17);
-            this.lostcoast.TabIndex = 2;
-            this.lostcoast.Text = "lostcoast";
-            this.lostcoast.UseVisualStyleBackColor = true;
-            // 
-            // dod
-            // 
-            this.dod.AutoSize = true;
-            this.dod.Location = new System.Drawing.Point(7, 40);
-            this.dod.Name = "dod";
-            this.dod.Size = new System.Drawing.Size(44, 17);
-            this.dod.TabIndex = 3;
-            this.dod.Text = "dod";
-            this.dod.UseVisualStyleBackColor = true;
+            this.hl1.AutoSize = true;
+            this.hl1.Location = new System.Drawing.Point(107, 40);
+            this.hl1.Name = "hl1";
+            this.hl1.Size = new System.Drawing.Size(40, 17);
+            this.hl1.TabIndex = 5;
+            this.hl1.Text = "hl1";
+            this.hl1.UseVisualStyleBackColor = true;
             // 
             // css
             // 
@@ -177,15 +149,55 @@ namespace steamdirectoryfinder
             this.css.Text = "css";
             this.css.UseVisualStyleBackColor = true;
             // 
-            // hl1
+            // dod
             // 
-            this.hl1.AutoSize = true;
-            this.hl1.Location = new System.Drawing.Point(107, 40);
-            this.hl1.Name = "hl1";
-            this.hl1.Size = new System.Drawing.Size(40, 17);
-            this.hl1.TabIndex = 5;
-            this.hl1.Text = "hl1";
-            this.hl1.UseVisualStyleBackColor = true;
+            this.dod.AutoSize = true;
+            this.dod.Location = new System.Drawing.Point(7, 40);
+            this.dod.Name = "dod";
+            this.dod.Size = new System.Drawing.Size(44, 17);
+            this.dod.TabIndex = 3;
+            this.dod.Text = "dod";
+            this.dod.UseVisualStyleBackColor = true;
+            // 
+            // lostcoast
+            // 
+            this.lostcoast.AutoSize = true;
+            this.lostcoast.Location = new System.Drawing.Point(108, 16);
+            this.lostcoast.Name = "lostcoast";
+            this.lostcoast.Size = new System.Drawing.Size(68, 17);
+            this.lostcoast.TabIndex = 2;
+            this.lostcoast.Text = "lostcoast";
+            this.lostcoast.UseVisualStyleBackColor = true;
+            // 
+            // ep2
+            // 
+            this.ep2.AutoSize = true;
+            this.ep2.Location = new System.Drawing.Point(58, 16);
+            this.ep2.Name = "ep2";
+            this.ep2.Size = new System.Drawing.Size(44, 17);
+            this.ep2.TabIndex = 1;
+            this.ep2.Text = "ep2";
+            this.ep2.UseVisualStyleBackColor = true;
+            // 
+            // ep1
+            // 
+            this.ep1.AutoSize = true;
+            this.ep1.Location = new System.Drawing.Point(7, 16);
+            this.ep1.Name = "ep1";
+            this.ep1.Size = new System.Drawing.Size(44, 17);
+            this.ep1.TabIndex = 0;
+            this.ep1.Text = "ep1";
+            this.ep1.UseVisualStyleBackColor = true;
+            // 
+            // hl2
+            // 
+            this.hl2.AutoSize = true;
+            this.hl2.Location = new System.Drawing.Point(153, 39);
+            this.hl2.Name = "hl2";
+            this.hl2.Size = new System.Drawing.Size(40, 17);
+            this.hl2.TabIndex = 6;
+            this.hl2.Text = "hl2";
+            this.hl2.UseVisualStyleBackColor = true;
             // 
             // ServerConfiguration
             // 
@@ -193,7 +205,7 @@ namespace steamdirectoryfinder
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(429, 310);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.radioButton1);
+            this.Controls.Add(this.SteamAuth);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.button1);
@@ -218,7 +230,7 @@ namespace steamdirectoryfinder
         private Button button1;
         private Label label2;
         private Label label3;
-        private RadioButton radioButton1;
+        private RadioButton SteamAuth;
         private GroupBox groupBox1;
         private CheckBox ep1;
         private CheckBox lostcoast;
@@ -226,5 +238,6 @@ namespace steamdirectoryfinder
         private CheckBox css;
         private CheckBox dod;
         private CheckBox hl1;
+        private CheckBox hl2;
     }
 }

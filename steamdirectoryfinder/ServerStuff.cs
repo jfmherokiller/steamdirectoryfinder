@@ -35,7 +35,7 @@ namespace steamdirectoryfinder
                 Program.Performtasksi(steamcmdbase," +login " + username + " " + password + " +quit");
             }
             if (mounts != "" && mounts == "") return;
-            if (true)
+            if (mounts == "" || !mounts.Contains("hl2"))
             {
                 Program.Performtasks(steamcmdbase, basecmd + "220 " + endofcmd); 
             }
@@ -123,7 +123,7 @@ namespace steamdirectoryfinder
             Program.DeleteVpks(Program.Returnallvpks(theserverfolder));
             var resourceData = Resources.files_to_delete_1_;
             var words = resourceData.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).ToList();
-            foreach(string lines in words)
+            foreach(var lines in words)
             {
                 var attr = File.GetAttributes(theserverfolder + "\\" + lines);
                 try

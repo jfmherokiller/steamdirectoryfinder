@@ -82,8 +82,8 @@ namespace steamdirectoryfinder
                     Console.WriteLine(@"-server ""<serverdirectory\obsidian>""");
                     Console.WriteLine(@"-server ""<serverdirectory\obsidian>"" <username> <password>");
                     Console.WriteLine(@"-server ""<serverdirectory\obsidian>"" <username> <password> -steamauth");
-                    Console.WriteLine(@"-server ""<serverdirectory\obsidian>"" <username> <password> ""ep1,lostcoast,ep2,hl1,css,dod""");
-                    Console.WriteLine(@"-server ""<serverdirectory\obsidian>"" <username> <password> -steamauth ""ep1,lostcoast,ep2,hl1,css,dod""");
+                    Console.WriteLine(@"-server ""<serverdirectory\obsidian>"" <username> <password> ""hl2,ep1,lostcoast,ep2,hl1,css,dod""");
+                    Console.WriteLine(@"-server ""<serverdirectory\obsidian>"" <username> <password> -steamauth ""hl2,ep1,lostcoast,ep2,hl1,css,dod""");
                     Console.WriteLine(@"-client");
                 }
                 else if (args[0].ToLower().Contains("-client"))
@@ -299,78 +299,78 @@ namespace steamdirectoryfinder
                 switch (Gamename(mymount))
                 {
                     case "Half-Life 2":
-                        var gamedir = "\\hl2";
-                        DeleteDir(_sourcesdk2007Installationpath + gamedir, true);
-                        Runoneachvpk(Returndirvpks(gameinstalldir + gamedir));
-                        NativeMethods.Otherstuff.CreateSymbolicLink(_sourcesdk2007Installationpath + gamedir, gameinstalldir + gamedir,
+                        var gamesubdir = "\\hl2";
+                        DeleteDir(_sourcesdk2007Installationpath + gamesubdir, true);
+                        Runoneachvpk(Returndirvpks(gameinstalldir + gamesubdir));
+                        NativeMethods.Otherstuff.CreateSymbolicLink(_sourcesdk2007Installationpath + gamesubdir, gameinstalldir + gamesubdir,
                             NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
-                        Console.WriteLine(gameinstalldir + gamedir);
-                        Console.WriteLine(_sourcesdk2007Installationpath + gamedir);
+                        Console.WriteLine(gameinstalldir + gamesubdir);
+                        Console.WriteLine(_sourcesdk2007Installationpath + gamesubdir);
                         break;
 
                     case "Day of Defeat: Source":
-                        gamedir = "\\dod";
-                        DeleteDir(_sourcesdk2007Installationpath + gamedir, false);
-                        Runoneachvpk(Returndirvpks(gameinstalldir + gamedir));
-                        NativeMethods.Otherstuff.CreateSymbolicLink(_sourcesdk2007Installationpath + gamedir, gameinstalldir + gamedir,
+                        gamesubdir = "\\dod";
+                        DeleteDir(_sourcesdk2007Installationpath + gamesubdir, false);
+                        Runoneachvpk(Returndirvpks(gameinstalldir + gamesubdir));
+                        NativeMethods.Otherstuff.CreateSymbolicLink(_sourcesdk2007Installationpath + gamesubdir, gameinstalldir + gamesubdir,
                             NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
-                        Console.WriteLine(gameinstalldir + gamedir);
-                        Console.WriteLine(_sourcesdk2007Installationpath + gamedir);
+                        Console.WriteLine(gameinstalldir + gamesubdir);
+                        Console.WriteLine(_sourcesdk2007Installationpath + gamesubdir);
                         File.Create(ocinstall + "\\mounts\\dod");
                         break;
 
                     case "Counter-Strike: Source":
-                        gamedir = "\\cstrike";
-                        DeleteDir(_sourcesdk2007Installationpath + gamedir, false);
-                        Runoneachvpk(Returndirvpks(gameinstalldir + gamedir));
-                        NativeMethods.Otherstuff.CreateSymbolicLink(_sourcesdk2007Installationpath + gamedir, gameinstalldir + gamedir,
+                        gamesubdir = "\\cstrike";
+                        DeleteDir(_sourcesdk2007Installationpath + gamesubdir, false);
+                        Runoneachvpk(Returndirvpks(gameinstalldir + gamesubdir));
+                        NativeMethods.Otherstuff.CreateSymbolicLink(_sourcesdk2007Installationpath + gamesubdir, gameinstalldir + gamesubdir,
                             NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
-                        Console.WriteLine(gameinstalldir + gamedir);
-                        Console.WriteLine(_sourcesdk2007Installationpath + gamedir);
+                        Console.WriteLine(gameinstalldir + gamesubdir);
+                        Console.WriteLine(_sourcesdk2007Installationpath + gamesubdir);
                         File.Create(ocinstall + "\\mounts\\css");
                         break;
 
                     case "Half-Life: Source":
-                        gamedir = "\\hl1";
-                        DeleteDir(_sourcesdk2007Installationpath + gamedir, false);
-                        Runoneachvpk(Returndirvpks(gameinstalldir + gamedir));
-                        NativeMethods.Otherstuff.CreateSymbolicLink(_sourcesdk2007Installationpath + gamedir, gameinstalldir + gamedir,
+                        gamesubdir = "\\hl1";
+                        DeleteDir(_sourcesdk2007Installationpath + gamesubdir, false);
+                        Runoneachvpk(Returndirvpks(gameinstalldir + gamesubdir));
+                        NativeMethods.Otherstuff.CreateSymbolicLink(_sourcesdk2007Installationpath + gamesubdir, gameinstalldir + gamesubdir,
                             NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
-                        Console.WriteLine(gameinstalldir + gamedir);
-                        Console.WriteLine(_sourcesdk2007Installationpath + gamedir);
+                        Console.WriteLine(gameinstalldir + gamesubdir);
+                        Console.WriteLine(_sourcesdk2007Installationpath + gamesubdir);
                         File.Create(ocinstall + "\\mounts\\hls");
                         break;
 
                     case "Half-Life 2: Lost Coast":
-                        gamedir = "\\lostcoast";
-                        DeleteDir(_sourcesdk2007Installationpath + gamedir, false);
-                        Runoneachvpk(Returndirvpks(gameinstalldir + gamedir));
-                        NativeMethods.Otherstuff.CreateSymbolicLink(_sourcesdk2007Installationpath + gamedir, gameinstalldir + gamedir,
+                        gamesubdir = "\\lostcoast";
+                        DeleteDir(_sourcesdk2007Installationpath + gamesubdir, false);
+                        Runoneachvpk(Returndirvpks(gameinstalldir + gamesubdir));
+                        NativeMethods.Otherstuff.CreateSymbolicLink(_sourcesdk2007Installationpath + gamesubdir, gameinstalldir + gamesubdir,
                             NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
-                        Console.WriteLine(gameinstalldir + gamedir);
-                        Console.WriteLine(_sourcesdk2007Installationpath + gamedir);
+                        Console.WriteLine(gameinstalldir + gamesubdir);
+                        Console.WriteLine(_sourcesdk2007Installationpath + gamesubdir);
                         File.Create(ocinstall + "\\mounts\\lostcoast");
                         break;
 
                     case "Half-Life 2: Episode One":
-                        gamedir = "\\episodic";
-                        DeleteDir(_sourcesdk2007Installationpath + gamedir, false);
-                        Runoneachvpk(Returndirvpks(gameinstalldir + gamedir));
-                        NativeMethods.Otherstuff.CreateSymbolicLink(_sourcesdk2007Installationpath + gamedir, gameinstalldir + gamedir,
+                        gamesubdir = "\\episodic";
+                        DeleteDir(_sourcesdk2007Installationpath + gamesubdir, false);
+                        Runoneachvpk(Returndirvpks(gameinstalldir + gamesubdir));
+                        NativeMethods.Otherstuff.CreateSymbolicLink(_sourcesdk2007Installationpath + gamesubdir, gameinstalldir + gamesubdir,
                             NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
-                        Console.WriteLine(gameinstalldir + gamedir);
-                        Console.WriteLine(_sourcesdk2007Installationpath + gamedir);
+                        Console.WriteLine(gameinstalldir + gamesubdir);
+                        Console.WriteLine(_sourcesdk2007Installationpath + gamesubdir);
                         File.Create(ocinstall + "\\mounts\\episodic");
                         break;
 
                     case "Half-Life 2: Episode Two":
-                        gamedir = "\\ep2";
-                        DeleteDir(_sourcesdk2007Installationpath + gamedir, false);
-                        Runoneachvpk(Returndirvpks(gameinstalldir + gamedir));
-                        NativeMethods.Otherstuff.CreateSymbolicLink(_sourcesdk2007Installationpath + gamedir, gameinstalldir + gamedir,
+                        gamesubdir = "\\ep2";
+                        DeleteDir(_sourcesdk2007Installationpath + gamesubdir, false);
+                        Runoneachvpk(Returndirvpks(gameinstalldir + gamesubdir));
+                        NativeMethods.Otherstuff.CreateSymbolicLink(_sourcesdk2007Installationpath + gamesubdir, gameinstalldir + gamesubdir,
                             NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
-                        Console.WriteLine(gameinstalldir + gamedir);
-                        Console.WriteLine(_sourcesdk2007Installationpath + gamedir);
+                        Console.WriteLine(gameinstalldir + gamesubdir);
+                        Console.WriteLine(_sourcesdk2007Installationpath + gamesubdir);
                         File.Create(ocinstall + "\\mounts\\ep2");
                         break;
 
