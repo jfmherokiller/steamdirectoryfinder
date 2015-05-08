@@ -19,14 +19,13 @@ namespace steamdirectoryfinder
             {
                 _fileStream = File.Create(path);
 
-                _fileWriter = new StreamWriter(_fileStream);
-                _fileWriter.AutoFlush = true;
+                _fileWriter = new StreamWriter(_fileStream) {AutoFlush = true};
 
                 _doubleWriter = new DoubleWriter(_fileWriter, _oldOut);
             }
             catch (Exception e)
             {
-                Console.WriteLine("Cannot open file for writing");
+                Console.WriteLine(@"Cannot open file for writing");
                 Console.WriteLine(e.Message);
                 return;
             }

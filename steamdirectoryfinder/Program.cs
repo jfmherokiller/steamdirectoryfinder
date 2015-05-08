@@ -260,7 +260,6 @@ namespace steamdirectoryfinder
                     continue;
                 }
                 Console.WriteLine(@"Error server or client not found");
-                continue;
             }
         }
 
