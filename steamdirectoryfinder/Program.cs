@@ -182,15 +182,14 @@ namespace steamdirectoryfinder
             return "\"" + value + "\"";
         }
 
-        public static string[] Returnallvpks(String dir)
+        public static IEnumerable<string> Returnallvpks(String dir)
         {
-            return Directory.GetFiles(dir, "*.vpk", SearchOption.AllDirectories);
+            return Directory.EnumerateFiles(dir, "*.vpk", SearchOption.AllDirectories);
         }
 
-        public static string[] Returndirvpks(string dir)
+        public static IEnumerable<string> Returndirvpks(string dir)
         {
-            var vpkfiles = Directory.GetFiles(dir, "*_dir.vpk", SearchOption.AllDirectories);
-            Array.Sort(vpkfiles, StringComparer.InvariantCulture);
+            var vpkfiles = Directory.EnumerateFiles(dir, "*_dir.vpk", SearchOption.AllDirectories);
             return vpkfiles;
         }
 
