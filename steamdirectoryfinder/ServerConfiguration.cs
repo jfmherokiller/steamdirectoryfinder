@@ -49,11 +49,11 @@ namespace steamdirectoryfinder
             ServerStuff.CheckifDirectoryexistsorcreateit(Directory.GetCurrentDirectory() + "\\steamcmd");
             if (SteamAuth.Checked)
             {
-                ServerStuff.InstallServer(textBox1.Text,textBox2.Text,_mainFolder,true,selectedmounts);
+                ServerStuff.InstallServer(textBox1.Text, textBox2.Text, _mainFolder, true, selectedmounts);
             }
             else
             {
-                ServerStuff.InstallServer(textBox1.Text, textBox2.Text, _mainFolder, false,selectedmounts);
+                ServerStuff.InstallServer(textBox1.Text, textBox2.Text, _mainFolder, false, selectedmounts);
             }
 
             ServerStuff.ExtractAndDelete(_mainFolder);
@@ -67,7 +67,6 @@ namespace steamdirectoryfinder
 
         private void ServerConfiguration_Load(object sender, EventArgs e)
         {
-            
         }
     }
 }

@@ -19,7 +19,7 @@ namespace steamdirectoryfinder
             {
                 _fileStream = File.Create(path);
 
-                _fileWriter = new StreamWriter(_fileStream) {AutoFlush = true};
+                _fileWriter = new StreamWriter(_fileStream) { AutoFlush = true };
 
                 _doubleWriter = new DoubleWriter(_fileWriter, _oldOut);
             }

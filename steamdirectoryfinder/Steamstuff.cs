@@ -1,6 +1,5 @@
-﻿using System;
-using System.CodeDom;
-using Steam4Net;
+﻿using Steam4Net;
+using System;
 
 namespace steamdirectoryfinder
 {
@@ -11,9 +10,11 @@ namespace steamdirectoryfinder
         public static SteamApps005 SteamApps { get; private set; }
 
         public static SteamApps001 SteamApps2 { get; private set; }
+
         private static SteamClient009 SteamClient { get; set; }
 
         public static SteamUser016 SteamUser { get; private set; }
+
         public static ClientAppManager AppManager { get; set; }
 
         private static int User { get; set; }

@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using steamdirectoryfinder.Properties;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
-using Microsoft.Win32;
-using steamdirectoryfinder.Properties;
 
 namespace steamdirectoryfinder
 {
@@ -68,7 +68,7 @@ namespace steamdirectoryfinder
         [STAThread]
         public static void Main(string[] args)
         {
-            AppDomain.CurrentDomain.ProcessExit += Shutdown; 
+            AppDomain.CurrentDomain.ProcessExit += Shutdown;
             using (new ConsoleCopy("mylogfile.txt"))
             {
                 Perfominitializations();
@@ -127,7 +127,6 @@ namespace steamdirectoryfinder
                         fun = NativeMethods.Otherstuff.GetShortPathName(fun);
                         Server(fun, args[2], args[3], true, args[5]);
                     }
-
                 }
             }
         }
@@ -138,6 +137,7 @@ namespace steamdirectoryfinder
             Console.ForegroundColor = ConsoleColor.DarkGreen;
             Console.Title = @"Source Sdk 2007 fud";
         }
+
         public static void Performtasksi(string prog, string ass)
         {
             var task = new Process
@@ -150,10 +150,11 @@ namespace steamdirectoryfinder
                 }
             };
             task.Start();
-            
+
             task.WaitForExit();
             task.Close();
         }
+
         public static void Performtasks(string prog, string ass)
         {
             var task = new Process
@@ -208,7 +209,7 @@ namespace steamdirectoryfinder
             Steamstuff.InitClient();
         }
 
-        private static void Shutdown(Object sender,EventArgs a)
+        private static void Shutdown(Object sender, EventArgs a)
         {
             Steamstuff.Shutdown();
             DeleteFile("HLExtract.exe");
@@ -229,9 +230,9 @@ namespace steamdirectoryfinder
             //var xcopyargs = PutIntoQuotes(gamedir + "\\root\\*") + " " + PutIntoQuotes(gamedir + "\\") + " /f /s /i /y";
             var hlExtractargs = "-p " + quotedVpk + " -d " + PutIntoQuotes(gamedir) + " " + "-e \"\"";
             Performtasks("HLExtract.exe", hlExtractargs);
-            Performtasks("robocopy",robocopyargs);
+            Performtasks("robocopy", robocopyargs);
 
-           // Performtasks("xcopy", xcopyargs);
+            // Performtasks("xcopy", xcopyargs);
             //Directory.Delete(gamedir + "\\root", true);
             //Performtasks("rd", "/q /s " )
         }
@@ -291,7 +292,7 @@ namespace steamdirectoryfinder
             {
                 if (!Steamstuff.SteamApps.BIsAppInstalled(mymount))
                 {
-                    Console.Beep();                   
+                    Console.Beep();
                     continue;
                 }
                 Steamstuff.SteamApps.GetAppInstallDir(mymount, gameinstalldir);
@@ -395,7 +396,7 @@ namespace steamdirectoryfinder
             }
         }
 
-        private static void Server(string installpath, string username = "", string password = "",bool steamauth = false,string mounts = "")
+        private static void Server(string installpath, string username = "", string password = "", bool steamauth = false, string mounts = "")
         {
             if (installpath != null & username == "" & password == "")
             {
@@ -419,17 +420,20 @@ namespace steamdirectoryfinder
             {
                 var fun = new ServerStuff(installpath, username, password);
                 fun.RunFun();
-            }else if (username != "" & password != "" & !steamauth & mounts == "")
+            }
+            else if (username != "" & password != "" & !steamauth & mounts == "")
             {
-                var fun = new ServerStuff(installpath, username, password,true);
+                var fun = new ServerStuff(installpath, username, password, true);
                 fun.RunFun();
-            }else if (username != "" & password != "" & steamauth & mounts != "" )
+            }
+            else if (username != "" & password != "" & steamauth & mounts != "")
             {
-                var fun = new ServerStuff(installpath,username,password,false,mounts);
+                var fun = new ServerStuff(installpath, username, password, false, mounts);
                 fun.RunFun();
-            }else if (username != "" & password != "" & !steamauth & mounts != "")
+            }
+            else if (username != "" & password != "" & !steamauth & mounts != "")
             {
-                var fun = new ServerStuff(installpath,username,password,true,mounts);
+                var fun = new ServerStuff(installpath, username, password, true, mounts);
                 fun.RunFun();
             }
         }

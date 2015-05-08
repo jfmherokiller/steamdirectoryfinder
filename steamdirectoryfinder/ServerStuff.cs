@@ -1,8 +1,9 @@
-﻿using System;
+﻿using steamdirectoryfinder.Properties;
+using System;
 using System.IO;
 using System.Linq;
 using System.Net;
-using steamdirectoryfinder.Properties;
+using System.Threading.Tasks;
 
 namespace steamdirectoryfinder
 {
@@ -14,7 +15,8 @@ namespace steamdirectoryfinder
         private readonly string _username;
         private readonly bool _steamauth;
         private readonly string _mounts;
-        public ServerStuff(string path, string username, string password,bool steamfun = false,string mounts = "")
+
+        public ServerStuff(string path, string username, string password, bool steamfun = false, string mounts = "")
         {
             _ocServerInstallPath = path;
             _mainFolder = Directory.GetParent(_ocServerInstallPath).FullName;
@@ -23,49 +25,50 @@ namespace steamdirectoryfinder
             _steamauth = steamfun;
             _mounts = mounts;
         }
-        public static void InstallServer(string username, string password, string serverdirectory,bool steamauth,string mounts = "")
+
+        public static void InstallServer(string username, string password, string serverdirectory, bool steamauth, string mounts = "")
         {
-            const string endofcmd = "validate +quit";
+            const string endofcmd = " validate +quit";
             var basecmd = " +login " + username + " " + password + " +force_install_dir " +
                           NativeMethods.Otherstuff.GetShortPathName(serverdirectory) +
                           " +app_update ";
-            var steamcmdbase = Directory.GetCurrentDirectory() + "\\steamcmd" + "\\steamcmd.exe";
+            var steamcmdbase = Path.Combine(Directory.GetCurrentDirectory(), "\\steamcmd\\steamcmd.exe");
             if (steamauth)
             {
-                Program.Performtasksi(steamcmdbase," +login " + username + " " + password + " +quit");
+                Program.Performtasksi(steamcmdbase, " +login " + username + " " + password + " +quit");
             }
             if (mounts != "" && mounts == "") return;
             if (mounts == "" || !mounts.Contains("hl2"))
             {
-                Program.Performtasks(steamcmdbase, basecmd + "220 " + endofcmd); 
+                Program.Performtasks(steamcmdbase, basecmd + "220" + endofcmd);
             }
             if (mounts == "" || !mounts.Contains("ep1"))
             {
-                Program.Performtasks(steamcmdbase, basecmd + "380 " + endofcmd); 
+                Program.Performtasks(steamcmdbase, basecmd + "380" + endofcmd);
             }
             if (mounts == "" || !mounts.Contains("lostcoast"))
             {
-                Program.Performtasks(steamcmdbase, basecmd + "340 " + endofcmd); 
+                Program.Performtasks(steamcmdbase, basecmd + "340" + endofcmd);
             }
             if (mounts == "" || !mounts.Contains("ep2"))
             {
-                Program.Performtasks(steamcmdbase, basecmd + "420 " + endofcmd); 
+                Program.Performtasks(steamcmdbase, basecmd + "420" + endofcmd);
             }
             if (mounts == "" || !mounts.Contains("hl1"))
             {
-                Program.Performtasks(steamcmdbase, basecmd + "280 " + endofcmd); 
+                Program.Performtasks(steamcmdbase, basecmd + "280" + endofcmd);
             }
             if (mounts == "" || !mounts.Contains("css"))
             {
-                Program.Performtasks(steamcmdbase, basecmd + "240 " + endofcmd); 
+                Program.Performtasks(steamcmdbase, basecmd + "240" + endofcmd);
             }
             if (mounts == "" || !mounts.Contains("dod"))
             {
-                Program.Performtasks(steamcmdbase, basecmd + "300 " + endofcmd); 
+                Program.Performtasks(steamcmdbase, basecmd + "300" + endofcmd);
             }
             if (true)
             {
-                Program.Performtasks(steamcmdbase, basecmd + "310 " + endofcmd); 
+                Program.Performtasks(steamcmdbase, basecmd + "310" + endofcmd);
             }
         }
 
@@ -89,7 +92,7 @@ namespace steamdirectoryfinder
         public static void ExtractServerResources(string ass)
         {
             File.WriteAllBytes("7za.exe", Resources._7za);
-            Program.Performtasks("7za.exe","x steamcmd.zip -o" + Program.PutIntoQuotes(Directory.GetCurrentDirectory() + "\\steamcmd") + " -aoa");
+            Program.Performtasks("7za.exe", "x steamcmd.zip -o" + Program.PutIntoQuotes(Directory.GetCurrentDirectory() + "\\steamcmd") + " -aoa");
             File.WriteAllBytes("addons.zip", Resources.addons);
             Program.Performtasks("7za.exe", "x addons.zip -o" + Program.PutIntoQuotes(ass) + " -aoa");
             Program.Performtasks("7za.exe", "x mmsource.zip -o" + Program.PutIntoQuotes(ass) + " -aoa");
@@ -102,7 +105,7 @@ namespace steamdirectoryfinder
             CheckifDirectoryexistsorcreateit(Directory.GetCurrentDirectory() + "\\steamcmd");
             DownloadSteamcmd();
             ExtractServerResources(_ocServerInstallPath);
-            InstallServer(_username, _password, _mainFolder,_steamauth,_mounts);
+            InstallServer(_username, _password, _mainFolder, _steamauth, _mounts);
             ExtractAndDelete(_mainFolder);
             CreateNeededFiles(_mainFolder);
         }
@@ -110,7 +113,7 @@ namespace steamdirectoryfinder
         public static void CreateNeededFiles(string installpath)
         {
             var myIp = new WebClient().DownloadString(@"http://ipv4.icanhazip.com").Trim();
-            var startBat = "srcds.exe -console -condebug -game obsidian -ip " + myIp +" -port 27015 +map oc_lobby +maxplayers 32 +hostname \"(SteamPipe) Basic Server\"";
+            var startBat = "srcds.exe -console -condebug -game obsidian -ip " + myIp + " -port 27015 +map oc_lobby +maxplayers 32 +hostname \"(SteamPipe) Basic Server\"";
             File.WriteAllText(installpath + "\\StartServer.bat", startBat);
         }
 
@@ -122,26 +125,26 @@ namespace steamdirectoryfinder
             Program.Runoneachvpk(Program.Returndirvpks(theserverfolder));
             Program.DeleteVpks(Program.Returnallvpks(theserverfolder));
             var resourceData = Resources.files_to_delete_1_;
-            var words = resourceData.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).ToList();
-            foreach(var lines in words)
+            var words = resourceData.Split(new[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries).ToList();
+            Parallel.ForEach(words, lines =>
             {
-                var attr = File.GetAttributes(theserverfolder + "\\" + lines);
+                var attr = File.GetAttributes(Path.Combine(theserverfolder, lines));
                 try
                 {
                     if (attr.HasFlag(FileAttributes.Directory))
                     {
-                        Program.DeleteDir(theserverfolder + "\\" + lines, true);
+                        Program.DeleteDir(Path.Combine(theserverfolder, lines), true);
                     }
                     else
                     {
-                        Program.DeleteFile(theserverfolder + "\\" + lines);
+                        Program.DeleteFile(Path.Combine(theserverfolder, lines));
                     }
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine(e);
                 }
-            }
+            });
         }
     }
 }
