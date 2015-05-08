@@ -130,10 +130,10 @@
   <data name="addons" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\addons.zip;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="BrianOrr_Clouds" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\brianorr-clouds.mp3;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="_7za" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\7za.exe;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="CANYON" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\canyon.mid;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>

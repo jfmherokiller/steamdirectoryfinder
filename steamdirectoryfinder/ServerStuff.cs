@@ -137,7 +137,7 @@ namespace steamdirectoryfinder
                         Program.DeleteFile(theserverfolder + "\\" + lines);
                     }
                 }
-                catch (FileNotFoundException e)
+                catch (Exception e)
                 {
                     Console.WriteLine(e);
                 }
