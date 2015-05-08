@@ -15,8 +15,6 @@ namespace steamdirectoryfinder
 
         public static SteamUser016 SteamUser { get; private set; }
 
-        public static ClientAppManager AppManager { get; set; }
-
         private static int User { get; set; }
 
         public static void InitClient()
@@ -26,19 +24,6 @@ namespace steamdirectoryfinder
                 throw new SteamException("Unable to load steamclient library.");
             }
             if (!Steamworks.LoadSteam())
-            {
-                throw new SteamException("Unable to load steam.");
-            }
-            SetupSteamInterfaces();
-        }
-
-        public static void InitServer(string loadpath)
-        {
-            if (!Steamworks.LoadSteamClientF(loadpath))
-            {
-                throw new SteamException("Unable to load steamclient library.");
-            }
-            if (!Steamworks.LoadSteamF(loadpath))
             {
                 throw new SteamException("Unable to load steam.");
             }

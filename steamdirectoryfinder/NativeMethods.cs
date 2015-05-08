@@ -45,7 +45,6 @@ namespace steamdirectoryfinder
         {
             public enum SymbolicLinkFlag
             {
-                File = 0,
                 Directory = 1
             }
 

@@ -16,25 +16,14 @@ namespace steamdirectoryfinder
 
         public static void DeleteDir(string fun)
         {
-            if (System.IO.File.GetAttributes(fun).HasFlag(FileAttributes.ReparsePoint))
-            {
-                Directory.Delete(fun, false);
-            }
-            else
-            {
-                Directory.Delete(fun,true);
-            }
+            Directory.Delete(fun, !File.GetAttributes(fun).HasFlag(FileAttributes.ReparsePoint));
         }
 
         public static void DeleteFile(string fun)
         {
-            try
+            if(File.Exists(fun))
             {
                 File.Delete(fun);
-            }
-            catch (DirectoryNotFoundException)
-            {
-                Console.WriteLine(@"opps File not found");
             }
         }
 
@@ -60,9 +49,7 @@ namespace steamdirectoryfinder
         {
             var sb = new StringBuilder(256);
             Steamstuff.SteamApps2.GetAppData(a, "name", sb);
-
-            var name = sb.ToString();
-            return name;
+            return sb.ToString();
         }
 
         [STAThread]
