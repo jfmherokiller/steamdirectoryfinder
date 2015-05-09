@@ -16,7 +16,10 @@ namespace steamdirectoryfinder
 
         public static void DeleteDir(string fun)
         {
-            Directory.Delete(fun, !File.GetAttributes(fun).HasFlag(FileAttributes.ReparsePoint));
+            if (Directory.Exists(fun))
+            {
+                Directory.Delete(fun, !File.GetAttributes(fun).HasFlag(FileAttributes.ReparsePoint));
+            }
         }
 
         public static void DeleteFile(string fun)

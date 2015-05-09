@@ -128,9 +128,12 @@ namespace steamdirectoryfinder
             var words = resourceData.Split(new[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries).ToList();
             Parallel.ForEach(words, lines =>
             {
-                var attr = File.GetAttributes(Path.Combine(theserverfolder, lines));
-                try
+                var fun = Path.Combine(theserverfolder, lines);
+                FileAttributes attr = 0;
+                if (File.Exists(fun) || Directory.Exists(fun))
                 {
+                  attr  = File.GetAttributes(fun);
+                }
                     if (attr.HasFlag(FileAttributes.Directory))
                     {
                         Program.DeleteDir(Path.Combine(theserverfolder, lines));
@@ -139,11 +142,6 @@ namespace steamdirectoryfinder
                     {
                         Program.DeleteFile(Path.Combine(theserverfolder, lines));
                     }
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                }
             });
         }
     }
