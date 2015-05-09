@@ -9,7 +9,7 @@ using Microsoft.Win32;
 
 namespace Steam4Net
 {
-    public class Steamworks
+    public static class Steamworks
     {
         private static IntPtr _steamClientHandle = IntPtr.Zero;
         private static IntPtr _steamHandle = IntPtr.Zero;
@@ -31,7 +31,9 @@ namespace Steam4Net
             {
                 var myKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32);
 
-                installPath = myKey.OpenSubKey(@"Software\Valve\Steam",false).GetValue("InstallPath").ToString();
+                var registryKey = myKey.OpenSubKey(@"Software\Valve\Steam",false);
+                if (registryKey != null)
+                    installPath = registryKey.GetValue("InstallPath").ToString();
             }
             catch
             {
@@ -131,20 +133,11 @@ namespace Steam4Net
         }
 
         /// <summary>
-        ///     Loads the steamclient library. This does not load the steam library. Please use the overload to do so.
-        /// </summary>
-        /// <returns>A value indicating if the load was successful.</returns>
-        public static bool Load()
-        {
-            return Load(false);
-        }
-
-        /// <summary>
         ///     Loads the steamclient library and, optionally, the steam library.
         /// </summary>
         /// <param name="steam">if set to <c>true</c> the steam library is also loaded.</param>
         /// <returns>A value indicating if the load was successful.</returns>
-        public static bool Load(bool steam)
+        public static bool Load(bool steam = false)
         {
             if (steam && !LoadSteam())
                 return false;
