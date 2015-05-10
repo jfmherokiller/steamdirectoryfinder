@@ -105,7 +105,6 @@
       <DependentUpon>ServerConfiguration.cs</DependentUpon>
     </Compile>
     <Compile Include="ServerStuff.cs" />
-    <Compile Include="Steamstuff.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -170,12 +169,6 @@
     <None Include="bin\Debug\HLLib.dll" />
     <None Include="bin\Debug\HLExtract.exe" />
     <Content Include="obsidian.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Steam4NET2\Steam4NET2\Steam4NET.csproj">
-      <Project>{1a204257-fe82-4bbe-9ed4-40694821c31f}</Project>
-      <Name>Steam4NET</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

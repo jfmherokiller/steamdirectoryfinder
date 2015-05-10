@@ -4,9 +4,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "steamdirectoryfinder", "steamdirectoryfinder\steamdirectoryfinder.csproj", "{DD084DFC-4EFF-4FA4-B29A-F88C8665BAA7}"
-	ProjectSection(ProjectDependencies) = postProject
-		{1A204257-FE82-4BBE-9ED4-40694821C31F} = {1A204257-FE82-4BBE-9ED4-40694821C31F}
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{B4D1FB4B-A052-40E6-9834-112ABE0D920B}"
 	ProjectSection(SolutionItems) = preProject
@@ -14,8 +11,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{B4D1FB
 		.nuget\NuGet.exe = .nuget\NuGet.exe
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Steam4NET", "Steam4NET2\Steam4NET2\Steam4NET.csproj", "{1A204257-FE82-4BBE-9ED4-40694821C31F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F83C55D7-11B5-477A-BD6E-A2EF1C5E0A9D}"
 	ProjectSection(SolutionItems) = preProject
@@ -57,23 +52,6 @@ Global
 		{DD084DFC-4EFF-4FA4-B29A-F88C8665BAA7}.Release|x64.ActiveCfg = Release|Any CPU
 		{DD084DFC-4EFF-4FA4-B29A-F88C8665BAA7}.Release|x86.ActiveCfg = Release|x86
 		{DD084DFC-4EFF-4FA4-B29A-F88C8665BAA7}.Release|x86.Build.0 = Release|x86
-		{1A204257-FE82-4BBE-9ED4-40694821C31F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1A204257-FE82-4BBE-9ED4-40694821C31F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1A204257-FE82-4BBE-9ED4-40694821C31F}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{1A204257-FE82-4BBE-9ED4-40694821C31F}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{1A204257-FE82-4BBE-9ED4-40694821C31F}.Debug|Win32.ActiveCfg = Debug|Any CPU
-		{1A204257-FE82-4BBE-9ED4-40694821C31F}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{1A204257-FE82-4BBE-9ED4-40694821C31F}.Debug|x86.ActiveCfg = Debug|x86
-		{1A204257-FE82-4BBE-9ED4-40694821C31F}.Debug|x86.Build.0 = Debug|x86
-		{1A204257-FE82-4BBE-9ED4-40694821C31F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1A204257-FE82-4BBE-9ED4-40694821C31F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1A204257-FE82-4BBE-9ED4-40694821C31F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{1A204257-FE82-4BBE-9ED4-40694821C31F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{1A204257-FE82-4BBE-9ED4-40694821C31F}.Release|Win32.ActiveCfg = Release|x86
-		{1A204257-FE82-4BBE-9ED4-40694821C31F}.Release|Win32.Build.0 = Release|x86
-		{1A204257-FE82-4BBE-9ED4-40694821C31F}.Release|x64.ActiveCfg = Release|Any CPU
-		{1A204257-FE82-4BBE-9ED4-40694821C31F}.Release|x86.ActiveCfg = Release|x86
-		{1A204257-FE82-4BBE-9ED4-40694821C31F}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
