@@ -4,20 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using steamdirectoryfinder;
 
 namespace steamdirectoryfinder
 {
     internal static class Program
     {
-        private const uint SourceSdk2007Id = 218;
-        private static readonly uint[] Requiredmountids = { 220, 240, 280, 300, 340, 380, 420 };
-        private static string _sourcesdk2007Installationpath = "";
-
         public static void DeleteDir(string fun)
         {
             if (Directory.Exists(fun))
@@ -28,7 +19,7 @@ namespace steamdirectoryfinder
 
         public static void DeleteFile(string fun)
         {
-            if(File.Exists(fun))
+            if (File.Exists(fun))
             {
                 File.Delete(fun);
             }
@@ -198,6 +189,10 @@ namespace steamdirectoryfinder
 
         private static void SetupClient()
         {
+            if (File.Exists("C:\\out.txt"))
+            {
+                File.Delete("C:\\out.txt");
+            }
             ExtractClientResources();
             //Steamstuff.InitClient();
         }
@@ -211,6 +206,7 @@ namespace steamdirectoryfinder
             DeleteFile("steamcmd.zip");
             DeleteFile("sourcemod.zip");
             DeleteFile("addons.zip");
+            Console.ResetColor();
         }
 
         private static void Tasks(string ass)
@@ -247,7 +243,7 @@ namespace steamdirectoryfinder
                 if (output != null && output.ToLower() == "fun")
                 {
                     var tehfile = Path.GetTempFileName();
-                    File.WriteAllBytes(tehfile, Resources.CANYON);
+                    File.WriteAllBytes(tehfile, Resources.windows);
                     NativeMethods.Mp3Play.Open(tehfile);
                     NativeMethods.Mp3Play.Play(true);
                     File.Delete(tehfile);
@@ -256,50 +252,65 @@ namespace steamdirectoryfinder
                 Console.WriteLine(@"Error server or client not found");
             }
         }
+
         private static void ClientNohook()
         {
             SetupClient();
-            var key = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Valve\\Steam",false);
+            var key = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Valve\\Steam", false);
             var ocinstall = key.GetValue("SourceModInstallPath") + "\\obsidian";
             var drives = DriveInfo.GetDrives();
             var correctdrive = "";
             var commonfolder = "";
 
-
-            foreach(var drive in drives)
+            foreach (var drive in drives)
             {
-                    var createfile = new Process
+                if (!drive.IsReady)
+                {
+                     continue;
+                }
+                var createfile = new Process
+                {
+                    StartInfo =
                     {
-                        StartInfo =
-                        {
-                            UseShellExecute = false,
-                            WorkingDirectory = drive.RootDirectory.FullName,
-                            CreateNoWindow = true,
-                            FileName = "cmd",
-                            Arguments = "/c \"dir /s /b >> C:\\out.txt\""
-                        }
-                    };
-                    createfile.Start();
-                    createfile.WaitForExit();
+                        UseShellExecute = false,
+                        WorkingDirectory = drive.RootDirectory.FullName,
+                        CreateNoWindow = true,
+                        FileName = "cmd",
+                        Arguments = "/c \"dir /s /b >> C:\\out.txt\""
+                    }
+                };
+                createfile.Start();
+                createfile.WaitForExit();
             }
-            correctdrive = File.ReadAllLines("C:\\out.txt").First(s => s.Contains("Source SDK Base 2007"));
+            String line;
+            var file = new StreamReader(@"c:\out.txt");
+            while ((line = file.ReadLine()) != null)
+            {
+                if (line.EndsWith("Source SDK Base 2007"))
+                {
+                    correctdrive = line;
+                    break;
+                }
+
+            }
+            file.Close();
             commonfolder = new DirectoryInfo(correctdrive).Parent.FullName;
             File.Delete("C:\\out.txt");
             Console.WriteLine(correctdrive);
             Console.WriteLine(commonfolder);
-            foreach (var fun in Directory.EnumerateDirectories(commonfolder,"*",SearchOption.TopDirectoryOnly))
+            foreach (var fun in Directory.EnumerateDirectories(commonfolder, "*", SearchOption.TopDirectoryOnly))
             {
                 if (fun.Contains("Half-Life 2"))
                 {
-                    foreach (var superfun in Directory.EnumerateDirectories(fun + "\\Half-Life 2", "*", SearchOption.TopDirectoryOnly))
+                    foreach (var superfun in Directory.EnumerateDirectories(fun, "*", SearchOption.TopDirectoryOnly))
                     {
                         if (superfun.Contains("hl2"))
                         {
-                            DeleteDir(correctdrive+"\\hl2");
+                            DeleteDir(correctdrive + "\\hl2");
                             Runoneachvpk(Returndirvpks(superfun));
-                            NativeMethods.Otherstuff.CreateSymbolicLink(correctdrive+"\\hl2", superfun,NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
+                            NativeMethods.Otherstuff.CreateSymbolicLink(correctdrive + "\\hl2", superfun, NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
                         }
-                        if (superfun.Contains("hl1"))
+                        if (superfun.Contains("hl1") & !superfun.Contains("hl1_hd"))
                         {
                             DeleteDir(correctdrive + "\\hl1");
                             Runoneachvpk(Returndirvpks(superfun));
@@ -332,10 +343,9 @@ namespace steamdirectoryfinder
                 if (fun.Contains("Counter-Strike Source"))
                 {
                     DeleteDir(correctdrive + "\\cstrike");
-                    Runoneachvpk(Returndirvpks(fun+"\\cstrike"));
-                    NativeMethods.Otherstuff.CreateSymbolicLink(correctdrive + "\\cstrike", fun+"\\cstrike", NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
+                    Runoneachvpk(Returndirvpks(fun + "\\cstrike"));
+                    NativeMethods.Otherstuff.CreateSymbolicLink(correctdrive + "\\cstrike", fun + "\\cstrike", NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
                     File.Create(ocinstall + "\\mounts\\css");
-
                 }
                 if (fun.Contains("Day of Defeat Source"))
                 {
@@ -346,6 +356,7 @@ namespace steamdirectoryfinder
                 }
             }
         }
+
         //private static void Client()
         //{
         //    //initalize the steam api binding code.

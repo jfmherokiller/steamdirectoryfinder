@@ -31,13 +31,11 @@ namespace steamdirectoryfinder
 
             public static void Play(bool loop)
             {
-                if (_isOpen)
-                {
-                    _command = "play MediaFile";
-                    if (loop)
-                        _command += " REPEAT";
-                    mciSendString(_command, null, 0, IntPtr.Zero);
-                }
+                if (!_isOpen) return;
+                _command = "play MediaFile";
+                if (loop)
+                    _command += " REPEAT";
+                mciSendString(_command, null, 0, IntPtr.Zero);
             }
         }
 
