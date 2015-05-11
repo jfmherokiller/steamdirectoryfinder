@@ -4,7 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using steamdirectoryfinder;
 
 namespace steamdirectoryfinder
 {
@@ -252,16 +256,95 @@ namespace steamdirectoryfinder
                 Console.WriteLine(@"Error server or client not found");
             }
         }
-
         private static void ClientNohook()
         {
-            var key = Registry.CurrentUser.OpenSubKey("Software\\Valve\\Steam");
-            var steaminstallpath = key.GetValue("InstallPath");
+            SetupClient();
+            var key = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Valve\\Steam",false);
             var ocinstall = key.GetValue("SourceModInstallPath") + "\\obsidian";
-            var steamdirvdf = steaminstallpath + "\\steamapps\\libraryfolders.vdf";
-            Console.WriteLine(File.ReadAllLines(steamdirvdf));
-            Console.ReadLine();
+            var drives = DriveInfo.GetDrives();
+            var correctdrive = "";
+            var commonfolder = "";
 
+
+            foreach(var drive in drives)
+            {
+                    var createfile = new Process
+                    {
+                        StartInfo =
+                        {
+                            UseShellExecute = false,
+                            WorkingDirectory = drive.RootDirectory.FullName,
+                            CreateNoWindow = true,
+                            FileName = "cmd",
+                            Arguments = "/c \"dir /s /b >> C:\\out.txt\""
+                        }
+                    };
+                    createfile.Start();
+                    createfile.WaitForExit();
+            }
+            correctdrive = File.ReadAllLines("C:\\out.txt").First(s => s.Contains("Source SDK Base 2007"));
+            commonfolder = new DirectoryInfo(correctdrive).Parent.FullName;
+            File.Delete("C:\\out.txt");
+            Console.WriteLine(correctdrive);
+            Console.WriteLine(commonfolder);
+            foreach (var fun in Directory.EnumerateDirectories(commonfolder,"*",SearchOption.TopDirectoryOnly))
+            {
+                if (fun.Contains("Half-Life 2"))
+                {
+                    foreach (var superfun in Directory.EnumerateDirectories(fun + "\\Half-Life 2", "*", SearchOption.TopDirectoryOnly))
+                    {
+                        if (superfun.Contains("hl2"))
+                        {
+                            DeleteDir(correctdrive+"\\hl2");
+                            Runoneachvpk(Returndirvpks(superfun));
+                            NativeMethods.Otherstuff.CreateSymbolicLink(correctdrive+"\\hl2", superfun,NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
+                        }
+                        if (superfun.Contains("hl1"))
+                        {
+                            DeleteDir(correctdrive + "\\hl1");
+                            Runoneachvpk(Returndirvpks(superfun));
+                            NativeMethods.Otherstuff.CreateSymbolicLink(correctdrive + "\\hl1", superfun, NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
+                            File.Create(ocinstall + "\\mounts\\hls");
+                        }
+                        if (superfun.Contains("ep2"))
+                        {
+                            DeleteDir(correctdrive + "\\ep2");
+                            Runoneachvpk(Returndirvpks(superfun));
+                            NativeMethods.Otherstuff.CreateSymbolicLink(correctdrive + "\\ep2", superfun, NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
+                            File.Create(ocinstall + "\\mounts\\ep2");
+                        }
+                        if (superfun.Contains("episodic"))
+                        {
+                            DeleteDir(correctdrive + "\\episodic");
+                            Runoneachvpk(Returndirvpks(superfun));
+                            NativeMethods.Otherstuff.CreateSymbolicLink(correctdrive + "\\episodic", superfun, NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
+                            File.Create(ocinstall + "\\mounts\\episodic");
+                        }
+                        if (superfun.Contains("lostcoast"))
+                        {
+                            DeleteDir(correctdrive + "\\lostcoast");
+                            Runoneachvpk(Returndirvpks(superfun));
+                            NativeMethods.Otherstuff.CreateSymbolicLink(correctdrive + "\\lostcoast", superfun, NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
+                            File.Create(ocinstall + "\\mounts\\lostcoast");
+                        }
+                    }
+                }
+                if (fun.Contains("Counter-Strike Source"))
+                {
+                    DeleteDir(correctdrive + "\\cstrike");
+                    Runoneachvpk(Returndirvpks(fun+"\\cstrike"));
+                    NativeMethods.Otherstuff.CreateSymbolicLink(correctdrive + "\\cstrike", fun+"\\cstrike", NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
+                    File.Create(ocinstall + "\\mounts\\css");
+
+                }
+                if (fun.Contains("Day of Defeat Source"))
+                {
+                    DeleteDir(correctdrive + "\\dod");
+                    Runoneachvpk(Returndirvpks(fun + "\\dod"));
+                    NativeMethods.Otherstuff.CreateSymbolicLink(correctdrive + "\\dod", fun + "\\dod", NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
+                    File.Create(ocinstall + "\\mounts\\dod");
+                }
+            }
         }
         //private static void Client()
         //{
