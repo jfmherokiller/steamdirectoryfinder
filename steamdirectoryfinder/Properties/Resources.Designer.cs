@@ -81,16 +81,6 @@ namespace steamdirectoryfinder.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] CANYON {
-            get {
-                object obj = ResourceManager.GetObject("CANYON", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to dl_ovr_runtime.bat
         ///hl2.exe
         ///hlds_steamgames.vdf
@@ -139,6 +129,16 @@ namespace steamdirectoryfinder.Properties {
         internal static byte[] HLLib {
             get {
                 object obj = ResourceManager.GetObject("HLLib", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] windows {
+            get {
+                object obj = ResourceManager.GetObject("windows", resourceCulture);
                 return ((byte[])(obj));
             }
         }

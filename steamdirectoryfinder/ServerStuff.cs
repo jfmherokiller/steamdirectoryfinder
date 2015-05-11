@@ -125,23 +125,23 @@ namespace steamdirectoryfinder
             Program.Runoneachvpk(Program.Returndirvpks(theserverfolder));
             Program.DeleteVpks(Program.Returnallvpks(theserverfolder));
             var resourceData = Resources.files_to_delete_1_;
-            var words = resourceData.Split(new[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries).ToList();
+            var words = resourceData.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).ToList();
             Parallel.ForEach(words, lines =>
             {
                 var fun = Path.Combine(theserverfolder, lines);
                 FileAttributes attr = 0;
                 if (File.Exists(fun) || Directory.Exists(fun))
                 {
-                  attr  = File.GetAttributes(fun);
+                    attr = File.GetAttributes(fun);
                 }
-                    if (attr.HasFlag(FileAttributes.Directory))
-                    {
-                        Program.DeleteDir(Path.Combine(theserverfolder, lines));
-                    }
-                    else
-                    {
-                        Program.DeleteFile(Path.Combine(theserverfolder, lines));
-                    }
+                if (attr.HasFlag(FileAttributes.Directory))
+                {
+                    Program.DeleteDir(Path.Combine(theserverfolder, lines));
+                }
+                else
+                {
+                    Program.DeleteFile(Path.Combine(theserverfolder, lines));
+                }
             });
         }
     }

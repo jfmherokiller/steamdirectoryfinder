@@ -8,7 +8,7 @@
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>steamdirectoryfinder</RootNamespace>
-    <AssemblyName>mountfixnet</AssemblyName>
+    <AssemblyName>mountfix</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -159,6 +159,7 @@
     <None Include="bin\Debug\7za.exe" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\windows.mid" />
     <None Include="Resources\7za.exe" />
     <None Include="Resources\addons.zip" />
     <None Include="Resources\BrianOrr-Clouds.mp3" />
