@@ -38,6 +38,42 @@ namespace steamdirectoryfinder
                 Program.Performtasksi(steamcmdbase, " +login " + username + " " + password + " +quit");
             }
             if (mounts != "" && mounts == "") return;
+            if (mounts != "" & (mounts.Contains("0")))
+            {
+                var fuckme = mounts.Split(',');
+                if (!fuckme[0].Contains("1"))
+                {
+                    Program.Performtasks(steamcmdbase, basecmd + "220" + endofcmd);
+                }
+                if (!fuckme[1].Contains("1"))
+                {
+                    Program.Performtasks(steamcmdbase, basecmd + "380" + endofcmd);
+                }
+                if (!fuckme[2].Contains("1"))
+                {
+                    Program.Performtasks(steamcmdbase, basecmd + "340" + endofcmd);
+                }
+                if (!fuckme[3].Contains("1"))
+                {
+                    Program.Performtasks(steamcmdbase, basecmd + "420" + endofcmd);
+                }
+                if (!fuckme[4].Contains("1"))
+                {
+                    Program.Performtasks(steamcmdbase, basecmd + "280" + endofcmd);
+                }
+                if (!fuckme[5].Contains("1"))
+                {
+                    Program.Performtasks(steamcmdbase, basecmd + "240" + endofcmd);
+                }
+                if (!fuckme[6].Contains("1"))
+                {
+                    Program.Performtasks(steamcmdbase, basecmd + "300" + endofcmd);
+                }
+                if (true)
+                {
+                    Program.Performtasks(steamcmdbase, basecmd + "310" + endofcmd);
+                }
+            }
             if (mounts == "" || !mounts.Contains("hl2"))
             {
                 Program.Performtasks(steamcmdbase, basecmd + "220" + endofcmd);

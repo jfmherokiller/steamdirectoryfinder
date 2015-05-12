@@ -68,7 +68,9 @@ namespace steamdirectoryfinder
                     Console.WriteLine(@"-server ""<serverdirectory\obsidian>"" <username> <password>");
                     Console.WriteLine(@"-server ""<serverdirectory\obsidian>"" <username> <password> -steamauth");
                     Console.WriteLine(@"-server ""<serverdirectory\obsidian>"" <username> <password> ""hl2,ep1,lostcoast,ep2,hl1,css,dod""");
+                    Console.WriteLine(@"-server ""<serverdirectory\obsidian>"" <username> <password> ""0,0,0,0,0,0,0,0""");
                     Console.WriteLine(@"-server ""<serverdirectory\obsidian>"" <username> <password> -steamauth ""hl2,ep1,lostcoast,ep2,hl1,css,dod""");
+                    Console.WriteLine(@"-server ""<serverdirectory\obsidian>"" <username> <password> -steamauth ""0,0,0,0,0,0,0,0""");
                     Console.WriteLine(@"-client");
                 }
                 else if (args[0].ToLower().Contains("-client"))
@@ -300,7 +302,7 @@ namespace steamdirectoryfinder
             Console.WriteLine(commonfolder);
             foreach (var fun in Directory.EnumerateDirectories(commonfolder, "*", SearchOption.TopDirectoryOnly))
             {
-                if (fun.Contains("Half-Life 2"))
+                if (fun.EndsWith("Half-Life 2"))
                 {
                     foreach (var superfun in Directory.EnumerateDirectories(fun, "*", SearchOption.TopDirectoryOnly))
                     {
