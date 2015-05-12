@@ -1,11 +1,16 @@
-Mountfix Installer For Obsidian Conflict:
+Mountfix Installer For Obsidian Conflict: (rev 104)
 
 Original manual workaround solution discovered by raidensnake (OC Beta) & Neico (OC Dev)
 
 Original LUA Mountfix by Neico (OC Dev)
 
-Improved C# version Coded & Debugged from scratch by mrchemist (OC Beta)
+Improved C# version Coded by mrchemist (OC Beta)
 Uses .NET Framework 4.5
+Uses HLlib 2.4.5 by Nemesis (Ryan Gregg)
+Uses SteamCMD by Valve Corporation
+Uses SourceMod/MetaMod Source by AlliedModders LLC
+Uses Obsidian Conflict Sourcemod Extensions by The Obsidian Conflict Development Team
+Base Server Config based On the XenoAisam OC Anime Server by raidensnake & The Obsidian Conflict Development Team
 Digitally Codesigned by raidensnake (OC Beta)
 
 Lead Testing & Debugging:
@@ -16,13 +21,21 @@ Testers:
 Shana (OC Dev Leader)
 Maestro Fénix (OC Beta)
 
-
 Special Thanks:
 Neico (OC Dev)
 Shana (OC Dev Leader)
+Tesla-X4 (OC Dev)
+Nemesis (Ryan Gregg)
+Valve Corporation
+AlliedModders LLC
 Obsidian Conflict Development Team
 Obsidian Conflict Community
 
+Steam CMD & Source Engine ©Valve Corporation http://www.valvesoftware.com
+Obsidian Conflict ©Obsidian Conflict Development Team http://www.obsidianconflict.net
+Mount fix ©mrchemist http://www.jfmhero.me & Raidensnake's Den Website Network (RSDNTWK) http://www.raidensnakesden.net
+SourceMod & Metamod Source ©AlliedModders LLC http://www.alliedmods.net/
+HLLib ©Nemisis (Ryan Gregg) http://nemesis.thewavelength.net/
 
 Confirmed Tested Client OS:
 
