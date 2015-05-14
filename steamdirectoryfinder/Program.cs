@@ -296,7 +296,11 @@ namespace steamdirectoryfinder
 
             }
             file.Close();
-            commonfolder = new DirectoryInfo(correctdrive).Parent.FullName;
+            if (correctdrive == "")
+            {
+                Environment.Exit(1);
+            }
+            commonfolder = new DirectoryInfo(NativeMethods.Otherstuff.GetShortPathName(correctdrive)).Parent.FullName;
             File.Delete("C:\\out.txt");
             Console.WriteLine(correctdrive);
             Console.WriteLine(commonfolder);
