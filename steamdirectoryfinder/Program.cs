@@ -1,9 +1,8 @@
-﻿using Microsoft.Win32;
-using steamdirectoryfinder.Properties;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using steamdirectoryfinder.Properties;
 
 namespace steamdirectoryfinder
 {
@@ -29,7 +28,7 @@ namespace steamdirectoryfinder
         {
             foreach (var avv in ass)
             {
-                if (!avv.Contains("platform"))
+                if (!avv.Contains(@"platform"))
                 {
                     DeleteFile(avv);
                 }
@@ -54,7 +53,7 @@ namespace steamdirectoryfinder
         public static void Main(string[] args)
         {
             AppDomain.CurrentDomain.ProcessExit += Shutdown;
-            using (new ConsoleCopy("mylogfile.txt"))
+            using (new ConsoleCopy(@"mylogfile.txt"))
             {
                 Perfominitializations();
                 if (args.Length == 0)
@@ -79,40 +78,47 @@ namespace steamdirectoryfinder
                 }
                 else if (args[0].ToLower().Contains("-server"))
                 {
-                    if (args.Length == 1)
+                    switch (args.Length)
                     {
-                        var fun = args[1];
-                        fun = fun.Trim('"');
-                        fun = NativeMethods.Otherstuff.GetShortPathName(fun);
-                        Server(fun);
-                    }
-                    else if (args.Length == 4)
-                    {
-                        var fun = args[1];
-                        fun = fun.Trim('"');
-                        fun = NativeMethods.Otherstuff.GetShortPathName(fun);
-                        Server(fun, args[2], args[3]);
-                    }
-                    else if (args.Length == 5)
-                    {
-                        var fun = args[1];
-                        fun = fun.Trim('"');
-                        fun = NativeMethods.Otherstuff.GetShortPathName(fun);
-                        if (args[4].Contains("-steamauth"))
+                        case 1:
                         {
-                            Server(fun, args[2], args[3], true);
+                            var fun = args[1];
+                            fun = fun.Trim('"');
+                            fun = NativeMethods.Otherstuff.GetShortPathName(fun);
+                            Server(fun);
                         }
-                        else
+                            break;
+                        case 4:
                         {
-                            Server(fun, args[2], args[3], false, args[4]);
+                            var fun = args[1];
+                            fun = fun.Trim('"');
+                            fun = NativeMethods.Otherstuff.GetShortPathName(fun);
+                            Server(fun, args[2], args[3]);
                         }
-                    }
-                    else if (args.Length == 6)
-                    {
-                        var fun = args[1];
-                        fun = fun.Trim('"');
-                        fun = NativeMethods.Otherstuff.GetShortPathName(fun);
-                        Server(fun, args[2], args[3], true, args[5]);
+                            break;
+                        case 5:
+                        {
+                            var fun = args[1];
+                            fun = fun.Trim('"');
+                            fun = NativeMethods.Otherstuff.GetShortPathName(fun);
+                            if (args[4].Contains("-steamauth"))
+                            {
+                                Server(fun, args[2], args[3], true);
+                            }
+                            else
+                            {
+                                Server(fun, args[2], args[3], false, args[4]);
+                            }
+                        }
+                            break;
+                        case 6:
+                        {
+                            var fun = args[1];
+                            fun = fun.Trim('"');
+                            fun = NativeMethods.Otherstuff.GetShortPathName(fun);
+                            Server(fun, args[2], args[3], true, args[5]);
+                        }
+                            break;
                     }
                 }
             }
@@ -196,12 +202,10 @@ namespace steamdirectoryfinder
                 File.Delete("C:\\out.txt");
             }
             ExtractClientResources();
-            //Steamstuff.InitClient();
         }
 
         private static void Shutdown(Object sender, EventArgs a)
         {
-            //Steamstuff.Shutdown();
             DeleteFile("HLExtract.exe");
             DeleteFile("HLLib.dll");
             DeleteFile("7za.exe");
