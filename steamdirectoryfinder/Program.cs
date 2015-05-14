@@ -254,21 +254,24 @@ namespace steamdirectoryfinder
                 Console.WriteLine(@"Error server or client not found");
             }
         }
-
         private static void ClientNohook()
         {
             SetupClient();
-            var key = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Valve\\Steam", false);
-            var ocinstall = key.GetValue("SourceModInstallPath") + "\\obsidian";
             var drives = DriveInfo.GetDrives();
-            var correctdrive = "";
-            var commonfolder = "";
-
+            var ocinstalldir = "";
+            var sourcesdk2007Installdir = "";
+            var ep2Installdir = "";
+            var hl2Installdir = "";
+            var hl1Installdir = "";
+            var lostcoastinstalldir = "";
+            var episodicinstalldir = "";
+            var dayofdefeatinstalldir = "";
+            var counterstrikesourceinstalldir = "";
             foreach (var drive in drives)
             {
                 if (!drive.IsReady)
                 {
-                     continue;
+                    continue;
                 }
                 var createfile = new Process
                 {
@@ -276,210 +279,117 @@ namespace steamdirectoryfinder
                     {
                         UseShellExecute = false,
                         WorkingDirectory = drive.RootDirectory.FullName,
+                        RedirectStandardOutput = true,
                         CreateNoWindow = true,
                         FileName = "cmd",
-                        Arguments = "/c \"dir /s /b >> C:\\out.txt\""
+                        Arguments = "/c \"dir /s /b "
+                    }
+                };
+                createfile.OutputDataReceived += delegate(object sender, DataReceivedEventArgs args)
+                {
+                    if (args.Data == null)
+                    {
+                        return;
+                    }
+                    if (args.Data.Contains("Source SDK Base 2007") & !args.Data.Contains("Source SDK Base 2007\\"))
+                    {
+                        sourcesdk2007Installdir = args.Data;
+                    }
+                    if (args.Data.Contains("Half-Life 2\\hl2") & !args.Data.Contains("Half-Life 2\\hl2\\") & !args.Data.Contains("Half-Life 2\\hl2.exe"))
+                    {
+                        hl2Installdir = args.Data;
+                    }
+                    if (args.Data.Contains("Half-Life 2\\episodic") & !args.Data.Contains("Half-Life 2\\episodic\\"))
+                    {
+                        episodicinstalldir = args.Data;
+                    }
+                    if (args.Data.Contains("Half-Life 2\\ep2") & !args.Data.Contains("Half-Life 2\\ep2\\"))
+                    {
+                        ep2Installdir = args.Data;
+                    }
+                    if (args.Data.Contains("Half-Life 2\\lostcoast") & !args.Data.Contains("Half-Life 2\\lostcoast\\"))
+                    {
+                        lostcoastinstalldir = args.Data;
+                    }
+                    if (args.Data.Contains("Half-Life 2\\hl1") & !args.Data.Contains("Half-Life 2\\hl1\\") & !args.Data.Contains("Half-Life 2\\hl1_hd"))
+                    {
+                        hl1Installdir = args.Data;
+                    }
+                    if (args.Data.Contains("Counter-Strike Source\\cstrike") & !args.Data.Contains("Counter-Strike Source\\cstrike\\"))
+                    {
+                        counterstrikesourceinstalldir = args.Data;
+                    }
+                    if (args.Data.Contains("Day of Defeat Source\\dod") & !args.Data.Contains("Day of Defeat Source\\dod\\"))
+                    {
+                        dayofdefeatinstalldir = args.Data;
+                    }
+                    if (args.Data.Contains("sourcemods\\obsidian") & !args.Data.Contains("sourcemods\\obsidian\\"))
+                    {
+                        ocinstalldir = args.Data;
                     }
                 };
                 createfile.Start();
+                createfile.BeginOutputReadLine();
                 createfile.WaitForExit();
             }
-            String line;
-            var file = new StreamReader(@"c:\out.txt");
-            while ((line = file.ReadLine()) != null)
+            Console.WriteLine(ocinstalldir);
+            Console.WriteLine(sourcesdk2007Installdir);
+            Console.WriteLine(ep2Installdir);
+            Console.WriteLine(hl2Installdir);
+            Console.WriteLine(hl1Installdir);
+            Console.WriteLine(episodicinstalldir);
+            Console.WriteLine(lostcoastinstalldir);
+            Console.WriteLine(counterstrikesourceinstalldir);
+            Console.WriteLine(dayofdefeatinstalldir);
+            if (hl2Installdir != "")
             {
-                if (line.EndsWith("Source SDK Base 2007"))
-                {
-                    correctdrive = line;
-                    break;
-                }
-
+                DeleteDir(sourcesdk2007Installdir + "\\hl2");
+                Runoneachvpk(Returndirvpks(hl2Installdir));
+                NativeMethods.Otherstuff.CreateSymbolicLink(sourcesdk2007Installdir + "\\hl2", hl2Installdir, NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
             }
-            file.Close();
-            if (correctdrive == "")
+            if (episodicinstalldir != "")
             {
-                Environment.Exit(1);
+                DeleteDir(sourcesdk2007Installdir + "\\episodic");
+                Runoneachvpk(Returndirvpks(episodicinstalldir));
+                NativeMethods.Otherstuff.CreateSymbolicLink(sourcesdk2007Installdir + "\\episodic", episodicinstalldir, NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
+                File.Create(ocinstalldir + "\\mounts\\episodic");
             }
-            commonfolder = new DirectoryInfo(NativeMethods.Otherstuff.GetShortPathName(correctdrive)).Parent.FullName;
-            File.Delete("C:\\out.txt");
-            Console.WriteLine(correctdrive);
-            Console.WriteLine(commonfolder);
-            foreach (var fun in Directory.EnumerateDirectories(commonfolder, "*", SearchOption.TopDirectoryOnly))
+            if (ep2Installdir != "")
             {
-                if (fun.EndsWith("Half-Life 2"))
-                {
-                    foreach (var superfun in Directory.EnumerateDirectories(fun, "*", SearchOption.TopDirectoryOnly))
-                    {
-                        if (superfun.Contains("hl2"))
-                        {
-                            DeleteDir(correctdrive + "\\hl2");
-                            Runoneachvpk(Returndirvpks(superfun));
-                            NativeMethods.Otherstuff.CreateSymbolicLink(correctdrive + "\\hl2", superfun, NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
-                        }
-                        if (superfun.Contains("hl1") & !superfun.Contains("hl1_hd"))
-                        {
-                            DeleteDir(correctdrive + "\\hl1");
-                            Runoneachvpk(Returndirvpks(superfun));
-                            NativeMethods.Otherstuff.CreateSymbolicLink(correctdrive + "\\hl1", superfun, NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
-                            File.Create(ocinstall + "\\mounts\\hls");
-                        }
-                        if (superfun.Contains("ep2"))
-                        {
-                            DeleteDir(correctdrive + "\\ep2");
-                            Runoneachvpk(Returndirvpks(superfun));
-                            NativeMethods.Otherstuff.CreateSymbolicLink(correctdrive + "\\ep2", superfun, NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
-                            File.Create(ocinstall + "\\mounts\\ep2");
-                        }
-                        if (superfun.Contains("episodic"))
-                        {
-                            DeleteDir(correctdrive + "\\episodic");
-                            Runoneachvpk(Returndirvpks(superfun));
-                            NativeMethods.Otherstuff.CreateSymbolicLink(correctdrive + "\\episodic", superfun, NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
-                            File.Create(ocinstall + "\\mounts\\episodic");
-                        }
-                        if (superfun.Contains("lostcoast"))
-                        {
-                            DeleteDir(correctdrive + "\\lostcoast");
-                            Runoneachvpk(Returndirvpks(superfun));
-                            NativeMethods.Otherstuff.CreateSymbolicLink(correctdrive + "\\lostcoast", superfun, NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
-                            File.Create(ocinstall + "\\mounts\\lostcoast");
-                        }
-                    }
-                }
-                if (fun.Contains("Counter-Strike Source"))
-                {
-                    DeleteDir(correctdrive + "\\cstrike");
-                    Runoneachvpk(Returndirvpks(fun + "\\cstrike"));
-                    NativeMethods.Otherstuff.CreateSymbolicLink(correctdrive + "\\cstrike", fun + "\\cstrike", NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
-                    File.Create(ocinstall + "\\mounts\\css");
-                }
-                if (fun.Contains("Day of Defeat Source"))
-                {
-                    DeleteDir(correctdrive + "\\dod");
-                    Runoneachvpk(Returndirvpks(fun + "\\dod"));
-                    NativeMethods.Otherstuff.CreateSymbolicLink(correctdrive + "\\dod", fun + "\\dod", NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
-                    File.Create(ocinstall + "\\mounts\\dod");
-                }
+                DeleteDir(sourcesdk2007Installdir + "\\ep2");
+                Runoneachvpk(Returndirvpks(ep2Installdir));
+                NativeMethods.Otherstuff.CreateSymbolicLink(sourcesdk2007Installdir + "\\ep2", ep2Installdir, NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
+                File.Create(ocinstalldir + "\\mounts\\ep2");
+            }
+            if (hl1Installdir != "")
+            {
+                DeleteDir(sourcesdk2007Installdir + "\\hl1");
+                Runoneachvpk(Returndirvpks(hl1Installdir));
+                NativeMethods.Otherstuff.CreateSymbolicLink(sourcesdk2007Installdir + "\\hl1", hl1Installdir, NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
+                File.Create(ocinstalldir + "\\mounts\\hls");
+            }
+            if (lostcoastinstalldir != "")
+            {
+                DeleteDir(sourcesdk2007Installdir + "\\lostcoast");
+                Runoneachvpk(Returndirvpks(lostcoastinstalldir));
+                NativeMethods.Otherstuff.CreateSymbolicLink(sourcesdk2007Installdir + "\\lostcoast", lostcoastinstalldir, NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
+                File.Create(ocinstalldir + "\\mounts\\lostcoast");
+            }
+            if (counterstrikesourceinstalldir != "")
+            {
+                DeleteDir(sourcesdk2007Installdir + "\\cstrike");
+                Runoneachvpk(Returndirvpks(counterstrikesourceinstalldir));
+                NativeMethods.Otherstuff.CreateSymbolicLink(sourcesdk2007Installdir + "\\cstrike", counterstrikesourceinstalldir, NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
+                File.Create(ocinstalldir + "\\mounts\\css");
+            }
+            if (dayofdefeatinstalldir != "")
+            {
+                DeleteDir(sourcesdk2007Installdir + "\\dod");
+                Runoneachvpk(Returndirvpks(dayofdefeatinstalldir));
+                NativeMethods.Otherstuff.CreateSymbolicLink(sourcesdk2007Installdir + "\\dod", dayofdefeatinstalldir, NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
+                File.Create(ocinstalldir + "\\mounts\\dod");
             }
         }
-
-        //private static void Client()
-        //{
-        //    //initalize the steam api binding code.
-        //    SetupClient();
-        //    //Check to see if Sourcesdk2007 is installed and if not then fail with message
-        //    if (!Steamstuff.SteamApps.BIsAppInstalled(218))
-        //    {
-        //        Console.WriteLine(@"Error Source Sdk 2007 is not installed");
-        //        Console.WriteLine(@"Source 2007 is required for the basics");
-        //        Console.ReadKey();
-        //        Environment.Exit(1);
-        //    }
-        //    //open valves registry key
-        //    var key = Registry.CurrentUser.OpenSubKey("Software\\Valve\\Steam");
-        //    //if key does not exist then fail
-        //    if (key == null) return;
-        //    //select the source mod install path to find obsidian.
-        //    var ocinstall = key.GetValue("SourceModInstallPath") + "\\obsidian";
-        //    //gameinstalldir is used to store the location of the game installation directory
-        //    var gameinstalldir = new StringBuilder(256);
-        //    //use the steam api to read the location of the source sdk 2007 directory
-        //    Steamstuff.SteamApps.GetAppInstallDir(SourceSdk2007Id, gameinstalldir);
-        //    //store the sourcesdk2007 path seporately so it can be called throughout the program
-        //    _sourcesdk2007Installationpath = gameinstalldir.ToString();
-        //    foreach (var mymount in Requiredmountids)
-        //    {
-        //        if (!Steamstuff.SteamApps.BIsAppInstalled(mymount))
-        //        {
-        //            Console.Beep();
-        //            continue;
-        //        }
-        //        Steamstuff.SteamApps.GetAppInstallDir(mymount, gameinstalldir);
-        //        switch (Gamename(mymount))
-        //        {
-        //            case "Half-Life 2":
-        //                var gamesubdir = "\\hl2";
-        //                DeleteDir(_sourcesdk2007Installationpath + gamesubdir);
-        //                Runoneachvpk(Returndirvpks(gameinstalldir + gamesubdir));
-        //                NativeMethods.Otherstuff.CreateSymbolicLink(_sourcesdk2007Installationpath + gamesubdir, gameinstalldir + gamesubdir,
-        //                    NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
-        //                Console.WriteLine(gameinstalldir + gamesubdir);
-        //                Console.WriteLine(_sourcesdk2007Installationpath + gamesubdir);
-        //                break;
-
-        //            case "Day of Defeat: Source":
-        //                gamesubdir = "\\dod";
-        //                DeleteDir(_sourcesdk2007Installationpath + gamesubdir);
-        //                Runoneachvpk(Returndirvpks(gameinstalldir + gamesubdir));
-        //                NativeMethods.Otherstuff.CreateSymbolicLink(_sourcesdk2007Installationpath + gamesubdir, gameinstalldir + gamesubdir,
-        //                    NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
-        //                Console.WriteLine(gameinstalldir + gamesubdir);
-        //                Console.WriteLine(_sourcesdk2007Installationpath + gamesubdir);
-        //                File.Create(ocinstall + "\\mounts\\dod");
-        //                break;
-
-        //            case "Counter-Strike: Source":
-        //                gamesubdir = "\\cstrike";
-        //                DeleteDir(_sourcesdk2007Installationpath + gamesubdir);
-        //                Runoneachvpk(Returndirvpks(gameinstalldir + gamesubdir));
-        //                NativeMethods.Otherstuff.CreateSymbolicLink(_sourcesdk2007Installationpath + gamesubdir, gameinstalldir + gamesubdir,
-        //                    NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
-        //                Console.WriteLine(gameinstalldir + gamesubdir);
-        //                Console.WriteLine(_sourcesdk2007Installationpath + gamesubdir);
-        //                File.Create(ocinstall + "\\mounts\\css");
-        //                break;
-
-        //            case "Half-Life: Source":
-        //                gamesubdir = "\\hl1";
-        //                DeleteDir(_sourcesdk2007Installationpath + gamesubdir);
-        //                Runoneachvpk(Returndirvpks(gameinstalldir + gamesubdir));
-        //                NativeMethods.Otherstuff.CreateSymbolicLink(_sourcesdk2007Installationpath + gamesubdir, gameinstalldir + gamesubdir,
-        //                    NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
-        //                Console.WriteLine(gameinstalldir + gamesubdir);
-        //                Console.WriteLine(_sourcesdk2007Installationpath + gamesubdir);
-        //                File.Create(ocinstall + "\\mounts\\hls");
-        //                break;
-
-        //            case "Half-Life 2: Lost Coast":
-        //                gamesubdir = "\\lostcoast";
-        //                DeleteDir(_sourcesdk2007Installationpath + gamesubdir);
-        //                Runoneachvpk(Returndirvpks(gameinstalldir + gamesubdir));
-        //                NativeMethods.Otherstuff.CreateSymbolicLink(_sourcesdk2007Installationpath + gamesubdir, gameinstalldir + gamesubdir,
-        //                    NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
-        //                Console.WriteLine(gameinstalldir + gamesubdir);
-        //                Console.WriteLine(_sourcesdk2007Installationpath + gamesubdir);
-        //                File.Create(ocinstall + "\\mounts\\lostcoast");
-        //                break;
-
-        //            case "Half-Life 2: Episode One":
-        //                gamesubdir = "\\episodic";
-        //                DeleteDir(_sourcesdk2007Installationpath + gamesubdir);
-        //                Runoneachvpk(Returndirvpks(gameinstalldir + gamesubdir));
-        //                NativeMethods.Otherstuff.CreateSymbolicLink(_sourcesdk2007Installationpath + gamesubdir, gameinstalldir + gamesubdir,
-        //                    NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
-        //                Console.WriteLine(gameinstalldir + gamesubdir);
-        //                Console.WriteLine(_sourcesdk2007Installationpath + gamesubdir);
-        //                File.Create(ocinstall + "\\mounts\\episodic");
-        //                break;
-
-        //            case "Half-Life 2: Episode Two":
-        //                gamesubdir = "\\ep2";
-        //                DeleteDir(_sourcesdk2007Installationpath + gamesubdir);
-        //                Runoneachvpk(Returndirvpks(gameinstalldir + gamesubdir));
-        //                NativeMethods.Otherstuff.CreateSymbolicLink(_sourcesdk2007Installationpath + gamesubdir, gameinstalldir + gamesubdir,
-        //                    NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
-        //                Console.WriteLine(gameinstalldir + gamesubdir);
-        //                Console.WriteLine(_sourcesdk2007Installationpath + gamesubdir);
-        //                File.Create(ocinstall + "\\mounts\\ep2");
-        //                break;
-
-        //            default:
-        //                Console.WriteLine(Gamename(mymount) + gameinstalldir);
-        //                break;
-        //        }
-        //    }
-        //}
-
         private static void OpenMenuIfnocmdArguments()
         {
             var choice = CheckifClientOrServer();
