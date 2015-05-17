@@ -127,8 +127,8 @@ namespace steamdirectoryfinder
 
         private static void Perfominitializations()
         {
-            Console.BackgroundColor = ConsoleColor.Black;
-            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            //Console.BackgroundColor = ConsoleColor.Black;
+            //Console.ForegroundColor = ConsoleColor.DarkGreen;
             Console.Title = @"Source Sdk 2007 fud";
         }
 
@@ -196,15 +196,6 @@ namespace steamdirectoryfinder
                 }
         }
 
-        private static void SetupClient()
-        {
-            if (File.Exists("C:\\out.txt"))
-            {
-                File.Delete("C:\\out.txt");
-            }
-            ExtractClientResources();
-        }
-
         private static void Shutdown(Object sender, EventArgs a)
         {
             DeleteFile("HLExtract.exe");
@@ -213,6 +204,7 @@ namespace steamdirectoryfinder
             DeleteFile("steamcmd.zip");
             DeleteFile("sourcemod.zip");
             DeleteFile("addons.zip");
+            DeleteDir("steamcmd");
             Console.ResetColor();
         }
 
@@ -261,7 +253,7 @@ namespace steamdirectoryfinder
         }
         private static void ClientNohook()
         {
-            SetupClient();
+            ExtractClientResources();
             var drives = DriveInfo.GetDrives();
             var ocinstalldir = "";
             var sourcesdk2007Installdir = "";
