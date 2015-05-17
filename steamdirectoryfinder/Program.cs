@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using steamdirectoryfinder.Properties;
 
@@ -327,7 +328,7 @@ namespace steamdirectoryfinder
                     {
                         dayofdefeatinstalldir = args.Data;
                     }
-                    if (args.Data.Contains("sourcemods\\obsidian") & !args.Data.Contains("sourcemods\\obsidian\\"))
+                    if (args.Data.EndsWith("sourcemods\\obsidian",true,CultureInfo.InvariantCulture) & !args.Data.Contains("sourcemods\\obsidian\\"))
                     {
                         ocinstalldir = args.Data;
                     }
@@ -345,6 +346,7 @@ namespace steamdirectoryfinder
             Console.WriteLine(lostcoastinstalldir);
             Console.WriteLine(counterstrikesourceinstalldir);
             Console.WriteLine(dayofdefeatinstalldir);
+            //Console.ReadLine();
             if (hl2Installdir != "")
             {
                 DeleteDir(sourcesdk2007Installdir + "\\hl2");
