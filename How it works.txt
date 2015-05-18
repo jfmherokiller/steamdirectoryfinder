@@ -1,0 +1,21 @@
+How it works:
+    Client:
+        the program starts by extracting the needed files which are HLLib.dll and HLExtract.exe
+         it then continues by running the command "dir /s /b" on each drive in order to locate the mount folders
+        once the program finds the folders of the currently installed mounts it stores them in variables
+        from here it accesses the folders of each mount and extracts the vpks in the correct order
+        then it creates a symlink between the source sdk 2007 folder and the game folder where the vpks have been extracted
+        finally it creates the mount file in the mounts folder of OC so that the user does not need to select the mounts themselves
+    Server:
+         this portion begins by extracting some needed files which are the HLLib.dll, HLExtract.exe, 7za.exe and addons.zip the addons.zip contains a few files that the oc server needs
+         next it downloads sourcemod, metamod, and steamcmd directly from thier websites so they did not need to be embeded in the program
+         from here it extracts steamcmd.zip into a subfolder named steamcmd
+         next it asks the user for the username and password that they wish to use to install the server, if they are using steamauth, and for what mounts they wish to disable so they do not get installed
+         from here the user clicks the install server button and if they selected steamauth then another window opens asking the user for the authcode they recieved by email
+         the process then begins downloading all the requested and required content
+         once this long process completes the vpks of all the mounts are extracted and then the vpks are deleted. 
+         then all unneeded folders are deleted as well
+         it then extracts the external ipv4 ip address of the server and writes it to a start.bat file
+         finally it extracts the addons.zip folder to the obsidian sourcemods directory so that the basic server will work without much trouble
+    Both: 
+        once the program completes its duties it cleans up after itself by deleting all extracted and downloaded folders including the steamcmd folder as to prevent the login details of the user from being located
