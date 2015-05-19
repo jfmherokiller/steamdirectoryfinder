@@ -81,7 +81,7 @@ namespace steamdirectoryfinder
                 {
                     switch (args.Length)
                     {
-                        case 1:
+                        case 2:
                         {
                             var fun = args[1];
                             fun = fun.Trim('"');
