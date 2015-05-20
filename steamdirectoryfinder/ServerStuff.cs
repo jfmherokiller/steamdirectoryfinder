@@ -32,7 +32,8 @@ namespace steamdirectoryfinder
             var basecmd = " +login " + username + " " + password + " +force_install_dir " +
                           NativeMethods.Otherstuff.GetShortPathName(serverdirectory) +
                           " +app_update ";
-            var steamcmdbase = Path.Combine(Directory.GetCurrentDirectory(), "\\steamcmd\\steamcmd.exe");
+            var currentdir = Directory.GetCurrentDirectory();
+            var steamcmdbase = Path.Combine(currentdir, "steamcmd\\steamcmd.exe");
             if (steamauth)
             {
                 Program.Performtasksi(steamcmdbase, " +login " + username + " " + password + " +quit");
