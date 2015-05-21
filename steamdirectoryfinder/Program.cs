@@ -1,9 +1,11 @@
-﻿using System;
+﻿using steamdirectoryfinder.Properties;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using steamdirectoryfinder.Properties;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace steamdirectoryfinder
 {
@@ -27,12 +29,9 @@ namespace steamdirectoryfinder
 
         public static void DeleteVpks(IEnumerable<string> ass)
         {
-            foreach (var avv in ass)
+            foreach (var avv in ass.Where(avv => !avv.Contains(@"platform")))
             {
-                if (!avv.Contains(@"platform"))
-                {
-                    DeleteFile(avv);
-                }
+                DeleteFile(avv);
             }
         }
 
@@ -40,15 +39,7 @@ namespace steamdirectoryfinder
         {
             File.WriteAllBytes("HLExtract.exe", Resources.HLExtract);
             File.WriteAllBytes("HLLib.dll", Resources.HLLib);
-            // File.WriteAllBytes("Steam4NET.dll", steamdirectoryfinder.Properties.Resources.Steam4NET_dll);
         }
-
-        //private static string Gamename(uint a)
-        //{
-        //    var sb = new StringBuilder(256);
-        //    Steamstuff.SteamApps2.GetAppData(a, "name", sb);
-        //    return sb.ToString();
-        //}
 
         [STAThread]
         public static void Main(string[] args)
@@ -61,7 +52,7 @@ namespace steamdirectoryfinder
                 {
                     OpenMenuIfnocmdArguments();
                 }
-                else if (args[0].ToLower().Contains("-help"))
+                else if (args[0].ToLower().Contains(@"-help"))
                 {
                     Console.WriteLine(@"Usage!");
                     Console.WriteLine(@"-server ""<serverdirectory\obsidian>""");
@@ -73,80 +64,59 @@ namespace steamdirectoryfinder
                     Console.WriteLine(@"-server ""<serverdirectory\obsidian>"" <username> <password> -steamauth ""0,0,0,0,0,0,0,0""");
                     Console.WriteLine(@"-client");
                 }
-                else if (args[0].ToLower().Contains("-client"))
+                else if (args[0].ToLower().Contains(@"-client"))
                 {
                     ClientNohook();
                 }
-                else if (args[0].ToLower().Contains("-server"))
+                else if (args[0].ToLower().Contains(@"-server"))
                 {
                     switch (args.Length)
                     {
                         case 2:
-                        {
-                            var fun = args[1];
-                            fun = fun.Trim('"');
-                            fun = NativeMethods.Otherstuff.GetShortPathName(fun);
-                            Server(fun);
-                        }
+                            {
+                                var fun = args[1];
+                                fun = fun.Trim('"');
+                                fun = NativeMethods.Otherstuff.GetShortPathName(fun);
+                                Server(fun);
+                            }
                             break;
+
                         case 4:
-                        {
-                            var fun = args[1];
-                            fun = fun.Trim('"');
-                            fun = NativeMethods.Otherstuff.GetShortPathName(fun);
-                            Server(fun, args[2], args[3]);
-                        }
+                            {
+                                var fun = args[1];
+                                fun = fun.Trim('"');
+                                fun = NativeMethods.Otherstuff.GetShortPathName(fun);
+                                Server(fun, args[2], args[3]);
+                            }
                             break;
+
                         case 5:
-                        {
-                            var fun = args[1];
-                            fun = fun.Trim('"');
-                            fun = NativeMethods.Otherstuff.GetShortPathName(fun);
-                            if (args[4].Contains("-steamauth"))
                             {
-                                Server(fun, args[2], args[3], true);
+                                var fun = args[1];
+                                fun = fun.Trim('"');
+                                fun = NativeMethods.Otherstuff.GetShortPathName(fun);
+                                if (args[4].Contains(@"-steamauth"))
+                                {
+                                    Server(fun, args[2], args[3], true);
+                                }
+                                else
+                                {
+                                    Server(fun, args[2], args[3], false, args[4]);
+                                }
                             }
-                            else
-                            {
-                                Server(fun, args[2], args[3], false, args[4]);
-                            }
-                        }
                             break;
+
                         case 6:
-                        {
-                            var fun = args[1];
-                            fun = fun.Trim('"');
-                            fun = NativeMethods.Otherstuff.GetShortPathName(fun);
-                            Server(fun, args[2], args[3], true, args[5]);
-                        }
+                            {
+                                var fun = args[1];
+                                fun = fun.Trim('"');
+                                fun = NativeMethods.Otherstuff.GetShortPathName(fun);
+                                Server(fun, args[2], args[3], true, args[5]);
+                            }
                             break;
                     }
                 }
             }
-        }
-
-        private static void Perfominitializations()
-        {
-            //Console.BackgroundColor = ConsoleColor.Black;
-            //Console.ForegroundColor = ConsoleColor.DarkGreen;
-            Console.Title = @"Source Sdk 2007 fud";
-        }
-
-        public static void Performtasksi(string prog, string ass)
-        {
-            var task = new Process
-            {
-                StartInfo =
-                {
-                    UseShellExecute = true,
-                    FileName = prog,
-                    Arguments = ass
-                }
-            };
-            task.Start();
-
-            task.WaitForExit();
-            task.Close();
         }
 
         public static void Performtasks(string prog, string ass)
@@ -168,7 +138,24 @@ namespace steamdirectoryfinder
             task.BeginOutputReadLine();
             task.WaitForExit();
             task.Close();
-            Console.SetIn(new StreamReader(Console.OpenStandardInput()));
+            //Console.SetIn(new StreamReader(Console.OpenStandardInput()));
+        }
+
+        public static void Performtasksi(string prog, string ass)
+        {
+            var task = new Process
+            {
+                StartInfo =
+                {
+                    UseShellExecute = true,
+                    FileName = prog,
+                    Arguments = ass
+                }
+            };
+            task.Start();
+
+            task.WaitForExit();
+            task.Close();
         }
 
         public static string PutIntoQuotes(string value)
@@ -189,40 +176,8 @@ namespace steamdirectoryfinder
 
         public static void Runoneachvpk(IEnumerable<string> ass)
         {
-            foreach (var avv in ass)
-                if (!avv.Contains("platform"))
-                {
-                    Tasks(avv);
-                }
-        }
-
-        private static void Shutdown(Object sender, EventArgs a)
-        {
-            DeleteFile("HLExtract.exe");
-            DeleteFile("HLLib.dll");
-            DeleteFile("7za.exe");
-            DeleteFile("steamcmd.zip");
-            DeleteFile("sourcemod.zip");
-            DeleteFile("addons.zip");
-            DeleteDir("steamcmd");
-            Console.ResetColor();
-        }
-
-        private static void Tasks(string ass)
-        {
-            var quotedVpk = PutIntoQuotes(ass);
-            var vpkwithoutextend = ass;
-            vpkwithoutextend = vpkwithoutextend.Remove(vpkwithoutextend.IndexOf('.'));
-            var gamedir = Path.GetDirectoryName(vpkwithoutextend);
-            var robocopyargs = PutIntoQuotes(gamedir + "\\root") + " " + PutIntoQuotes(gamedir) + "  /E /MOVE /IS";
-            //var xcopyargs = PutIntoQuotes(gamedir + "\\root\\*") + " " + PutIntoQuotes(gamedir + "\\") + " /f /s /i /y";
-            var hlExtractargs = "-p " + quotedVpk + " -d " + PutIntoQuotes(gamedir) + " " + "-e \"\"";
-            Performtasks("HLExtract.exe", hlExtractargs);
-            Performtasks("robocopy", robocopyargs);
-
-            // Performtasks("xcopy", xcopyargs);
-            //Directory.Delete(gamedir + "\\root", true);
-            //Performtasks("rd", "/q /s " )
+            foreach (var avv in ass.Where(avv => !avv.Contains(@"platform")))
+                Tasks(avv);
         }
 
         private static bool CheckifClientOrServer()
@@ -251,6 +206,7 @@ namespace steamdirectoryfinder
                 Console.WriteLine(@"Error server or client not found");
             }
         }
+
         private static void ClientNohook()
         {
             ExtractClientResources();
@@ -264,11 +220,11 @@ namespace steamdirectoryfinder
             var episodicinstalldir = "";
             var dayofdefeatinstalldir = "";
             var counterstrikesourceinstalldir = "";
-            foreach (var drive in drives)
+            Parallel.ForEach(drives, (drive, state) =>
             {
                 if (!drive.IsReady)
                 {
-                    continue;
+                    state.Stop();
                 }
                 var createfile = new Process
                 {
@@ -292,7 +248,8 @@ namespace steamdirectoryfinder
                     {
                         sourcesdk2007Installdir = args.Data;
                     }
-                    if (args.Data.Contains("Half-Life 2\\hl2") & !args.Data.Contains("Half-Life 2\\hl2\\") & !args.Data.Contains("Half-Life 2\\hl2.exe"))
+                    if (args.Data.Contains("Half-Life 2\\hl2") & !args.Data.Contains("Half-Life 2\\hl2\\") &
+                        !args.Data.Contains("Half-Life 2\\hl2.exe"))
                     {
                         hl2Installdir = args.Data;
                     }
@@ -308,19 +265,23 @@ namespace steamdirectoryfinder
                     {
                         lostcoastinstalldir = args.Data;
                     }
-                    if (args.Data.Contains("Half-Life 2\\hl1") & !args.Data.Contains("Half-Life 2\\hl1\\") & !args.Data.Contains("Half-Life 2\\hl1_hd"))
+                    if (args.Data.Contains("Half-Life 2\\hl1") & !args.Data.Contains("Half-Life 2\\hl1\\") &
+                        !args.Data.Contains("Half-Life 2\\hl1_hd"))
                     {
                         hl1Installdir = args.Data;
                     }
-                    if (args.Data.Contains("Counter-Strike Source\\cstrike") & !args.Data.Contains("Counter-Strike Source\\cstrike\\"))
+                    if (args.Data.Contains("Counter-Strike Source\\cstrike") &
+                        !args.Data.Contains("Counter-Strike Source\\cstrike\\"))
                     {
                         counterstrikesourceinstalldir = args.Data;
                     }
-                    if (args.Data.Contains("Day of Defeat Source\\dod") & !args.Data.Contains("Day of Defeat Source\\dod\\"))
+                    if (args.Data.Contains("Day of Defeat Source\\dod") &
+                        !args.Data.Contains("Day of Defeat Source\\dod\\"))
                     {
                         dayofdefeatinstalldir = args.Data;
                     }
-                    if (args.Data.EndsWith("sourcemods\\obsidian",true,CultureInfo.InvariantCulture) & !args.Data.Contains("sourcemods\\obsidian\\"))
+                    if (args.Data.EndsWith("sourcemods\\obsidian", true, CultureInfo.InvariantCulture) &
+                        !args.Data.Contains("sourcemods\\obsidian\\"))
                     {
                         ocinstalldir = args.Data;
                     }
@@ -328,7 +289,8 @@ namespace steamdirectoryfinder
                 createfile.Start();
                 createfile.BeginOutputReadLine();
                 createfile.WaitForExit();
-            }
+            });
+
             Console.WriteLine(ocinstalldir);
             Console.WriteLine(sourcesdk2007Installdir);
             Console.WriteLine(ep2Installdir);
@@ -338,56 +300,76 @@ namespace steamdirectoryfinder
             Console.WriteLine(lostcoastinstalldir);
             Console.WriteLine(counterstrikesourceinstalldir);
             Console.WriteLine(dayofdefeatinstalldir);
-            //Console.ReadLine();
+            InstallClientMounts(hl2Installdir, sourcesdk2007Installdir, episodicinstalldir, ocinstalldir, ep2Installdir, hl1Installdir, lostcoastinstalldir, counterstrikesourceinstalldir, dayofdefeatinstalldir);
+            if (!Environment.Is64BitOperatingSystem) return;
+            var laafun = new LaaFile(sourcesdk2007Installdir + "\\hl2.exe");
+            if (laafun.LargeAddressAware == false)
+            {
+                laafun.WriteCharacteristics(true);
+            }
+        }
+
+        private static void InstallClientMounts(string hl2Installdir, string sourcesdk2007Installdir, string episodicinstalldir,
+            string ocinstalldir, string ep2Installdir, string hl1Installdir, string lostcoastinstalldir,
+            string counterstrikesourceinstalldir, string dayofdefeatinstalldir)
+        {
             if (hl2Installdir != "")
             {
                 DeleteDir(sourcesdk2007Installdir + "\\hl2");
                 Runoneachvpk(Returndirvpks(hl2Installdir));
-                NativeMethods.Otherstuff.CreateSymbolicLink(sourcesdk2007Installdir + "\\hl2", hl2Installdir, NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
+                NativeMethods.Otherstuff.CreateSymbolicLink(sourcesdk2007Installdir + "\\hl2", hl2Installdir,
+                    NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
             }
             if (episodicinstalldir != "")
             {
                 DeleteDir(sourcesdk2007Installdir + "\\episodic");
                 Runoneachvpk(Returndirvpks(episodicinstalldir));
-                NativeMethods.Otherstuff.CreateSymbolicLink(sourcesdk2007Installdir + "\\episodic", episodicinstalldir, NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
+                NativeMethods.Otherstuff.CreateSymbolicLink(sourcesdk2007Installdir + "\\episodic", episodicinstalldir,
+                    NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
                 File.Create(ocinstalldir + "\\mounts\\episodic");
             }
             if (ep2Installdir != "")
             {
                 DeleteDir(sourcesdk2007Installdir + "\\ep2");
                 Runoneachvpk(Returndirvpks(ep2Installdir));
-                NativeMethods.Otherstuff.CreateSymbolicLink(sourcesdk2007Installdir + "\\ep2", ep2Installdir, NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
+                NativeMethods.Otherstuff.CreateSymbolicLink(sourcesdk2007Installdir + "\\ep2", ep2Installdir,
+                    NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
                 File.Create(ocinstalldir + "\\mounts\\ep2");
             }
             if (hl1Installdir != "")
             {
                 DeleteDir(sourcesdk2007Installdir + "\\hl1");
                 Runoneachvpk(Returndirvpks(hl1Installdir));
-                NativeMethods.Otherstuff.CreateSymbolicLink(sourcesdk2007Installdir + "\\hl1", hl1Installdir, NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
+                NativeMethods.Otherstuff.CreateSymbolicLink(sourcesdk2007Installdir + "\\hl1", hl1Installdir,
+                    NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
                 File.Create(ocinstalldir + "\\mounts\\hls");
             }
             if (lostcoastinstalldir != "")
             {
                 DeleteDir(sourcesdk2007Installdir + "\\lostcoast");
                 Runoneachvpk(Returndirvpks(lostcoastinstalldir));
-                NativeMethods.Otherstuff.CreateSymbolicLink(sourcesdk2007Installdir + "\\lostcoast", lostcoastinstalldir, NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
+                NativeMethods.Otherstuff.CreateSymbolicLink(sourcesdk2007Installdir + "\\lostcoast", lostcoastinstalldir,
+                    NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
                 File.Create(ocinstalldir + "\\mounts\\lostcoast");
             }
             if (counterstrikesourceinstalldir != "")
             {
                 DeleteDir(sourcesdk2007Installdir + "\\cstrike");
                 Runoneachvpk(Returndirvpks(counterstrikesourceinstalldir));
-                NativeMethods.Otherstuff.CreateSymbolicLink(sourcesdk2007Installdir + "\\cstrike", counterstrikesourceinstalldir, NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
+                NativeMethods.Otherstuff.CreateSymbolicLink(sourcesdk2007Installdir + "\\cstrike", counterstrikesourceinstalldir,
+                    NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
                 File.Create(ocinstalldir + "\\mounts\\css");
             }
             if (dayofdefeatinstalldir != "")
             {
                 DeleteDir(sourcesdk2007Installdir + "\\dod");
                 Runoneachvpk(Returndirvpks(dayofdefeatinstalldir));
-                NativeMethods.Otherstuff.CreateSymbolicLink(sourcesdk2007Installdir + "\\dod", dayofdefeatinstalldir, NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
+                NativeMethods.Otherstuff.CreateSymbolicLink(sourcesdk2007Installdir + "\\dod", dayofdefeatinstalldir,
+                    NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
                 File.Create(ocinstalldir + "\\mounts\\dod");
             }
         }
+
         private static void OpenMenuIfnocmdArguments()
         {
             var choice = CheckifClientOrServer();
@@ -403,6 +385,10 @@ namespace steamdirectoryfinder
             }
         }
 
+        private static void Perfominitializations()
+        {
+            Console.Title = @"Source Sdk 2007 steampipe fix";
+        }
         private static void Server(string installpath, string username = "", string password = "", bool steamauth = false, string mounts = "")
         {
             if (installpath != null & username == "" & password == "")
@@ -443,6 +429,34 @@ namespace steamdirectoryfinder
                 var fun = new ServerStuff(installpath, username, password, true, mounts);
                 fun.RunFun();
             }
+        }
+
+        private static void Shutdown(object sender, EventArgs a)
+        {
+            DeleteFile(@"HLExtract.exe");
+            DeleteFile(@"HLLib.dll");
+            DeleteFile(@"7za.exe");
+            DeleteFile(@"steamcmd.zip");
+            DeleteFile(@"sourcemod.zip");
+            DeleteFile(@"addons.zip");
+            DeleteDir(@"steamcmd");
+        }
+
+        private static void Tasks(string ass)
+        {
+            var quotedVpk = PutIntoQuotes(ass);
+            var vpkwithoutextend = ass;
+            vpkwithoutextend = vpkwithoutextend.Remove(vpkwithoutextend.IndexOf('.'));
+            var gamedir = Path.GetDirectoryName(vpkwithoutextend);
+            var robocopyargs = PutIntoQuotes(gamedir + "\\root") + " " + PutIntoQuotes(gamedir) + "  /E /MOVE /IS";
+            //var xcopyargs = PutIntoQuotes(gamedir + "\\root\\*") + " " + PutIntoQuotes(gamedir + "\\") + " /f /s /i /y";
+            var hlExtractargs = "-p " + quotedVpk + " -d " + PutIntoQuotes(gamedir) + " " + "-e \"\"";
+            Performtasks("HLExtract.exe", hlExtractargs);
+            Performtasks("robocopy", robocopyargs);
+
+            // Performtasks("xcopy", xcopyargs);
+            //Directory.Delete(gamedir + "\\root", true);
+            //Performtasks("rd", "/q /s " )
         }
     }
 }

@@ -46,7 +46,7 @@ namespace steamdirectoryfinder
             ServerStuff.DownloadSteamcmd();
             ServerStuff.ExtractServerResources(_ocServerInstallPath);
             ServerStuff.CheckifDirectoryexistsorcreateit(_ocServerInstallPath);
-            ServerStuff.CheckifDirectoryexistsorcreateit(Directory.GetCurrentDirectory() + "\\steamcmd");
+            ServerStuff.CheckifDirectoryexistsorcreateit(Path.Combine(Directory.GetCurrentDirectory() + @"steamcmd"));
             ServerStuff.InstallServer(textBox1.Text, textBox2.Text, _mainFolder, SteamAuth.Checked, selectedmounts);
 
             ServerStuff.ExtractAndDelete(_mainFolder);

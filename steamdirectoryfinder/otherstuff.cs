@@ -7,10 +7,9 @@ namespace steamdirectoryfinder
     internal class ConsoleCopy : IDisposable
     {
         private readonly TextWriter _oldOut;
+        private TextWriter _doubleWriter;
         private FileStream _fileStream;
         private StreamWriter _fileWriter;
-        private TextWriter _doubleWriter;
-
         public ConsoleCopy(string path)
         {
             _oldOut = Console.Out;
