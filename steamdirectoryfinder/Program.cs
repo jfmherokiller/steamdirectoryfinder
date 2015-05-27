@@ -409,22 +409,22 @@ namespace steamdirectoryfinder
                 var serverform = new ServerConfiguration(input);
                 serverform.ShowDialog();
             }
-            else if (username != null & password != null)
+            else if (username != null & password != null & !steamauth & mounts == "")
             {
                 var fun = new ServerStuff(installpath, username, password);
                 fun.RunFun();
             }
-            else if (username != "" & password != "" & !steamauth & mounts == "")
+            else if (username != "" & password != "" & steamauth & mounts == "")
             {
                 var fun = new ServerStuff(installpath, username, password, true);
                 fun.RunFun();
             }
-            else if (username != "" & password != "" & steamauth & mounts != "")
+            else if (username != "" & password != "" & !steamauth & mounts != "")
             {
                 var fun = new ServerStuff(installpath, username, password, false, mounts);
                 fun.RunFun();
             }
-            else if (username != "" & password != "" & !steamauth & mounts != "")
+            else if (username != "" & password != "" & steamauth & mounts != "")
             {
                 var fun = new ServerStuff(installpath, username, password, true, mounts);
                 fun.RunFun();
