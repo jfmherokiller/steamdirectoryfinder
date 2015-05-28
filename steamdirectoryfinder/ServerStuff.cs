@@ -111,9 +111,12 @@ namespace steamdirectoryfinder
                 Program.Performtasksi(steamcmdbase, " +login " + username + " " + password + " +quit");
             }
             System.Threading.Thread.Sleep(5000);
-            if (mounts != "" && mounts == "") return;
-            InstallMountsFromintstring(mounts, steamcmdbase, basecmd, endofcmd);
-            InstallMountsFromnames(mounts, steamcmdbase, basecmd, endofcmd);
+
+            if (InstallMountsFromintstring(mounts, steamcmdbase, basecmd, endofcmd) != 1)
+            {
+                InstallMountsFromnames(mounts, steamcmdbase, basecmd, endofcmd);
+            }
+            
         }
 
         public void RunFun()
@@ -127,9 +130,9 @@ namespace steamdirectoryfinder
             CreateNeededFiles(_mainFolder);
         }
 
-        private static void InstallMountsFromintstring(string mounts, string steamcmdbase, string basecmd, string endofcmd)
+        private static int InstallMountsFromintstring(string mounts, string steamcmdbase, string basecmd, string endofcmd)
         {
-            if (!(mounts != "" & (mounts.Contains(@"0")))) return;
+            if (!(mounts != "" & (mounts.Contains(@"0")))) return 0;
             var fuckme = mounts.Split(',');
             if (!fuckme[0].Contains("1"))
             {
@@ -163,6 +166,7 @@ namespace steamdirectoryfinder
             {
                 Program.Performtasks(steamcmdbase, basecmd + "310" + endofcmd);
             }
+            return 1;
         }
 
         private static void InstallMountsFromnames(string mounts, string steamcmdbase, string basecmd, string endofcmd)

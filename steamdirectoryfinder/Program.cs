@@ -438,6 +438,7 @@ namespace steamdirectoryfinder
             DeleteFile(@"7za.exe");
             DeleteFile(@"steamcmd.zip");
             DeleteFile(@"sourcemod.zip");
+            DeleteFile(@"mmsource.zip");
             DeleteFile(@"addons.zip");
             DeleteDir(@"steamcmd");
         }
