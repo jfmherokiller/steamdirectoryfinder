@@ -220,11 +220,11 @@ namespace steamdirectoryfinder
             var episodicinstalldir = "";
             var dayofdefeatinstalldir = "";
             var counterstrikesourceinstalldir = "";
-            Parallel.ForEach(drives, (drive, state) =>
+            foreach(var drive in drives)
             {
                 if (!drive.IsReady)
                 {
-                    state.Stop();
+                    continue;
                 }
                 var createfile = new Process
                 {
@@ -289,7 +289,7 @@ namespace steamdirectoryfinder
                 createfile.Start();
                 createfile.BeginOutputReadLine();
                 createfile.WaitForExit();
-            });
+            }
 
             Console.WriteLine(ocinstalldir);
             Console.WriteLine(sourcesdk2007Installdir);
