@@ -84,8 +84,6 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Characteristics.cs" />
-    <Compile Include="LaaFile.cs" />
     <Compile Include="NativeMethods.cs" />
     <Compile Include="otherstuff.cs" />
     <Compile Include="Program.cs" />
