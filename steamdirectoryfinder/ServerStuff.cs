@@ -76,12 +76,12 @@ namespace steamdirectoryfinder
                     Program.DeleteFile(Path.Combine(theserverfolder, lines));
                 }
             });
-            if (!Environment.Is64BitOperatingSystem) return;
-            var laafun = new LaaFile(theserverfolder + "\\srcds.exe");
-            if (laafun.LargeAddressAware == false)
-            {
-                laafun.WriteCharacteristics(true);
-            }
+            //if (!Environment.Is64BitOperatingSystem) return;
+            //var laafun = new LaaFile(theserverfolder + "\\srcds.exe");
+            //if (laafun.LargeAddressAware == false)
+            //{
+            //    laafun.WriteCharacteristics(true);
+            //}
         }
 
         public static void ExtractServerResources(string ass)

@@ -302,11 +302,11 @@ namespace steamdirectoryfinder
             Console.WriteLine(dayofdefeatinstalldir);
             InstallClientMounts(hl2Installdir, sourcesdk2007Installdir, episodicinstalldir, ocinstalldir, ep2Installdir, hl1Installdir, lostcoastinstalldir, counterstrikesourceinstalldir, dayofdefeatinstalldir);
             if (!Environment.Is64BitOperatingSystem) return;
-            var laafun = new LaaFile(sourcesdk2007Installdir + "\\hl2.exe");
-            if (laafun.LargeAddressAware == false)
-            {
-                laafun.WriteCharacteristics(true);
-            }
+            //var laafun = new LaaFile(sourcesdk2007Installdir + "\\hl2.exe");
+            //if (laafun.LargeAddressAware == false)
+            //{
+            //    laafun.WriteCharacteristics(true);
+            //}
         }
 
         private static void InstallClientMounts(string hl2Installdir, string sourcesdk2007Installdir, string episodicinstalldir,
