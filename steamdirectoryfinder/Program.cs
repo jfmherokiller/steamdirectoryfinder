@@ -11,6 +11,14 @@ namespace steamdirectoryfinder
 {
     internal static class Program
     {
+        public static void checkforrootpath(string ass)
+        {
+            var roottest = Directory.GetParent(ass.TrimEnd('\\')).ToString();
+            if (Path.GetPathRoot(roottest) == roottest)
+            {
+                Environment.Exit(1);
+            }
+        }
         public static void DeleteDir(string fun)
         {
             if (Directory.Exists(fun))
@@ -70,6 +78,7 @@ namespace steamdirectoryfinder
                 }
                 else if (args[0].ToLower().Contains(@"-server"))
                 {
+                    checkforrootpath(args[1]);
                     switch (args.Length)
                     {
                         case 2:
@@ -301,7 +310,7 @@ namespace steamdirectoryfinder
             Console.WriteLine(counterstrikesourceinstalldir);
             Console.WriteLine(dayofdefeatinstalldir);
             InstallClientMounts(hl2Installdir, sourcesdk2007Installdir, episodicinstalldir, ocinstalldir, ep2Installdir, hl1Installdir, lostcoastinstalldir, counterstrikesourceinstalldir, dayofdefeatinstalldir);
-            if (!Environment.Is64BitOperatingSystem) return;
+           // if (!Environment.Is64BitOperatingSystem) return;
             //var laafun = new LaaFile(sourcesdk2007Installdir + "\\hl2.exe");
             //if (laafun.LargeAddressAware == false)
             //{
@@ -381,6 +390,7 @@ namespace steamdirectoryfinder
             {
                 Console.WriteLine(@"Please provide the oc server install path subdirectory");
                 var input = Console.ReadLine();
+                checkforrootpath(input);
                 Server(input);
             }
         }

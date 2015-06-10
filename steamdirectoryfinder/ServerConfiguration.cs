@@ -13,7 +13,7 @@ namespace steamdirectoryfinder
         {
             InitializeComponent();
             _ocServerInstallPath = path;
-            _mainFolder = Directory.GetParent(_ocServerInstallPath).FullName;
+            _mainFolder = Directory.GetParent(_mainFolder.TrimEnd('\\')).ToString();
         }
 
         private void button1_Click_1(object sender, EventArgs e)
