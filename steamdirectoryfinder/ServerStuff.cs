@@ -19,7 +19,7 @@ namespace steamdirectoryfinder
         public ServerStuff(string path, string username, string password, bool steamfun = false, string mounts = "")
         {
             _ocServerInstallPath = path;
-            _mainFolder = Directory.GetParent(_mainFolder.TrimEnd('\\')).ToString();
+            _mainFolder = Directory.GetParent(path.TrimEnd('\\')).ToString();
             _username = username;
             _password = password;
             _steamauth = steamfun;

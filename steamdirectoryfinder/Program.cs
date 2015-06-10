@@ -13,6 +13,7 @@ namespace steamdirectoryfinder
     {
         public static void checkforrootpath(string ass)
         {
+            if (!Directory.Exists(ass)) return;
             var roottest = Directory.GetParent(ass.TrimEnd('\\')).ToString();
             if (Path.GetPathRoot(roottest) == roottest)
             {
