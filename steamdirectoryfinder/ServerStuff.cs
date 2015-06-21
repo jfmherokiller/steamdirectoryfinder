@@ -44,9 +44,9 @@ namespace steamdirectoryfinder
             using (var client = new WebClient())
             {
                 client.DownloadFile("http://media.steampowered.com/installer/steamcmd.zip", "steamcmd.zip");
-                client.DownloadFile("http://www.gsptalk.com/mirror/sourcemod/mmsource-1.10.4-windows.zip",
+                client.DownloadFile("http://www.gsptalk.com/mirror/sourcemod/mmsource-1.10.5-windows.zip",
                     "mmsource.zip");
-                client.DownloadFile("http://www.gsptalk.com/mirror/sourcemod/sourcemod-1.7.1-windows.zip",
+                client.DownloadFile("http://www.gsptalk.com/mirror/sourcemod/sourcemod-1.7.2-windows.zip",
                     "sourcemod.zip");
             }
         }
