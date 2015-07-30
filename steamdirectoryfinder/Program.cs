@@ -352,7 +352,6 @@ namespace steamdirectoryfinder
                 {
                     DeleteDir(sourcesdk2007Installdir + "\\hl2");
                     Runoneachvpk(Returndirvpks(game));
-                     //Mklink(sourcesdk2007Installdir + "\\hl2",game);
                     NativeMethods.Otherstuff.CreateSymbolicLink(sourcesdk2007Installdir + "\\hl2", game,
                         NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
                 }
@@ -363,7 +362,6 @@ namespace steamdirectoryfinder
                     Runoneachvpk(Returndirvpks(game));
                     NativeMethods.Otherstuff.CreateSymbolicLink(sourcesdk2007Installdir + "\\" + gamename, game,
                         NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
-                    //Mklink(sourcesdk2007Installdir + "\\" + gamename,game);
                     if (gamename.Equals("cstrike"))
                     {
                         File.Create(ocinstalldir + "\\mounts\\css");
