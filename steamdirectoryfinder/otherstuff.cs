@@ -10,6 +10,7 @@ namespace steamdirectoryfinder
         private TextWriter _doubleWriter;
         private FileStream _fileStream;
         private StreamWriter _fileWriter;
+
         public ConsoleCopy(string path)
         {
             _oldOut = Console.Out;

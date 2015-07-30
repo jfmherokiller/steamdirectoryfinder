@@ -16,6 +16,7 @@ namespace steamdirectoryfinder
         private readonly string _password;
         private readonly bool _steamauth;
         private readonly string _username;
+
         public ServerStuff(string path, string username, string password, bool steamfun = false, string mounts = "")
         {
             _ocServerInstallPath = path;
@@ -116,7 +117,6 @@ namespace steamdirectoryfinder
             {
                 InstallMountsFromnames(mounts, steamcmdbase, basecmd, endofcmd);
             }
-            
         }
 
         public void RunFun()

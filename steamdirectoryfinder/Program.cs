@@ -1,17 +1,18 @@
-﻿using System;
+﻿using steamdirectoryfinder.Properties;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using steamdirectoryfinder.Properties;
+using System.Windows.Forms;
 
 namespace steamdirectoryfinder
 {
     internal static class Program
     {
-        public static void Checkforrootpath(string ass)
+        private static void Checkforrootpath(string ass)
         {
             if (!Directory.Exists(ass)) return;
             var roottest = Directory.GetParent(ass.TrimEnd('\\')).ToString();
@@ -20,6 +21,7 @@ namespace steamdirectoryfinder
                 Environment.Exit(1);
             }
         }
+
         public static void DeleteDir(string fun)
         {
             if (Directory.Exists(fun))
@@ -150,7 +152,6 @@ namespace steamdirectoryfinder
             task.Close();
             //Console.SetIn(new StreamReader(Console.OpenStandardInput()));
         }
-
         public static void Performtasksi(string prog, string ass)
         {
             var task = new Process
@@ -198,6 +199,7 @@ namespace steamdirectoryfinder
                 var output = Console.ReadLine();
                 if (output != null && output.ToLower() == "client")
                 {
+                    //PlaySong();
                     return true;
                 }
                 if (output != null && output.ToLower() == "server")
@@ -206,15 +208,20 @@ namespace steamdirectoryfinder
                 }
                 if (output != null && output.ToLower() == "fun")
                 {
-                    var tehfile = Path.GetTempFileName();
-                    File.WriteAllBytes(tehfile, Resources.windows);
-                    NativeMethods.Mp3Play.Open(tehfile);
-                    NativeMethods.Mp3Play.Play(true);
-                    File.Delete(tehfile);
+                    PlaySong();
                     continue;
                 }
                 Console.WriteLine(@"Error server or client not found");
             }
+        }
+
+        private static void PlaySong()
+        {
+            var tehfile = Path.GetTempFileName();
+            File.WriteAllBytes(tehfile, Resources.windows);
+            NativeMethods.Mp3Play.Open(tehfile);
+            NativeMethods.Mp3Play.Play(true);
+            File.Delete(tehfile);
         }
 
         private static void ClientNohook()
@@ -223,16 +230,16 @@ namespace steamdirectoryfinder
             var drives = DriveInfo.GetDrives();
             var ocinstalldir = "";
             var sourcesdk2007Installdir = "";
-            //var ep2Installdir = "";
-            //var hl2Installdir = "";
-            //var hl1Installdir = "";
-            //var lostcoastinstalldir = "";
-            //var episodicinstalldir = "";
-            //var dayofdefeatinstalldir = "";
-            //var counterstrikesourceinstalldir = "";
-            var storedlocations = new List<String>();
+            var ep2Installdir = "";
+            var hl2Installdir = "";
+            var hl1Installdir = "";
+            var lostcoastinstalldir = "";
+            var episodicinstalldir = "";
+            var dayofdefeatinstalldir = "";
+            var counterstrikesourceinstalldir = "";
+            var storedlocations = new List<string>();
             Console.WriteLine(@"Now looking for the installation directories");
-            foreach(var drive in drives)
+            foreach (var drive in drives)
             {
                 if (!drive.IsReady)
                 {
@@ -252,16 +259,43 @@ namespace steamdirectoryfinder
                 };
                 createfile.OutputDataReceived += delegate(object sender, DataReceivedEventArgs args)
                 {
-                    string[] locations = { "steamapps\\common\\Half-Life 2\\hl2", "steamapps\\common\\Half-Life 2\\episodic", "steamapps\\common\\Half-Life 2\\ep2", "steamapps\\common\\Half-Life 2\\lostcoast", "steamapps\\common\\Half-Life 2\\hl1", "steamapps\\common\\Counter-Strike Source\\cstrike", "steamapps\\common\\Day of Defeat Source\\dod" };
+                    //string[] locations = { "steamapps\\common\\Half-Life 2\\hl2", "steamapps\\common\\Half-Life 2\\episodic", "steamapps\\common\\Half-Life 2\\ep2", "steamapps\\common\\Half-Life 2\\lostcoast", "steamapps\\common\\Half-Life 2\\hl1", "steamapps\\common\\Counter-Strike Source\\cstrike", "steamapps\\common\\Day of Defeat Source\\dod" };
                     if (args.Data == null)
                     {
                         return;
                     }
-                    if (args.Data.Contains("steamapps\\common\\Source SDK Base 2007") & !args.Data.Contains("steamapps\\common\\Source SDK Base 2007\\"))
+                    if (args.Data.EndsWith("steamapps\\common\\Half-Life 2\\hl2"))
+                    {
+                        hl2Installdir = args.Data;
+                    }
+                    if (args.Data.EndsWith("steamapps\\common\\Half-Life 2\\episodic"))
+                    {
+                        episodicinstalldir = args.Data;
+                    }
+                    if (args.Data.EndsWith("steamapps\\common\\Half-Life 2\\ep2"))
+                    {
+                        ep2Installdir = args.Data;
+                    }
+                    if (args.Data.EndsWith("steamapps\\common\\Half-Life 2\\lostcoast"))
+                    {
+                        lostcoastinstalldir = args.Data;
+                    }
+                    if (args.Data.EndsWith("steamapps\\common\\Half-Life 2\\hl1"))
+                    {
+                        hl1Installdir = args.Data;
+                    }
+                    if (args.Data.EndsWith("steamapps\\common\\Counter-Strike Source\\cstrike"))
+                    {
+                        counterstrikesourceinstalldir = args.Data;
+                    }
+                    if (args.Data.EndsWith("steamapps\\common\\Day of Defeat Source\\dod"))
+                    {
+                        dayofdefeatinstalldir = args.Data;
+                    }
+                    if (args.Data.EndsWith("Source SDK Base 2007\\hl2.exe"))
                     {
                         sourcesdk2007Installdir = args.Data;
                     }
-                    storedlocations.AddRange(from location in locations where args.Data.EndsWith(location, true, CultureInfo.InvariantCulture) & Directory.Exists(args.Data) select args.Data);
                     if (args.Data.EndsWith("sourcemods\\obsidian", true, CultureInfo.InvariantCulture) &
                         !args.Data.Contains("sourcemods\\obsidian\\"))
                     {
@@ -272,6 +306,14 @@ namespace steamdirectoryfinder
                 createfile.BeginOutputReadLine();
                 createfile.WaitForExit();
             }
+            storedlocations.Add(hl2Installdir);
+            storedlocations.Add(episodicinstalldir);
+            storedlocations.Add(ep2Installdir);
+            storedlocations.Add(lostcoastinstalldir);
+            storedlocations.Add(hl1Installdir);
+            storedlocations.Add(counterstrikesourceinstalldir);
+            storedlocations.Add(dayofdefeatinstalldir);
+
             Console.WriteLine(@"Found The directories");
             Thread.Sleep(1000);
             Console.WriteLine(ocinstalldir);
@@ -280,9 +322,26 @@ namespace steamdirectoryfinder
 
             InstallClientMounts2(sourcesdk2007Installdir, storedlocations, ocinstalldir);
         }
-
+        static string GetDirectoryNamestring(string f)
+        {
+            try
+            {
+                return f.Substring(0, f.LastIndexOf('\\'));
+            }
+            catch
+            {
+                return string.Empty;
+            }
+        }
         private static void InstallClientMounts2(string sourcesdk2007Installdir, IEnumerable<string> storedlocations, string ocinstalldir)
         {
+            if (sourcesdk2007Installdir == "")
+            {
+                MessageBox.Show(@"Error Please install Source sdk 2007 then click ok." + Environment.NewLine + @"If you get this message box again please send the location of your source sdk 2007 installation to the creator so he can fix the mixup.", @"mountfix problem",
+                    MessageBoxButtons.OK);
+                ClientNohook();
+            }
+            sourcesdk2007Installdir = GetDirectoryNamestring(sourcesdk2007Installdir);
             foreach (var game in storedlocations)
             {
                 if (game == "")
@@ -293,16 +352,18 @@ namespace steamdirectoryfinder
                 {
                     DeleteDir(sourcesdk2007Installdir + "\\hl2");
                     Runoneachvpk(Returndirvpks(game));
+                     //Mklink(sourcesdk2007Installdir + "\\hl2",game);
                     NativeMethods.Otherstuff.CreateSymbolicLink(sourcesdk2007Installdir + "\\hl2", game,
                         NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
                 }
                 else
                 {
                     var gamename = game.Split(Path.DirectorySeparatorChar).Last();
-                    DeleteDir(sourcesdk2007Installdir + "\\" +gamename);
+                    DeleteDir(sourcesdk2007Installdir + "\\" + gamename);
                     Runoneachvpk(Returndirvpks(game));
-                    NativeMethods.Otherstuff.CreateSymbolicLink(sourcesdk2007Installdir + "\\"+ gamename, game,
+                    NativeMethods.Otherstuff.CreateSymbolicLink(sourcesdk2007Installdir + "\\" + gamename, game,
                         NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
+                    //Mklink(sourcesdk2007Installdir + "\\" + gamename,game);
                     if (gamename.Equals("cstrike"))
                     {
                         File.Create(ocinstalldir + "\\mounts\\css");
@@ -315,7 +376,6 @@ namespace steamdirectoryfinder
                     {
                         File.Create(ocinstalldir + "\\mounts\\" + gamename);
                     }
-                    
                 }
             }
         }
@@ -340,6 +400,7 @@ namespace steamdirectoryfinder
         {
             Console.Title = @"Source Sdk 2007 steampipe fix";
         }
+
         private static void Server(string installpath, string username = "", string password = "", bool steamauth = false, string mounts = "")
         {
             if (installpath != null & username == "" & password == "")
