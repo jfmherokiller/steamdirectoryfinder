@@ -238,6 +238,7 @@ namespace steamdirectoryfinder
                 {
                     Console.WriteLine("Do You wish to select mounts?[y/n]");
                     var ans = Console.ReadKey();
+                    Console.WriteLine();
                     if (ans.KeyChar == 'y')
                     {
                         var formresults = myform.ShowDialog();
