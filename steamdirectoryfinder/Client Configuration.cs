@@ -35,7 +35,7 @@ namespace steamdirectoryfinder
             }
             if (!cstrike.Checked)
             {
-                this.Mounts.Add("cstrike");
+                this.Mounts.Add("css");
             }
             if (!ep2.Checked)
             {
@@ -43,7 +43,7 @@ namespace steamdirectoryfinder
             }
             if (!episodic.Checked)
             {
-                this.Mounts.Add("episodic");
+                this.Mounts.Add("ep1");
             }
             if (!lostcoast.Checked)
             {

@@ -78,10 +78,18 @@ namespace steamdirectoryfinder
                     Console.WriteLine(@"-server ""<serverdirectory\obsidian>"" <username> <password> -steamauth ""hl2,ep1,lostcoast,ep2,hl1,css,dod""");
                     Console.WriteLine(@"-server ""<serverdirectory\obsidian>"" <username> <password> -steamauth ""0,0,0,0,0,0,0,0""");
                     Console.WriteLine(@"-client");
+                    Console.WriteLine(@"-client ""hl2,ep1,lostcoast,ep2,hl1,css,dod""");
                 }
                 else if (args[0].ToLower().Contains(@"-client"))
                 {
-                    ClientNohook();
+                    if (args.Length == 2)
+                    {
+                        ClientNohook('y', args[1]);
+                    }
+                    else
+                    {
+                        ClientNohook();
+                    }
                 }
                 else if (args[0].ToLower().Contains(@"-server"))
                 {
@@ -229,7 +237,7 @@ namespace steamdirectoryfinder
             File.Delete(tehfile);
         }
 
-        private static void ClientNohook(char fun = 'n')
+        private static void ClientNohook(char fun = 'n',string imounts ="")
         {
             List<string> mounts = new List<string>();
             if (fun == 'n')
@@ -245,6 +253,10 @@ namespace steamdirectoryfinder
                         mounts = myform.Mounts;
                     }
                 }
+            }
+            if (imounts != "")
+            {
+                mounts = imounts.Split(',').ToList();
             }
             ExtractClientResources();
             var drives = DriveInfo.GetDrives();
@@ -288,7 +300,7 @@ namespace steamdirectoryfinder
                     {
                         hl2Installdir = args.Data;
                     }
-                    if (args.Data.EndsWith("steamapps\\common\\Half-Life 2\\episodic") & (!mounts.Contains("episodic")))
+                    if (args.Data.EndsWith("steamapps\\common\\Half-Life 2\\episodic") & (!mounts.Contains("ep1")))
                     {
                         episodicinstalldir = args.Data;
                     }
@@ -304,7 +316,7 @@ namespace steamdirectoryfinder
                     {
                         hl1Installdir = args.Data;
                     }
-                    if (args.Data.EndsWith("steamapps\\common\\Counter-Strike Source\\cstrike") & (!mounts.Contains("cstrike")))
+                    if (args.Data.EndsWith("steamapps\\common\\Counter-Strike Source\\cstrike") & (!mounts.Contains("css")))
                     {
                         counterstrikesourceinstalldir = args.Data;
                     }
