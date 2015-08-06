@@ -65,10 +65,7 @@ namespace steamdirectoryfinder
                 _two = two;
             }
 
-            public override Encoding Encoding
-            {
-                get { return _one.Encoding; }
-            }
+            public override Encoding Encoding => _one.Encoding;
 
             public override void Flush()
             {

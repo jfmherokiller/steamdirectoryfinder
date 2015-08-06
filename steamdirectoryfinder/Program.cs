@@ -6,6 +6,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace steamdirectoryfinder
@@ -50,6 +51,9 @@ namespace steamdirectoryfinder
         {
             File.WriteAllBytes("HLExtract.exe", Resources.HLExtract);
             File.WriteAllBytes("HLLib.dll", Resources.HLLib);
+            File.WriteAllBytes("7za.exe", Resources._7za);
+            File.WriteAllBytes("clientpatches.7z",Resources.clientpatches);
+
         }
 
         [STAThread]
@@ -152,6 +156,7 @@ namespace steamdirectoryfinder
             task.Close();
             //Console.SetIn(new StreamReader(Console.OpenStandardInput()));
         }
+
         public static void Performtasksi(string prog, string ass)
         {
             var task = new Process
@@ -197,16 +202,16 @@ namespace steamdirectoryfinder
             {
                 Console.WriteLine(@"Please specify if client or server");
                 var output = Console.ReadLine();
-                if (output != null && output.ToLower() == "client")
+                if (output != null && output.ToLower() == @"client")
                 {
                     //PlaySong();
                     return true;
                 }
-                if (output != null && output.ToLower() == "server")
+                if (output != null && output.ToLower() == @"server")
                 {
                     return false;
                 }
-                if (output != null && output.ToLower() == "fun")
+                if (output != null && output.ToLower() == @"fun")
                 {
                     PlaySong();
                     continue;
@@ -228,15 +233,15 @@ namespace steamdirectoryfinder
         {
             ExtractClientResources();
             var drives = DriveInfo.GetDrives();
-            var ocinstalldir = "";
+            var ocinstalldir = " ";
             var sourcesdk2007Installdir = "";
-            var ep2Installdir = "";
-            var hl2Installdir = "";
-            var hl1Installdir = "";
-            var lostcoastinstalldir = "";
-            var episodicinstalldir = "";
-            var dayofdefeatinstalldir = "";
-            var counterstrikesourceinstalldir = "";
+            var ep2Installdir = " ";
+            var hl2Installdir = " ";
+            var hl1Installdir = " ";
+            var lostcoastinstalldir = " ";
+            var episodicinstalldir = " ";
+            var dayofdefeatinstalldir = " ";
+            var counterstrikesourceinstalldir = " ";
             var storedlocations = new List<string>();
             Console.WriteLine(@"Now looking for the installation directories");
             foreach (var drive in drives)
@@ -257,7 +262,7 @@ namespace steamdirectoryfinder
                         Arguments = "/c \"dir /s /b "
                     }
                 };
-                createfile.OutputDataReceived += delegate(object sender, DataReceivedEventArgs args)
+                createfile.OutputDataReceived += delegate (object sender, DataReceivedEventArgs args)
                 {
                     //string[] locations = { "steamapps\\common\\Half-Life 2\\hl2", "steamapps\\common\\Half-Life 2\\episodic", "steamapps\\common\\Half-Life 2\\ep2", "steamapps\\common\\Half-Life 2\\lostcoast", "steamapps\\common\\Half-Life 2\\hl1", "steamapps\\common\\Counter-Strike Source\\cstrike", "steamapps\\common\\Day of Defeat Source\\dod" };
                     if (args.Data == null)
@@ -322,7 +327,8 @@ namespace steamdirectoryfinder
 
             InstallClientMounts2(sourcesdk2007Installdir, storedlocations, ocinstalldir);
         }
-        static string GetDirectoryNamestring(string f)
+
+        private static string GetDirectoryNamestring(string f)
         {
             try
             {
@@ -333,6 +339,7 @@ namespace steamdirectoryfinder
                 return string.Empty;
             }
         }
+
         private static void InstallClientMounts2(string sourcesdk2007Installdir, IEnumerable<string> storedlocations, string ocinstalldir)
         {
             if (sourcesdk2007Installdir == "")
@@ -342,11 +349,17 @@ namespace steamdirectoryfinder
                 ClientNohook();
             }
             sourcesdk2007Installdir = GetDirectoryNamestring(sourcesdk2007Installdir);
-            foreach (var game in storedlocations)
+            //nonparalleloneachgame(sourcesdk2007Installdir, storedlocations, ocinstalldir);
+            paralleloneachgame(sourcesdk2007Installdir, storedlocations, ocinstalldir);
+            InstallClientPatches(ocinstalldir);
+        }
+
+        private static void paralleloneachgame(string sourcesdk2007Installdir, IEnumerable<string> storedlocations, string ocinstalldir)
+        {
+            Parallel.ForEach(storedlocations, game =>
             {
-                if (game == "")
+                if (game == " ")
                 {
-                    return;
                 }
                 else if (game.EndsWith("hl2"))
                 {
@@ -362,11 +375,49 @@ namespace steamdirectoryfinder
                     Runoneachvpk(Returndirvpks(game));
                     NativeMethods.Otherstuff.CreateSymbolicLink(sourcesdk2007Installdir + "\\" + gamename, game,
                         NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
-                    if (gamename.Equals("cstrike"))
+                    if (gamename.Equals(@"cstrike"))
                     {
                         File.Create(ocinstalldir + "\\mounts\\css");
                     }
-                    else if (gamename.Equals("hl1"))
+                    else if (gamename.Equals(@"hl1"))
+                    {
+                        File.Create(ocinstalldir + "\\mounts\\hls");
+                    }
+                    else
+                    {
+                        File.Create(ocinstalldir + "\\mounts\\" + gamename);
+                    }
+                }
+            });
+        }
+
+        private static void nonparalleloneachgame(string sourcesdk2007Installdir, IEnumerable<string> storedlocations,
+            string ocinstalldir)
+        {
+            foreach (var game in storedlocations)
+            {
+                if (game == " ")
+                {
+                }
+                else if (game.EndsWith("hl2"))
+                {
+                    DeleteDir(sourcesdk2007Installdir + "\\hl2");
+                    Runoneachvpk(Returndirvpks(game));
+                    NativeMethods.Otherstuff.CreateSymbolicLink(sourcesdk2007Installdir + "\\hl2", game,
+                        NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
+                }
+                else
+                {
+                    var gamename = game.Split(Path.DirectorySeparatorChar).Last();
+                    DeleteDir(sourcesdk2007Installdir + "\\" + gamename);
+                    Runoneachvpk(Returndirvpks(game));
+                    NativeMethods.Otherstuff.CreateSymbolicLink(sourcesdk2007Installdir + "\\" + gamename, game,
+                        NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
+                    if (gamename.Equals(@"cstrike"))
+                    {
+                        File.Create(ocinstalldir + "\\mounts\\css");
+                    }
+                    else if (gamename.Equals(@"hl1"))
                     {
                         File.Create(ocinstalldir + "\\mounts\\hls");
                     }
@@ -376,6 +427,11 @@ namespace steamdirectoryfinder
                     }
                 }
             }
+        }
+
+        private static void InstallClientPatches(string ocinstalldir)
+        {
+            Program.Performtasks("7za.exe", "x clientpatches.7z -o" + Program.PutIntoQuotes(ocinstalldir) + " -aoa");
         }
 
         private static void OpenMenuIfnocmdArguments()
@@ -450,6 +506,7 @@ namespace steamdirectoryfinder
             DeleteFile(@"sourcemod.zip");
             DeleteFile(@"mmsource.zip");
             DeleteFile(@"addons.zip");
+            DeleteFile(@"clientpatches.7z");
             DeleteDir(@"steamcmd");
         }
 
@@ -459,7 +516,7 @@ namespace steamdirectoryfinder
             var vpkwithoutextend = ass;
             vpkwithoutextend = vpkwithoutextend.Remove(vpkwithoutextend.IndexOf('.'));
             var gamedir = Path.GetDirectoryName(vpkwithoutextend);
-            var robocopyargs = PutIntoQuotes(gamedir + "\\root") + " " + PutIntoQuotes(gamedir) + "  /E /MOVE /IS";
+            var robocopyargs = PutIntoQuotes(gamedir + "\\root") + " " + PutIntoQuotes(gamedir) + "  /E /MOVE /IS  /MT:" +Environment.ProcessorCount;
             //var xcopyargs = PutIntoQuotes(gamedir + "\\root\\*") + " " + PutIntoQuotes(gamedir + "\\") + " /f /s /i /y";
             var hlExtractargs = "-p " + quotedVpk + " -d " + PutIntoQuotes(gamedir) + " " + "-e \"\"";
             Performtasks("HLExtract.exe", hlExtractargs);
