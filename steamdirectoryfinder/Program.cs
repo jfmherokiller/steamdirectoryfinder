@@ -231,6 +231,16 @@ namespace steamdirectoryfinder
 
         private static void ClientNohook()
         {
+            using (var myform = new Client_Configuration())
+            {
+                Console.WriteLine("Do You wish to select mounts?[y/n]");
+                var ans = Console.ReadKey();
+                if (ans.KeyChar == 'y')
+                {
+                    myform.ShowDialog();
+                }
+            }
+
             ExtractClientResources();
             var drives = DriveInfo.GetDrives();
             var ocinstalldir = " ";
@@ -459,8 +469,7 @@ namespace steamdirectoryfinder
         {
             if (installpath != null & username == "" & password == "")
             {
-                var serverform = new ServerConfiguration(installpath);
-                serverform.ShowDialog();
+                OpenServerForm(installpath);
             }
             else if (installpath == null)
             {
@@ -472,8 +481,7 @@ namespace steamdirectoryfinder
                 }
                 Console.WriteLine(input);
                 Console.ReadLine();
-                var serverform = new ServerConfiguration(input);
-                serverform.ShowDialog();
+                OpenServerForm(input);
             }
             else if (username != null & password != null & !steamauth & mounts == "")
             {
@@ -495,6 +503,15 @@ namespace steamdirectoryfinder
                 var fun = new ServerStuff(installpath, username, password, true, mounts);
                 fun.RunFun();
             }
+        }
+
+        private static void OpenServerForm(string installpath)
+        {
+            using (var serverform = new ServerConfiguration(installpath))
+            {
+                serverform.ShowDialog();
+            }
+                
         }
 
         private static void Shutdown(object sender, EventArgs a)

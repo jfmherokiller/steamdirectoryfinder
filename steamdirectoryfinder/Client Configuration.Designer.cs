@@ -36,6 +36,7 @@
             this.cstrike = new System.Windows.Forms.CheckBox();
             this.hl1 = new System.Windows.Forms.CheckBox();
             this.dod = new System.Windows.Forms.CheckBox();
+            this.dropmounts = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // hl2
@@ -55,9 +56,9 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(13, 15);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(216, 13);
+            this.label1.Size = new System.Drawing.Size(283, 13);
             this.label1.TabIndex = 1;
-            this.label1.Text = "Please deselect the mounts you do not want";
+            this.label1.Text = "Please deselect the mounts you do not want then click OK";
             // 
             // episodic
             // 
@@ -131,11 +132,22 @@
             this.dod.Text = "Day of Defeat: Source";
             this.dod.UseVisualStyleBackColor = true;
             // 
+            // dropmounts
+            // 
+            this.dropmounts.Location = new System.Drawing.Point(304, 373);
+            this.dropmounts.Name = "dropmounts";
+            this.dropmounts.Size = new System.Drawing.Size(75, 23);
+            this.dropmounts.TabIndex = 8;
+            this.dropmounts.Text = "OK";
+            this.dropmounts.UseVisualStyleBackColor = true;
+            this.dropmounts.Click += new System.EventHandler(this.dropmounts_Click);
+            // 
             // Client_Configuration
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(405, 408);
+            this.Controls.Add(this.dropmounts);
             this.Controls.Add(this.dod);
             this.Controls.Add(this.hl1);
             this.Controls.Add(this.cstrike);
@@ -146,6 +158,7 @@
             this.Controls.Add(this.hl2);
             this.Name = "Client_Configuration";
             this.Text = "Client_Configuration";
+            this.Load += new System.EventHandler(this.Client_Configuration_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -161,5 +174,6 @@
         private System.Windows.Forms.CheckBox cstrike;
         private System.Windows.Forms.CheckBox hl1;
         private System.Windows.Forms.CheckBox dod;
+        private System.Windows.Forms.Button dropmounts;
     }
 }

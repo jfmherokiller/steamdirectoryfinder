@@ -16,5 +16,15 @@ namespace steamdirectoryfinder
         {
             InitializeComponent();
         }
+
+        private void Client_Configuration_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dropmounts_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
