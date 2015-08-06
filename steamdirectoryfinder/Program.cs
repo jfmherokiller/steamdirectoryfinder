@@ -231,13 +231,15 @@ namespace steamdirectoryfinder
 
         private static void ClientNohook()
         {
+            List<string> mounts = new List<string>();
             using (var myform = new Client_Configuration())
             {
                 Console.WriteLine("Do You wish to select mounts?[y/n]");
                 var ans = Console.ReadKey();
                 if (ans.KeyChar == 'y')
                 {
-                    myform.ShowDialog();
+                    var formresults = myform.ShowDialog();
+                    mounts = myform.Mounts;
                 }
             }
 
@@ -279,31 +281,31 @@ namespace steamdirectoryfinder
                     {
                         return;
                     }
-                    if (args.Data.EndsWith("steamapps\\common\\Half-Life 2\\hl2"))
+                    if (args.Data.EndsWith("steamapps\\common\\Half-Life 2\\hl2") & (!mounts.Contains("hl2")))
                     {
                         hl2Installdir = args.Data;
                     }
-                    if (args.Data.EndsWith("steamapps\\common\\Half-Life 2\\episodic"))
+                    if (args.Data.EndsWith("steamapps\\common\\Half-Life 2\\episodic") & (!mounts.Contains("episodic")))
                     {
                         episodicinstalldir = args.Data;
                     }
-                    if (args.Data.EndsWith("steamapps\\common\\Half-Life 2\\ep2"))
+                    if (args.Data.EndsWith("steamapps\\common\\Half-Life 2\\ep2") & (!mounts.Contains("ep2")))
                     {
                         ep2Installdir = args.Data;
                     }
-                    if (args.Data.EndsWith("steamapps\\common\\Half-Life 2\\lostcoast"))
+                    if (args.Data.EndsWith("steamapps\\common\\Half-Life 2\\lostcoast") & (!mounts.Contains("lostcoast")) )
                     {
                         lostcoastinstalldir = args.Data;
                     }
-                    if (args.Data.EndsWith("steamapps\\common\\Half-Life 2\\hl1"))
+                    if (args.Data.EndsWith("steamapps\\common\\Half-Life 2\\hl1") & (!mounts.Contains("hl1")))
                     {
                         hl1Installdir = args.Data;
                     }
-                    if (args.Data.EndsWith("steamapps\\common\\Counter-Strike Source\\cstrike"))
+                    if (args.Data.EndsWith("steamapps\\common\\Counter-Strike Source\\cstrike") & (!mounts.Contains("cstrike")))
                     {
                         counterstrikesourceinstalldir = args.Data;
                     }
-                    if (args.Data.EndsWith("steamapps\\common\\Day of Defeat Source\\dod"))
+                    if (args.Data.EndsWith("steamapps\\common\\Day of Defeat Source\\dod") & (!mounts.Contains("dod")))
                     {
                         dayofdefeatinstalldir = args.Data;
                     }
