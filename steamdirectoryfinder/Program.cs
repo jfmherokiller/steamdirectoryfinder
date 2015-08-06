@@ -229,20 +229,22 @@ namespace steamdirectoryfinder
             File.Delete(tehfile);
         }
 
-        private static void ClientNohook()
+        private static void ClientNohook(char fun = 'n')
         {
             List<string> mounts = new List<string>();
-            using (var myform = new Client_Configuration())
+            if (fun == 'n')
             {
-                Console.WriteLine("Do You wish to select mounts?[y/n]");
-                var ans = Console.ReadKey();
-                if (ans.KeyChar == 'y')
+                using (var myform = new Client_Configuration())
                 {
-                    var formresults = myform.ShowDialog();
-                    mounts = myform.Mounts;
+                    Console.WriteLine("Do You wish to select mounts?[y/n]");
+                    var ans = Console.ReadKey();
+                    if (ans.KeyChar == 'y')
+                    {
+                        var formresults = myform.ShowDialog();
+                        mounts = myform.Mounts;
+                    }
                 }
             }
-
             ExtractClientResources();
             var drives = DriveInfo.GetDrives();
             var ocinstalldir = " ";
