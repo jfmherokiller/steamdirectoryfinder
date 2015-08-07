@@ -78,13 +78,18 @@ namespace steamdirectoryfinder
                     Console.WriteLine(@"-server ""<serverdirectory\obsidian>"" <username> <password> -steamauth ""hl2,ep1,lostcoast,ep2,hl1,css,dod""");
                     Console.WriteLine(@"-server ""<serverdirectory\obsidian>"" <username> <password> -steamauth ""0,0,0,0,0,0,0,0""");
                     Console.WriteLine(@"-client");
-                    Console.WriteLine(@"-client ""hl2,ep1,lostcoast,ep2,hl1,css,dod""");
+                    Console.WriteLine(@"-client -y");
+                    Console.WriteLine(@"-client -n ""hl2,ep1,lostcoast,ep2,hl1,css,dod""");
                 }
                 else if (args[0].ToLower().Contains(@"-client"))
                 {
-                    if (args.Length == 2)
+                    if ((args.Length == 2) & (args[1] == "-y"))
                     {
-                        ClientNohook('y', args[1]);
+                        ClientNohook("-y");
+                    }
+                    else if (args.Length == 3)
+                    {
+                        ClientNohook("-n",args[2]);
                     }
                     else
                     {
@@ -237,21 +242,21 @@ namespace steamdirectoryfinder
             File.Delete(tehfile);
         }
 
-        private static void ClientNohook(char fun = 'n',string imounts ="")
+        private static void ClientNohook(string fun = "-n",string imounts ="")
         {
-            List<string> mounts = new List<string>();
-            if (fun == 'n')
+            var mounts = new List<string>();
+            if (fun == "-y")
             {
                 using (var myform = new Client_Configuration())
                 {
-                    Console.WriteLine("Do You wish to select mounts?[y/n]");
-                    var ans = Console.ReadKey();
-                    Console.WriteLine();
-                    if (ans.KeyChar == 'y')
-                    {
+                    //Console.WriteLine("Do You wish to select mounts?[y/n]");
+                    //var ans = Console.ReadKey();
+                    //Console.WriteLine();
+                    //if (ans.KeyChar == 'y')
+                   // {
                         var formresults = myform.ShowDialog();
                         mounts = myform.Mounts;
-                    }
+                    //}
                 }
             }
             if (imounts != "")
