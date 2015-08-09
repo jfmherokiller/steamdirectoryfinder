@@ -60,8 +60,8 @@ namespace steamdirectoryfinder
         public static void Main(string[] args)
         {
             AppDomain.CurrentDomain.ProcessExit += Shutdown;
-            using (new ConsoleCopy(@"mylogfile.txt"))
-            {
+            //using (new ConsoleCopy(@"mylogfile.txt"))
+            //{
                 Perfominitializations();
                 if (args.Length == 0)
                 {
@@ -145,7 +145,7 @@ namespace steamdirectoryfinder
                             break;
                     }
                 }
-            }
+            //}
         }
 
         public static void Performtasks(string prog, string ass)
@@ -276,6 +276,7 @@ namespace steamdirectoryfinder
             var counterstrikesourceinstalldir = " ";
             var storedlocations = new List<string>();
             Console.WriteLine(@"Now looking for the installation directories");
+
             foreach (var drive in drives)
             {
                 if (!drive.IsReady)
@@ -313,7 +314,7 @@ namespace steamdirectoryfinder
                     {
                         ep2Installdir = args.Data;
                     }
-                    if (args.Data.EndsWith("steamapps\\common\\Half-Life 2\\lostcoast") & (!mounts.Contains("lostcoast")) )
+                    if (args.Data.EndsWith("steamapps\\common\\Half-Life 2\\lostcoast") & (!mounts.Contains("lostcoast")))
                     {
                         lostcoastinstalldir = args.Data;
                     }
@@ -423,6 +424,7 @@ namespace steamdirectoryfinder
             });
         }
 
+/*
         private static void nonparalleloneachgame(string sourcesdk2007Installdir, IEnumerable<string> storedlocations,
             string ocinstalldir)
         {
@@ -460,6 +462,7 @@ namespace steamdirectoryfinder
                 }
             }
         }
+*/
 
         private static void InstallClientPatches(string ocinstalldir)
         {
