@@ -214,7 +214,8 @@ namespace steamdirectoryfinder
             while (true)
             {
                 Console.WriteLine(@"Please specify if client or server");
-                var output = Console.ReadLine();
+
+				var output = Console.ReadLine();
                 if (output != null && output.ToLower() == @"client")
                 {
                     //PlaySong();
@@ -275,6 +276,14 @@ namespace steamdirectoryfinder
             var dayofdefeatinstalldir = " ";
             var counterstrikesourceinstalldir = " ";
             var storedlocations = new List<string>();
+			var programfilename = "cmd";
+			var programargs = "/c \"dir /s /b ";
+
+			if (Environment.OSVersion.Platform.Equals (PlatformID.Unix)) 
+			{
+				programfilename = "find";
+				programargs = ".";
+			}
             Console.WriteLine(@"Now looking for the installation directories");
 
             foreach (var drive in drives)
@@ -291,8 +300,8 @@ namespace steamdirectoryfinder
                         WorkingDirectory = drive.RootDirectory.FullName,
                         RedirectStandardOutput = true,
                         CreateNoWindow = true,
-                        FileName = "cmd",
-                        Arguments = "/c \"dir /s /b "
+						FileName = programfilename,
+						Arguments = programargs
                     }
                 };
                 createfile.OutputDataReceived += delegate (object sender, DataReceivedEventArgs args)

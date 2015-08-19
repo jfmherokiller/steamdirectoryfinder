@@ -1,6 +1,10 @@
 ﻿<Properties StartupItem="steamdirectoryfinder/steamdirectoryfinder.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench />
+  <MonoDevelop.Ide.Workbench ActiveDocument="steamdirectoryfinder/Program.cs">
+    <Files>
+      <File FileName="steamdirectoryfinder/Program.cs" Line="232" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
