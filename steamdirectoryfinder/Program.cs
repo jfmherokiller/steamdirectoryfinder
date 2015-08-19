@@ -254,7 +254,7 @@ namespace steamdirectoryfinder
                     //Console.WriteLine();
                     //if (ans.KeyChar == 'y')
                    // {
-                        var formresults = myform.ShowDialog();
+                        
                         mounts = myform.Mounts;
                     //}
                 }
