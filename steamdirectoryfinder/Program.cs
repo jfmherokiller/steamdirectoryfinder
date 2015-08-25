@@ -41,9 +41,12 @@ namespace steamdirectoryfinder
 
         public static void DeleteVpks(IEnumerable<string> ass)
         {
-            foreach (var avv in ass.Where(avv => !avv.Contains(@"platform")))
+			foreach (var avv in ass)
             {
-                DeleteFile(avv);
+				if (!avv.Contains (@"platform")) 
+				{
+					DeleteFile(avv);
+				}
             }
         }
 
@@ -192,21 +195,24 @@ namespace steamdirectoryfinder
             return "\"" + value + "\"";
         }
 
-        public static IEnumerable<string> Returnallvpks(String dir)
+		public static string[] Returnallvpks(String dir)
         {
-            return Directory.EnumerateFiles(dir, "*.vpk", SearchOption.AllDirectories);
+            return Directory.GetFiles(dir, "*.vpk", SearchOption.AllDirectories);
         }
 
-        public static IEnumerable<string> Returndirvpks(string dir)
+		public static string[] Returndirvpks(string dir)
         {
-            var vpkfiles = Directory.EnumerateFiles(dir, "*_dir.vpk", SearchOption.AllDirectories);
+            var vpkfiles = Directory.GetFiles(dir, "*_dir.vpk", SearchOption.AllDirectories);
             return vpkfiles;
         }
 
         public static void Runoneachvpk(IEnumerable<string> ass)
         {
-            foreach (var avv in ass.Where(avv => !avv.Contains(@"platform")))
-                Tasks(avv);
+			foreach (var avv in ass)
+				if (!avv.Contains (@"platform")) 
+				{
+					Tasks(avv);
+				}
         }
 
         private static bool CheckifClientOrServer()
@@ -218,7 +224,7 @@ namespace steamdirectoryfinder
 				var output = Console.ReadLine();
                 if (output != null && output.ToLower() == @"client")
                 {
-                    //PlaySong();
+                    PlaySong();
                     return true;
                 }
                 if (output != null && output.ToLower() == @"server")
@@ -282,7 +288,7 @@ namespace steamdirectoryfinder
 			if (Environment.OSVersion.Platform.Equals (PlatformID.Unix)) 
 			{
 				programfilename = "find";
-				programargs = ".";
+				programargs = "Steam";
 			}
             Console.WriteLine(@"Now looking for the installation directories");
 
@@ -391,11 +397,11 @@ namespace steamdirectoryfinder
                 ClientNohook();
             }
             sourcesdk2007Installdir = GetDirectoryNamestring(sourcesdk2007Installdir);
-            //nonparalleloneachgame(sourcesdk2007Installdir, storedlocations, ocinstalldir);
-            paralleloneachgame(sourcesdk2007Installdir, storedlocations, ocinstalldir);
+            nonparalleloneachgame(sourcesdk2007Installdir, storedlocations, ocinstalldir);
+            //paralleloneachgame(sourcesdk2007Installdir, storedlocations, ocinstalldir);
             InstallClientPatches(ocinstalldir);
         }
-
+/*
         private static void paralleloneachgame(string sourcesdk2007Installdir, IEnumerable<string> storedlocations, string ocinstalldir)
         {
             Parallel.ForEach(storedlocations, game =>
@@ -432,8 +438,8 @@ namespace steamdirectoryfinder
                 }
             });
         }
+*/
 
-/*
         private static void nonparalleloneachgame(string sourcesdk2007Installdir, IEnumerable<string> storedlocations,
             string ocinstalldir)
         {
@@ -446,16 +452,18 @@ namespace steamdirectoryfinder
                 {
                     DeleteDir(sourcesdk2007Installdir + "\\hl2");
                     Runoneachvpk(Returndirvpks(game));
-                    NativeMethods.Otherstuff.CreateSymbolicLink(sourcesdk2007Installdir + "\\hl2", game,
-                        NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
+                    //NativeMethods.Otherstuff.CreateSymbolicLink(sourcesdk2007Installdir + "\\hl2", game,
+                        //NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
+					Monitor.Core.Utilities.JunctionPoint.Create(game,sourcesdk2007Installdir + "\\hl2",true);
                 }
                 else
                 {
                     var gamename = game.Split(Path.DirectorySeparatorChar).Last();
                     DeleteDir(sourcesdk2007Installdir + "\\" + gamename);
                     Runoneachvpk(Returndirvpks(game));
-                    NativeMethods.Otherstuff.CreateSymbolicLink(sourcesdk2007Installdir + "\\" + gamename, game,
-                        NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
+                    //NativeMethods.Otherstuff.CreateSymbolicLink(sourcesdk2007Installdir + "\\" + gamename, game,
+                      //  NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
+					Monitor.Core.Utilities.JunctionPoint.Create(game,sourcesdk2007Installdir + "\\" + gamename,true);
                     if (gamename.Equals(@"cstrike"))
                     {
                         File.Create(ocinstalldir + "\\mounts\\css");
@@ -471,7 +479,7 @@ namespace steamdirectoryfinder
                 }
             }
         }
-*/
+
 
         private static void InstallClientPatches(string ocinstalldir)
         {
@@ -567,14 +575,14 @@ namespace steamdirectoryfinder
             var vpkwithoutextend = ass;
             vpkwithoutextend = vpkwithoutextend.Remove(vpkwithoutextend.IndexOf('.'));
             var gamedir = Path.GetDirectoryName(vpkwithoutextend);
-            var robocopyargs = PutIntoQuotes(gamedir + "\\root") + " " + PutIntoQuotes(gamedir) + "  /E /MOVE /IS  /MT:" +Environment.ProcessorCount;
-            //var xcopyargs = PutIntoQuotes(gamedir + "\\root\\*") + " " + PutIntoQuotes(gamedir + "\\") + " /f /s /i /y";
+            //var robocopyargs = PutIntoQuotes(gamedir + "\\root") + " " + PutIntoQuotes(gamedir) + "  /E /MOVE /IS  /MT:" +Environment.ProcessorCount;
+            var xcopyargs = PutIntoQuotes(gamedir + "\\root\\*") + " " + PutIntoQuotes(gamedir + "\\") + " /f /s /i /y";
             var hlExtractargs = "-p " + quotedVpk + " -d " + PutIntoQuotes(gamedir) + " " + "-e \"\"";
             Performtasks("HLExtract.exe", hlExtractargs);
-            Performtasks("robocopy", robocopyargs);
+            //Performtasks("robocopy", robocopyargs);
 
-            // Performtasks("xcopy", xcopyargs);
-            //Directory.Delete(gamedir + "\\root", true);
+             Performtasks("xcopy", xcopyargs);
+            Directory.Delete(gamedir + "\\root", true);
             //Performtasks("rd", "/q /s " )
         }
     }
