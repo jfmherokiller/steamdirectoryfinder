@@ -13,20 +13,37 @@ namespace steamdirectoryfinder
 {
     internal static class Program
     {
-        private static void Checkforrootpath(string ass)
+        private static string Checkforrootpath(string ass)
         {
-            if (!Directory.Exists(ass)) return;
-            var roottest = Directory.GetParent(ass.TrimEnd('\\')).ToString();
-            if (Path.GetPathRoot(roottest) == roottest)
+            if (!Directory.Exists(ass))
             {
+                Directory.CreateDirectory(ass);
+            }
+            DirectoryInfo d = new DirectoryInfo(ass);
+            if (d.Parent == null)
+            {
+                MessageBox.Show("Please specify a directory that is not Letter:\\ ");
                 Environment.Exit(1);
             }
+            else
+            {
+                if (ass.EndsWith("obsidian"))
+                {
+                    return ass;
+                }
+                else
+                {
+                    return ass + "\\obsidian";
+                }
+            }
+            return null;
         }
 
         public static void DeleteDir(string fun)
         {
             if (Directory.Exists(fun))
             {
+
                 Directory.Delete(fun, !File.GetAttributes(fun).HasFlag(FileAttributes.ReparsePoint));
             }
         }
@@ -100,12 +117,16 @@ namespace steamdirectoryfinder
             }
             else if (args[0].ToLower().Contains(@"-server"))
             {
-                Checkforrootpath(args[1]);
+                var fun = Checkforrootpath(args[1]);
+                if (fun == null)
+                {
+                    MessageBox.Show("Please create the server directory then rerun the mountfix");
+                    Environment.Exit(1);
+                }
                 switch (args.Length)
                 {
                     case 2:
                     {
-                        var fun = args[1];
                         fun = fun.Trim('"');
                         fun = NativeMethods.Otherstuff.GetShortPathName(fun);
                         Server(fun);
@@ -114,7 +135,6 @@ namespace steamdirectoryfinder
 
                     case 4:
                     {
-                        var fun = args[1];
                         fun = fun.Trim('"');
                         fun = NativeMethods.Otherstuff.GetShortPathName(fun);
                         Server(fun, args[2], args[3]);
@@ -123,7 +143,6 @@ namespace steamdirectoryfinder
 
                     case 5:
                     {
-                        var fun = args[1];
                         fun = fun.Trim('"');
                         fun = NativeMethods.Otherstuff.GetShortPathName(fun);
                         if (args[4].Contains(@"-steamauth"))
@@ -139,7 +158,6 @@ namespace steamdirectoryfinder
 
                     case 6:
                     {
-                        var fun = args[1];
                         fun = fun.Trim('"');
                         fun = NativeMethods.Otherstuff.GetShortPathName(fun);
                         Server(fun, args[2], args[3], true, args[5]);
@@ -147,7 +165,6 @@ namespace steamdirectoryfinder
                         break;
                 }
             }
-            //}
         }
 
         public static void Performtasks(string prog, string ass)
