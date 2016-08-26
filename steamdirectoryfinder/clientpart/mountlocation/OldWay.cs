@@ -12,34 +12,11 @@ using steamdirectoryfinder.Properties;
 
 namespace steamdirectoryfinder.clientpart.mountlocation
 {
-    class FindMounts
+    class OldWay
     {
 
-        public static void ExtractClientResources()
+        public static Tuple<string,string,List<string>> oldwaysetup(List<string> mounts)
         {
-            bothServerAndClient.ClientAndServer.ExtractResourcesForBoth();
-            File.WriteAllBytes("clientpatches.7z", Resources.clientpatches);
-        }
-        private static void InstallClientPatches(string ocinstalldir)
-        {
-            bothServerAndClient.ClientAndServer.Performtasks("7za.exe", "x clientpatches.7z -o" + MiscFunctions.PutIntoQuotes(ocinstalldir) + " -aoa");
-        }
-        public static void ClientNohook(string fun = "-n", string imounts = "")
-        {
-            var mounts = new List<string>();
-            if (fun == "-y")
-            {
-                using (var myform = new Client_Configuration())
-                {
-                    var formresults = myform.ShowDialog();
-                    mounts = myform.Mounts;
-                }
-            }
-            if (imounts != "")
-            {
-                mounts = imounts.Split(',').ToList();
-            }
-            ExtractClientResources();
             var drives = DriveInfo.GetDrives();
             var ocinstalldir = " ";
             var sourcesdk2007Installdir = "";
@@ -128,69 +105,15 @@ namespace steamdirectoryfinder.clientpart.mountlocation
             storedlocations.Add(hl1Installdir);
             storedlocations.Add(counterstrikesourceinstalldir);
             storedlocations.Add(dayofdefeatinstalldir);
-
-            Console.WriteLine(@"Found The directories");
-            Thread.Sleep(1000);
-            Console.WriteLine(ocinstalldir);
-            Console.WriteLine(sourcesdk2007Installdir);
-            Console.WriteLine(string.Join(Environment.NewLine, storedlocations.Cast<string>().ToArray()));
-
-            InstallClientMounts2(sourcesdk2007Installdir, storedlocations, ocinstalldir);
-        }
-        private static void InstallClientMounts2(string sourcesdk2007Installdir, IEnumerable<string> storedlocations,
-            string ocinstalldir)
-        {
-            if (sourcesdk2007Installdir == "")
-            {
-                MessageBox.Show(
-                    @"Error Please install Source sdk 2007 then click ok." + Environment.NewLine +
-                    @"If you get this message box again please send the location of your source sdk 2007 installation to the creator so he can fix the mixup.",
-                    @"mountfix problem",
-                    MessageBoxButtons.OK);
-                ClientNohook();
-            }
-            sourcesdk2007Installdir = bothServerAndClient.ClientAndServer.GetDirectoryNamestring(sourcesdk2007Installdir);
-            //nonparalleloneachgame(sourcesdk2007Installdir, storedlocations, ocinstalldir);
-            paralleloneachgame(sourcesdk2007Installdir, storedlocations, ocinstalldir);
-            InstallClientPatches(ocinstalldir);
+            return new Tuple<string, string, List<string>>(ocinstalldir,sourcesdk2007Installdir,storedlocations);
         }
 
-        private static void paralleloneachgame(string sourcesdk2007Installdir, IEnumerable<string> storedlocations,
-            string ocinstalldir)
-        {
-            Parallel.ForEach(storedlocations, game =>
-            {
-                if (game == " ")
-                {
-                }
-                else if (game.EndsWith("hl2"))
-                {
-                    MiscFunctions.DeleteDir(sourcesdk2007Installdir + "\\hl2");
-                    bothServerAndClient.ClientAndServer.Runoneachvpk(bothServerAndClient.ClientAndServer.Returndirvpks(game));
-                    NativeMethods.Otherstuff.CreateSymbolicLink(sourcesdk2007Installdir + "\\hl2", game,
-                        NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
-                }
-                else
-                {
-                    var gamename = game.Split(Path.DirectorySeparatorChar).Last();
-                    MiscFunctions.DeleteDir(sourcesdk2007Installdir + "\\" + gamename);
-                    bothServerAndClient.ClientAndServer.Runoneachvpk(bothServerAndClient.ClientAndServer.Returndirvpks(game));
-                    NativeMethods.Otherstuff.CreateSymbolicLink(sourcesdk2007Installdir + "\\" + gamename, game,
-                        NativeMethods.Otherstuff.SymbolicLinkFlag.Directory);
-                    if (gamename.Equals(@"cstrike"))
-                    {
-                        File.Create(ocinstalldir + "\\mounts\\css");
-                    }
-                    else if (gamename.Equals(@"hl1"))
-                    {
-                        File.Create(ocinstalldir + "\\mounts\\hls");
-                    }
-                    else
-                    {
-                        File.Create(ocinstalldir + "\\mounts\\" + gamename);
-                    }
-                }
-            });
-        }
+
+
+
+
+
+
+
     }
 }

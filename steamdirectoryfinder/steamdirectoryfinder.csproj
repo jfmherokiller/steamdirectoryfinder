@@ -87,7 +87,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="bothServerAndClient\ClientAndServer.cs" />
-    <Compile Include="clientpart\mountlocation\FindMounts.cs" />
+    <Compile Include="clientpart\mountlocation\BothWays.cs" />
+    <Compile Include="clientpart\mountlocation\OldWay.cs" />
+    <Compile Include="clientpart\mountlocation\NewWay.cs" />
     <Compile Include="clientpart\ui\Client Configuration.cs">
       <SubType>Form</SubType>
     </Compile>

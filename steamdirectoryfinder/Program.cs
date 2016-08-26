@@ -84,15 +84,15 @@ namespace steamdirectoryfinder
             {
                 if ((args.Length == 2) & (args[1] == "-y"))
                 {
-                    FindMounts.ClientNohook("-y");
+                    OldWay.ClientNohook("-y");
                 }
                 else if (args.Length == 3)
                 {
-                    FindMounts.ClientNohook("-n", args[2]);
+                    OldWay.ClientNohook("-n", args[2]);
                 }
                 else
                 {
-                    FindMounts.ClientNohook();
+                    OldWay.ClientNohook();
                 }
             }
             else if (args[0].ToLower().Contains(@"-server"))
@@ -189,7 +189,7 @@ namespace steamdirectoryfinder
             var choice = CheckifClientOrServer();
             if (choice)
             {
-                FindMounts.ClientNohook();
+                OldWay.ClientNohook();
             }
             else
             {
