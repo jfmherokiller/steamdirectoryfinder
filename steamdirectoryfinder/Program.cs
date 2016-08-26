@@ -1,5 +1,4 @@
-﻿using steamdirectoryfinder.Properties;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
@@ -8,6 +7,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using steamdirectoryfinder.Properties;
 
 namespace steamdirectoryfinder
 {
@@ -52,8 +52,7 @@ namespace steamdirectoryfinder
             File.WriteAllBytes("HLExtract.exe", Resources.HLExtract);
             File.WriteAllBytes("HLLib.dll", Resources.HLLib);
             File.WriteAllBytes("7za.exe", Resources._7za);
-            File.WriteAllBytes("clientpatches.7z",Resources.clientpatches);
-
+            File.WriteAllBytes("clientpatches.7z", Resources.clientpatches);
         }
 
         [STAThread]
@@ -62,89 +61,92 @@ namespace steamdirectoryfinder
             AppDomain.CurrentDomain.ProcessExit += Shutdown;
             //using (new ConsoleCopy(@"mylogfile.txt"))
             //{
-                Perfominitializations();
-                if (args.Length == 0)
+            Perfominitializations();
+            if (args.Length == 0)
+            {
+                OpenMenuIfnocmdArguments();
+            }
+            else if (args[0].ToLower().Contains(@"-help"))
+            {
+                Console.WriteLine(@"Usage!");
+                Console.WriteLine(@"-server ""<serverdirectory\obsidian>""");
+                Console.WriteLine(@"-server ""<serverdirectory\obsidian>"" <username> <password>");
+                Console.WriteLine(@"-server ""<serverdirectory\obsidian>"" <username> <password> -steamauth");
+                Console.WriteLine(
+                    @"-server ""<serverdirectory\obsidian>"" <username> <password> ""hl2,ep1,lostcoast,ep2,hl1,css,dod""");
+                Console.WriteLine(@"-server ""<serverdirectory\obsidian>"" <username> <password> ""0,0,0,0,0,0,0,0""");
+                Console.WriteLine(
+                    @"-server ""<serverdirectory\obsidian>"" <username> <password> -steamauth ""hl2,ep1,lostcoast,ep2,hl1,css,dod""");
+                Console.WriteLine(
+                    @"-server ""<serverdirectory\obsidian>"" <username> <password> -steamauth ""0,0,0,0,0,0,0,0""");
+                Console.WriteLine(@"-client");
+                Console.WriteLine(@"-client -y");
+                Console.WriteLine(@"-client -n ""hl2,ep1,lostcoast,ep2,hl1,css,dod""");
+            }
+            else if (args[0].ToLower().Contains(@"-client"))
+            {
+                if ((args.Length == 2) & (args[1] == "-y"))
                 {
-                    OpenMenuIfnocmdArguments();
+                    ClientNohook("-y");
                 }
-                else if (args[0].ToLower().Contains(@"-help"))
+                else if (args.Length == 3)
                 {
-                    Console.WriteLine(@"Usage!");
-                    Console.WriteLine(@"-server ""<serverdirectory\obsidian>""");
-                    Console.WriteLine(@"-server ""<serverdirectory\obsidian>"" <username> <password>");
-                    Console.WriteLine(@"-server ""<serverdirectory\obsidian>"" <username> <password> -steamauth");
-                    Console.WriteLine(@"-server ""<serverdirectory\obsidian>"" <username> <password> ""hl2,ep1,lostcoast,ep2,hl1,css,dod""");
-                    Console.WriteLine(@"-server ""<serverdirectory\obsidian>"" <username> <password> ""0,0,0,0,0,0,0,0""");
-                    Console.WriteLine(@"-server ""<serverdirectory\obsidian>"" <username> <password> -steamauth ""hl2,ep1,lostcoast,ep2,hl1,css,dod""");
-                    Console.WriteLine(@"-server ""<serverdirectory\obsidian>"" <username> <password> -steamauth ""0,0,0,0,0,0,0,0""");
-                    Console.WriteLine(@"-client");
-                    Console.WriteLine(@"-client -y");
-                    Console.WriteLine(@"-client -n ""hl2,ep1,lostcoast,ep2,hl1,css,dod""");
+                    ClientNohook("-n", args[2]);
                 }
-                else if (args[0].ToLower().Contains(@"-client"))
+                else
                 {
-                    if ((args.Length == 2) & (args[1] == "-y"))
-                    {
-                        ClientNohook("-y");
-                    }
-                    else if (args.Length == 3)
-                    {
-                        ClientNohook("-n",args[2]);
-                    }
-                    else
-                    {
-                        ClientNohook();
-                    }
+                    ClientNohook();
                 }
-                else if (args[0].ToLower().Contains(@"-server"))
+            }
+            else if (args[0].ToLower().Contains(@"-server"))
+            {
+                Checkforrootpath(args[1]);
+                switch (args.Length)
                 {
-                    Checkforrootpath(args[1]);
-                    switch (args.Length)
+                    case 2:
                     {
-                        case 2:
-                            {
-                                var fun = args[1];
-                                fun = fun.Trim('"');
-                                fun = NativeMethods.Otherstuff.GetShortPathName(fun);
-                                Server(fun);
-                            }
-                            break;
+                        var fun = args[1];
+                        fun = fun.Trim('"');
+                        fun = NativeMethods.Otherstuff.GetShortPathName(fun);
+                        Server(fun);
+                    }
+                        break;
 
-                        case 4:
-                            {
-                                var fun = args[1];
-                                fun = fun.Trim('"');
-                                fun = NativeMethods.Otherstuff.GetShortPathName(fun);
-                                Server(fun, args[2], args[3]);
-                            }
-                            break;
-
-                        case 5:
-                            {
-                                var fun = args[1];
-                                fun = fun.Trim('"');
-                                fun = NativeMethods.Otherstuff.GetShortPathName(fun);
-                                if (args[4].Contains(@"-steamauth"))
-                                {
-                                    Server(fun, args[2], args[3], true);
-                                }
-                                else
-                                {
-                                    Server(fun, args[2], args[3], false, args[4]);
-                                }
-                            }
-                            break;
-
-                        case 6:
-                            {
-                                var fun = args[1];
-                                fun = fun.Trim('"');
-                                fun = NativeMethods.Otherstuff.GetShortPathName(fun);
-                                Server(fun, args[2], args[3], true, args[5]);
-                            }
-                            break;
+                    case 4:
+                    {
+                        var fun = args[1];
+                        fun = fun.Trim('"');
+                        fun = NativeMethods.Otherstuff.GetShortPathName(fun);
+                        Server(fun, args[2], args[3]);
                     }
+                        break;
+
+                    case 5:
+                    {
+                        var fun = args[1];
+                        fun = fun.Trim('"');
+                        fun = NativeMethods.Otherstuff.GetShortPathName(fun);
+                        if (args[4].Contains(@"-steamauth"))
+                        {
+                            Server(fun, args[2], args[3], true);
+                        }
+                        else
+                        {
+                            Server(fun, args[2], args[3], false, args[4]);
+                        }
+                    }
+                        break;
+
+                    case 6:
+                    {
+                        var fun = args[1];
+                        fun = fun.Trim('"');
+                        fun = NativeMethods.Otherstuff.GetShortPathName(fun);
+                        Server(fun, args[2], args[3], true, args[5]);
+                    }
+                        break;
                 }
+            }
             //}
         }
 
@@ -156,7 +158,6 @@ namespace steamdirectoryfinder
                 {
                     UseShellExecute = false,
                     RedirectStandardOutput = true,
-
                     CreateNoWindow = true,
                     FileName = prog,
                     Arguments = ass
@@ -192,7 +193,7 @@ namespace steamdirectoryfinder
             return "\"" + value + "\"";
         }
 
-        public static IEnumerable<string> Returnallvpks(String dir)
+        public static IEnumerable<string> Returnallvpks(string dir)
         {
             return Directory.EnumerateFiles(dir, "*.vpk", SearchOption.AllDirectories);
         }
@@ -242,7 +243,7 @@ namespace steamdirectoryfinder
             File.Delete(tehfile);
         }
 
-        private static void ClientNohook(string fun = "-n",string imounts ="")
+        private static void ClientNohook(string fun = "-n", string imounts = "")
         {
             var mounts = new List<string>();
             if (fun == "-y")
@@ -253,9 +254,9 @@ namespace steamdirectoryfinder
                     //var ans = Console.ReadKey();
                     //Console.WriteLine();
                     //if (ans.KeyChar == 'y')
-                   // {
-                        var formresults = myform.ShowDialog();
-                        mounts = myform.Mounts;
+                    // {
+                    var formresults = myform.ShowDialog();
+                    mounts = myform.Mounts;
                     //}
                 }
             }
@@ -295,38 +296,39 @@ namespace steamdirectoryfinder
                         Arguments = "/c \"dir /s /b "
                     }
                 };
-                createfile.OutputDataReceived += delegate (object sender, DataReceivedEventArgs args)
+                createfile.OutputDataReceived += delegate(object sender, DataReceivedEventArgs args)
                 {
                     //string[] locations = { "steamapps\\common\\Half-Life 2\\hl2", "steamapps\\common\\Half-Life 2\\episodic", "steamapps\\common\\Half-Life 2\\ep2", "steamapps\\common\\Half-Life 2\\lostcoast", "steamapps\\common\\Half-Life 2\\hl1", "steamapps\\common\\Counter-Strike Source\\cstrike", "steamapps\\common\\Day of Defeat Source\\dod" };
                     if (args.Data == null)
                     {
                         return;
                     }
-                    if (args.Data.EndsWith("steamapps\\common\\Half-Life 2\\hl2") & (!mounts.Contains("hl2")))
+                    if (args.Data.EndsWith("steamapps\\common\\Half-Life 2\\hl2") & !mounts.Contains("hl2"))
                     {
                         hl2Installdir = args.Data;
                     }
-                    if (args.Data.EndsWith("steamapps\\common\\Half-Life 2\\episodic") & (!mounts.Contains("ep1")))
+                    if (args.Data.EndsWith("steamapps\\common\\Half-Life 2\\episodic") & !mounts.Contains("ep1"))
                     {
                         episodicinstalldir = args.Data;
                     }
-                    if (args.Data.EndsWith("steamapps\\common\\Half-Life 2\\ep2") & (!mounts.Contains("ep2")))
+                    if (args.Data.EndsWith("steamapps\\common\\Half-Life 2\\ep2") & !mounts.Contains("ep2"))
                     {
                         ep2Installdir = args.Data;
                     }
-                    if (args.Data.EndsWith("steamapps\\common\\Half-Life 2\\lostcoast") & (!mounts.Contains("lostcoast")))
+                    if (args.Data.EndsWith("steamapps\\common\\Half-Life 2\\lostcoast") & !mounts.Contains("lostcoast"))
                     {
                         lostcoastinstalldir = args.Data;
                     }
-                    if (args.Data.EndsWith("steamapps\\common\\Half-Life 2\\hl1") & (!mounts.Contains("hl1")))
+                    if (args.Data.EndsWith("steamapps\\common\\Half-Life 2\\hl1") & !mounts.Contains("hl1"))
                     {
                         hl1Installdir = args.Data;
                     }
-                    if (args.Data.EndsWith("steamapps\\common\\Counter-Strike Source\\cstrike") & (!mounts.Contains("css")))
+                    if (args.Data.EndsWith("steamapps\\common\\Counter-Strike Source\\cstrike") &
+                        !mounts.Contains("css"))
                     {
                         counterstrikesourceinstalldir = args.Data;
                     }
-                    if (args.Data.EndsWith("steamapps\\common\\Day of Defeat Source\\dod") & (!mounts.Contains("dod")))
+                    if (args.Data.EndsWith("steamapps\\common\\Day of Defeat Source\\dod") & !mounts.Contains("dod"))
                     {
                         dayofdefeatinstalldir = args.Data;
                     }
@@ -373,11 +375,15 @@ namespace steamdirectoryfinder
             }
         }
 
-        private static void InstallClientMounts2(string sourcesdk2007Installdir, IEnumerable<string> storedlocations, string ocinstalldir)
+        private static void InstallClientMounts2(string sourcesdk2007Installdir, IEnumerable<string> storedlocations,
+            string ocinstalldir)
         {
             if (sourcesdk2007Installdir == "")
             {
-                MessageBox.Show(@"Error Please install Source sdk 2007 then click ok." + Environment.NewLine + @"If you get this message box again please send the location of your source sdk 2007 installation to the creator so he can fix the mixup.", @"mountfix problem",
+                MessageBox.Show(
+                    @"Error Please install Source sdk 2007 then click ok." + Environment.NewLine +
+                    @"If you get this message box again please send the location of your source sdk 2007 installation to the creator so he can fix the mixup.",
+                    @"mountfix problem",
                     MessageBoxButtons.OK);
                 ClientNohook();
             }
@@ -387,7 +393,8 @@ namespace steamdirectoryfinder
             InstallClientPatches(ocinstalldir);
         }
 
-        private static void paralleloneachgame(string sourcesdk2007Installdir, IEnumerable<string> storedlocations, string ocinstalldir)
+        private static void paralleloneachgame(string sourcesdk2007Installdir, IEnumerable<string> storedlocations,
+            string ocinstalldir)
         {
             Parallel.ForEach(storedlocations, game =>
             {
@@ -466,7 +473,7 @@ namespace steamdirectoryfinder
 
         private static void InstallClientPatches(string ocinstalldir)
         {
-            Program.Performtasks("7za.exe", "x clientpatches.7z -o" + Program.PutIntoQuotes(ocinstalldir) + " -aoa");
+            Performtasks("7za.exe", "x clientpatches.7z -o" + PutIntoQuotes(ocinstalldir) + " -aoa");
         }
 
         private static void OpenMenuIfnocmdArguments()
@@ -490,7 +497,8 @@ namespace steamdirectoryfinder
             Console.Title = @"Source Sdk 2007 steampipe fix";
         }
 
-        private static void Server(string installpath, string username = "", string password = "", bool steamauth = false, string mounts = "")
+        private static void Server(string installpath, string username = "", string password = "",
+            bool steamauth = false, string mounts = "")
         {
             if (installpath != null & username == "" & password == "")
             {
@@ -536,7 +544,6 @@ namespace steamdirectoryfinder
             {
                 serverform.ShowDialog();
             }
-                
         }
 
         private static void Shutdown(object sender, EventArgs a)
@@ -558,7 +565,8 @@ namespace steamdirectoryfinder
             var vpkwithoutextend = ass;
             vpkwithoutextend = vpkwithoutextend.Remove(vpkwithoutextend.IndexOf('.'));
             var gamedir = Path.GetDirectoryName(vpkwithoutextend);
-            var robocopyargs = PutIntoQuotes(gamedir + "\\root") + " " + PutIntoQuotes(gamedir) + "  /E /MOVE /IS  /MT:" +Environment.ProcessorCount;
+            var robocopyargs = PutIntoQuotes(gamedir + "\\root") + " " + PutIntoQuotes(gamedir) + "  /E /MOVE /IS  /MT:" +
+                               Environment.ProcessorCount;
             //var xcopyargs = PutIntoQuotes(gamedir + "\\root\\*") + " " + PutIntoQuotes(gamedir + "\\") + " /f /s /i /y";
             var hlExtractargs = "-p " + quotedVpk + " -d " + PutIntoQuotes(gamedir) + " " + "-e \"\"";
             Performtasks("HLExtract.exe", hlExtractargs);

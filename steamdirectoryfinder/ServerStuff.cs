@@ -1,13 +1,49 @@
-﻿using steamdirectoryfinder.Properties;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
+using steamdirectoryfinder.Properties;
 
 namespace steamdirectoryfinder
 {
+    internal class DownloadTheLatestSourceModAndMetamod
+    {
+        private static readonly string Sourcemodlink = "https://www.sourcemod.net/downloads.php";
+        private static readonly string Metamodlink = "http://www.metamodsource.net";
+
+        private static string DownloadString(string address)
+        {
+            string reply;
+            using (var client = new WebClient())
+            {
+                reply = client.DownloadString(address);
+            }
+            return reply;
+        }
+
+        //construct the download links from the pages
+        public static Tuple<string, string> DownloadPAges()
+        {
+            var sourcemodstring = DownloadString(Sourcemodlink);
+            var metamodstring = DownloadString(Metamodlink);
+            //select and construct the download link
+            sourcemodstring = "https://www.sourcemod.net" +
+                              sourcemodstring.Substring(
+                                  sourcemodstring.IndexOf("/smdrop/", StringComparison.OrdinalIgnoreCase), 47);
+            //traverse the metamod pages and select the first mirror
+            metamodstring = Metamodlink +
+                            metamodstring.Substring(
+                                metamodstring.IndexOf("/downloads/", StringComparison.OrdinalIgnoreCase), 38);
+            metamodstring = DownloadString(metamodstring);
+            metamodstring = metamodstring.Substring(metamodstring.IndexOf("http://www.gsptalk.com/mirror", StringComparison.OrdinalIgnoreCase), 67);
+
+            return new Tuple<string, string>(metamodstring, sourcemodstring);
+        }
+    }
+
     internal class ServerStuff
     {
         private static string _mainFolder;
@@ -34,8 +70,9 @@ namespace steamdirectoryfinder
 
         public static void CreateNeededFiles(string installpath)
         {
-            var myIp = new WebClient().DownloadString(@"http://ipv4.icanhazip.com").Trim();
-            var startBat = @"srcds.exe -console -condebug -game obsidian -ip " + myIp + @" -port 27015 +map oc_lobby +maxplayers 32 +hostname ""(SteamPipe) Basic Server""";
+            var myIp = new WebClient().DownloadString("http://ipv4.icanhazip.com").Trim();
+            var startBat = @"srcds.exe -console -condebug -game obsidian -ip " + myIp +
+                           @" -port 27015 +map oc_lobby +maxplayers 32 +hostname ""(SteamPipe) Basic Server""";
 
             File.WriteAllText(installpath + "\\StartServer.bat", startBat);
         }
@@ -44,10 +81,11 @@ namespace steamdirectoryfinder
         {
             using (var client = new WebClient())
             {
+                var cool = DownloadTheLatestSourceModAndMetamod.DownloadPAges();
                 client.DownloadFile("http://media.steampowered.com/installer/steamcmd.zip", "steamcmd.zip");
-                client.DownloadFile("http://www.gsptalk.com/mirror/sourcemod/mmsource-1.10.5-windows.zip",
+                client.DownloadFile(cool.Item1,
                     "mmsource.zip");
-                client.DownloadFile("http://www.gsptalk.com/mirror/sourcemod/sourcemod-1.7.2-windows.zip",
+                client.DownloadFile(cool.Item2,
                     "sourcemod.zip");
             }
         }
@@ -59,7 +97,7 @@ namespace steamdirectoryfinder
             Program.Runoneachvpk(Program.Returndirvpks(theserverfolder));
             Program.DeleteVpks(Program.Returnallvpks(theserverfolder));
             var resourceData = Resources.files_to_delete_1_;
-            var words = resourceData.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            var words = resourceData.Split(new[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries).ToList();
             Parallel.ForEach(words, lines =>
             {
                 var fun = Path.Combine(theserverfolder, lines);
@@ -88,14 +126,16 @@ namespace steamdirectoryfinder
         public static void ExtractServerResources(string ass)
         {
             File.WriteAllBytes("7za.exe", Resources._7za);
-            Program.Performtasks("7za.exe", "x steamcmd.zip -o" + Program.PutIntoQuotes(Directory.GetCurrentDirectory() + "\\steamcmd") + " -aoa");
+            Program.Performtasks("7za.exe",
+                "x steamcmd.zip -o" + Program.PutIntoQuotes(Directory.GetCurrentDirectory() + "\\steamcmd") + " -aoa");
             File.WriteAllBytes("addons.zip", Resources.addons);
             Program.Performtasks("7za.exe", "x addons.zip -o" + Program.PutIntoQuotes(ass) + " -aoa");
             Program.Performtasks("7za.exe", "x mmsource.zip -o" + Program.PutIntoQuotes(ass) + " -aoa");
             Program.Performtasks("7za.exe", "x sourcemod.zip -o" + Program.PutIntoQuotes(ass) + " -aoa");
         }
 
-        public static void InstallServer(string username, string password, string serverdirectory, bool steamauth, string mounts = "")
+        public static void InstallServer(string username, string password, string serverdirectory, bool steamauth,
+            string mounts = "")
         {
             foreach (var fub in Process.GetProcessesByName("steamcmd.exe"))
             {
@@ -111,7 +151,7 @@ namespace steamdirectoryfinder
             {
                 Program.Performtasksi(steamcmdbase, " +login " + username + " " + password + " +quit");
             }
-            System.Threading.Thread.Sleep(5000);
+            Thread.Sleep(5000);
 
             if (InstallMountsFromintstring(mounts, steamcmdbase, basecmd, endofcmd) != 1)
             {
@@ -130,9 +170,10 @@ namespace steamdirectoryfinder
             CreateNeededFiles(_mainFolder);
         }
 
-        private static int InstallMountsFromintstring(string mounts, string steamcmdbase, string basecmd, string endofcmd)
+        private static int InstallMountsFromintstring(string mounts, string steamcmdbase, string basecmd,
+            string endofcmd)
         {
-            if (!(mounts != "" & (mounts.Contains(@"0")))) return 0;
+            if (!(mounts != "" & mounts.Contains(@"0"))) return 0;
             var fuckme = mounts.Split(',');
             if (!fuckme[0].Contains("1"))
             {
