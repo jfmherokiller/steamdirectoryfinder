@@ -86,10 +86,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Client Configuration.cs">
+    <Compile Include="bothServerAndClient\ClientAndServer.cs" />
+    <Compile Include="clientpart\mountlocation\FindMounts.cs" />
+    <Compile Include="clientpart\ui\Client Configuration.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Client Configuration.Designer.cs">
+    <Compile Include="clientpart\ui\Client Configuration.Designer.cs">
       <DependentUpon>Client Configuration.cs</DependentUpon>
     </Compile>
     <Compile Include="NativeMethods.cs" />
@@ -106,13 +108,13 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="ServerConfiguration.cs">
+    <Compile Include="serverpart\ui\ServerConfiguration.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ServerConfiguration.Designer.cs">
+    <Compile Include="serverpart\ui\ServerConfiguration.Designer.cs">
       <DependentUpon>ServerConfiguration.cs</DependentUpon>
     </Compile>
-    <Compile Include="ServerStuff.cs" />
+    <Compile Include="serverpart\code\ServerStuff.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -125,14 +127,14 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Client Configuration.resx">
+    <EmbeddedResource Include="clientpart\ui\Client Configuration.resx">
       <DependentUpon>Client Configuration.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="ServerConfiguration.resx">
+    <EmbeddedResource Include="serverpart\ui\ServerConfiguration.resx">
       <DependentUpon>ServerConfiguration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>

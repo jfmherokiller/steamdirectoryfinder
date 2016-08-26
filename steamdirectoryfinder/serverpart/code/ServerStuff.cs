@@ -5,9 +5,10 @@ using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using steamdirectoryfinder.bothServerAndClient;
 using steamdirectoryfinder.Properties;
 
-namespace steamdirectoryfinder
+namespace steamdirectoryfinder.serverpart.code
 {
     internal class DownloadTheLatestSourceModAndMetamod
     {
@@ -92,10 +93,10 @@ namespace steamdirectoryfinder
 
         public static void ExtractAndDelete(string theserverfolder)
         {
-            Program.ExtractClientResources();
+            ClientAndServer.ExtractResourcesForBoth();
 
-            Program.Runoneachvpk(Program.Returndirvpks(theserverfolder));
-            Program.DeleteVpks(Program.Returnallvpks(theserverfolder));
+             ClientAndServer.Runoneachvpk(ClientAndServer.Returndirvpks(theserverfolder));
+            Program.DeleteVpks(ClientAndServer.Returnallvpks(theserverfolder));
             var resourceData = Resources.files_to_delete_1_;
             var words = resourceData.Split(new[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries).ToList();
             Parallel.ForEach(words, lines =>
@@ -108,11 +109,11 @@ namespace steamdirectoryfinder
                 }
                 if (attr.HasFlag(FileAttributes.Directory))
                 {
-                    Program.DeleteDir(Path.Combine(theserverfolder, lines));
+                    MiscFunctions.DeleteDir(Path.Combine(theserverfolder, lines));
                 }
                 else
                 {
-                    Program.DeleteFile(Path.Combine(theserverfolder, lines));
+                    MiscFunctions.DeleteFile(Path.Combine(theserverfolder, lines));
                 }
             });
             //if (!Environment.Is64BitOperatingSystem) return;
@@ -126,12 +127,12 @@ namespace steamdirectoryfinder
         public static void ExtractServerResources(string ass)
         {
             File.WriteAllBytes("7za.exe", Resources._7za);
-            Program.Performtasks("7za.exe",
-                "x steamcmd.zip -o" + Program.PutIntoQuotes(Directory.GetCurrentDirectory() + "\\steamcmd") + " -aoa");
+            ClientAndServer.Performtasks("7za.exe",
+                "x steamcmd.zip -o" + MiscFunctions.PutIntoQuotes(Directory.GetCurrentDirectory() + "\\steamcmd") + " -aoa");
             File.WriteAllBytes("addons.zip", Resources.addons);
-            Program.Performtasks("7za.exe", "x addons.zip -o" + Program.PutIntoQuotes(ass) + " -aoa");
-            Program.Performtasks("7za.exe", "x mmsource.zip -o" + Program.PutIntoQuotes(ass) + " -aoa");
-            Program.Performtasks("7za.exe", "x sourcemod.zip -o" + Program.PutIntoQuotes(ass) + " -aoa");
+            ClientAndServer.Performtasks("7za.exe", "x addons.zip -o" + MiscFunctions.PutIntoQuotes(ass) + " -aoa");
+            ClientAndServer.Performtasks("7za.exe", "x mmsource.zip -o" + MiscFunctions.PutIntoQuotes(ass) + " -aoa");
+            ClientAndServer.Performtasks("7za.exe", "x sourcemod.zip -o" + MiscFunctions.PutIntoQuotes(ass) + " -aoa");
         }
 
         public static void InstallServer(string username, string password, string serverdirectory, bool steamauth,
@@ -149,7 +150,7 @@ namespace steamdirectoryfinder
             var steamcmdbase = Path.Combine(currentdir, "steamcmd\\steamcmd.exe");
             if (steamauth)
             {
-                Program.Performtasksi(steamcmdbase, " +login " + username + " " + password + " +quit");
+                ClientAndServer.Performtasksi(steamcmdbase, " +login " + username + " " + password + " +quit");
             }
             Thread.Sleep(5000);
 
@@ -177,35 +178,35 @@ namespace steamdirectoryfinder
             var fuckme = mounts.Split(',');
             if (!fuckme[0].Contains("1"))
             {
-                Program.Performtasks(steamcmdbase, basecmd + "220" + endofcmd);
+                ClientAndServer.Performtasks(steamcmdbase, basecmd + "220" + endofcmd);
             }
             if (!fuckme[1].Contains("1"))
             {
-                Program.Performtasks(steamcmdbase, basecmd + "380" + endofcmd);
+                ClientAndServer.Performtasks(steamcmdbase, basecmd + "380" + endofcmd);
             }
             if (!fuckme[2].Contains("1"))
             {
-                Program.Performtasks(steamcmdbase, basecmd + "340" + endofcmd);
+                ClientAndServer.Performtasks(steamcmdbase, basecmd + "340" + endofcmd);
             }
             if (!fuckme[3].Contains("1"))
             {
-                Program.Performtasks(steamcmdbase, basecmd + "420" + endofcmd);
+                ClientAndServer.Performtasks(steamcmdbase, basecmd + "420" + endofcmd);
             }
             if (!fuckme[4].Contains("1"))
             {
-                Program.Performtasks(steamcmdbase, basecmd + "280" + endofcmd);
+                ClientAndServer.Performtasks(steamcmdbase, basecmd + "280" + endofcmd);
             }
             if (!fuckme[5].Contains("1"))
             {
-                Program.Performtasks(steamcmdbase, basecmd + "240" + endofcmd);
+               ClientAndServer.Performtasks(steamcmdbase, basecmd + "240" + endofcmd);
             }
             if (!fuckme[6].Contains("1"))
             {
-                Program.Performtasks(steamcmdbase, basecmd + "300" + endofcmd);
+                ClientAndServer.Performtasks(steamcmdbase, basecmd + "300" + endofcmd);
             }
             if (true)
             {
-                Program.Performtasks(steamcmdbase, basecmd + "310" + endofcmd);
+                ClientAndServer.Performtasks(steamcmdbase, basecmd + "310" + endofcmd);
             }
             return 1;
         }
@@ -214,35 +215,35 @@ namespace steamdirectoryfinder
         {
             if (mounts == "" || !mounts.Contains("hl2"))
             {
-                Program.Performtasks(steamcmdbase, basecmd + "220" + endofcmd);
+                ClientAndServer.Performtasks(steamcmdbase, basecmd + "220" + endofcmd);
             }
             if (mounts == "" || !mounts.Contains("ep1"))
             {
-                Program.Performtasks(steamcmdbase, basecmd + "380" + endofcmd);
+                ClientAndServer.Performtasks(steamcmdbase, basecmd + "380" + endofcmd);
             }
             if (mounts == "" || !mounts.Contains("lostcoast"))
             {
-                Program.Performtasks(steamcmdbase, basecmd + "340" + endofcmd);
+                ClientAndServer.Performtasks(steamcmdbase, basecmd + "340" + endofcmd);
             }
             if (mounts == "" || !mounts.Contains("ep2"))
             {
-                Program.Performtasks(steamcmdbase, basecmd + "420" + endofcmd);
+                ClientAndServer.Performtasks(steamcmdbase, basecmd + "420" + endofcmd);
             }
             if (mounts == "" || !mounts.Contains("hl1"))
             {
-                Program.Performtasks(steamcmdbase, basecmd + "280" + endofcmd);
+                ClientAndServer.Performtasks(steamcmdbase, basecmd + "280" + endofcmd);
             }
             if (mounts == "" || !mounts.Contains("css"))
             {
-                Program.Performtasks(steamcmdbase, basecmd + "240" + endofcmd);
+                ClientAndServer.Performtasks(steamcmdbase, basecmd + "240" + endofcmd);
             }
             if (mounts == "" || !mounts.Contains("dod"))
             {
-                Program.Performtasks(steamcmdbase, basecmd + "300" + endofcmd);
+                ClientAndServer.Performtasks(steamcmdbase, basecmd + "300" + endofcmd);
             }
             if (true)
             {
-                Program.Performtasks(steamcmdbase, basecmd + "310" + endofcmd);
+                ClientAndServer.Performtasks(steamcmdbase, basecmd + "310" + endofcmd);
             }
         }
     }
