@@ -38,10 +38,11 @@ namespace steamdirectoryfinder
         public static void Main(string[] args)
         {
             AppDomain.CurrentDomain.ProcessExit += Shutdown;
-            //using (new ConsoleCopy(@"mylogfile.txt"))
+            using (new ConsoleCopy(@"mylogfile.txt"))
+            {
                 Perfominitializations();
                 SelectArgOptions(args);
-
+            }
         }
 
         private static void SelectArgOptions(string[] args)
