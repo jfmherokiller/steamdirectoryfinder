@@ -18,10 +18,10 @@ namespace steamdirectoryfinder.clientpart.mountlocation
             var ocinstallpath = steaminstallpath + "\\steamapps\\sourcemods\\obsidian";
             var libraryPaths = GetLibraryPaths(steaminstallpath);
             var gamepaths = GetGamePaths(libraryPaths, mounts);
-            var source2007path = gamepaths.Where((value => value.Contains("2007"))).ElementAt(0);
-            gamepaths.Remove(source2007path);
+            var source2007path = gamepaths.Where((value => value.Contains("2007"))).FirstOrDefault();
             if (gamepaths.Count != 0 & source2007path.Length > 0)
             {
+                gamepaths.Remove(source2007path);
                 return new Tuple<string, string, List<string>>(ocinstallpath,source2007path,gamepaths);
             }
             return null;
@@ -43,7 +43,7 @@ namespace steamdirectoryfinder.clientpart.mountlocation
                     {
                         if (Directory.GetFiles(libpath + pathset[0]).Length != 0)
                         {
-                            storedlocations.Add(libpath + pathset[0]);
+                             storedlocations.Add(libpath + pathset[0]);
                         }
                     }
                 }

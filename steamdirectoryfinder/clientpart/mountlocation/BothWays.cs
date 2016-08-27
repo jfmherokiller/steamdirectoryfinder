@@ -51,8 +51,12 @@ namespace steamdirectoryfinder.clientpart.mountlocation
             Tuple<string, string, List<string>> OcAnd2007AndLocations;
             mounts = OpenClientFormOrCheckForCommandLineMounts(fun, mounts,imounts);
             ExtractClientResources();
+            if (mounts == null)
+            {
+                mounts = new List<string>();
+            }
             OcAnd2007AndLocations = NewWay.NewWayStart(mounts);
-            if (OcAnd2007AndLocations == null)
+            if (OcAnd2007AndLocations == null || (OcAnd2007AndLocations.Item1 == "" | OcAnd2007AndLocations.Item2 == ""))
             {
                 OcAnd2007AndLocations = OldWay.oldwaysetup(mounts);
             }

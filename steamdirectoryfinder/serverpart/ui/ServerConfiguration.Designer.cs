@@ -39,13 +39,13 @@ namespace steamdirectoryfinder
             this.label3 = new System.Windows.Forms.Label();
             this.SteamAuth = new System.Windows.Forms.RadioButton();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.hl2 = new System.Windows.Forms.CheckBox();
             this.hl1 = new System.Windows.Forms.CheckBox();
             this.css = new System.Windows.Forms.CheckBox();
             this.dod = new System.Windows.Forms.CheckBox();
             this.lostcoast = new System.Windows.Forms.CheckBox();
             this.ep2 = new System.Windows.Forms.CheckBox();
             this.ep1 = new System.Windows.Forms.CheckBox();
-            this.hl2 = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -129,6 +129,16 @@ namespace steamdirectoryfinder
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Disabled Mounts";
             // 
+            // hl2
+            // 
+            this.hl2.AutoSize = true;
+            this.hl2.Location = new System.Drawing.Point(153, 39);
+            this.hl2.Name = "hl2";
+            this.hl2.Size = new System.Drawing.Size(40, 17);
+            this.hl2.TabIndex = 6;
+            this.hl2.Text = "hl2";
+            this.hl2.UseVisualStyleBackColor = true;
+            // 
             // hl1
             // 
             this.hl1.AutoSize = true;
@@ -188,16 +198,6 @@ namespace steamdirectoryfinder
             this.ep1.TabIndex = 0;
             this.ep1.Text = "ep1";
             this.ep1.UseVisualStyleBackColor = true;
-            // 
-            // hl2
-            // 
-            this.hl2.AutoSize = true;
-            this.hl2.Location = new System.Drawing.Point(153, 39);
-            this.hl2.Name = "hl2";
-            this.hl2.Size = new System.Drawing.Size(40, 17);
-            this.hl2.TabIndex = 6;
-            this.hl2.Text = "hl2";
-            this.hl2.UseVisualStyleBackColor = true;
             // 
             // ServerConfiguration
             // 

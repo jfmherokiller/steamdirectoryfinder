@@ -11,7 +11,45 @@ using steamdirectoryfinder.Properties;
 
 namespace steamdirectoryfinder.serverpart.code
 {
+    internal class ServerFormStuffs
+    {
+        private static string _mainFolder;
+        private static string _ocServerInstallPath;
+        private  static string  _mounts;
+        private static string _password;
+        private static bool _steamauth;
+        private static string _username;
+        public static void OpenServerForm(string installpath)
+        {
+            using (var serverform = new ServerConfiguration(installpath))
+            {
+                serverform.ShowDialog();
+                Dostuff();
+            }
+        }
 
+        private static void Dostuff()
+        {
+            ServerStuff.DownloadSteamcmd();
+            ServerStuff.ExtractServerResources(_ocServerInstallPath);
+            ServerStuff.CheckifDirectoryexistsorcreateit(_ocServerInstallPath);
+            ServerStuff.CheckifDirectoryexistsorcreateit(Path.Combine(Directory.GetCurrentDirectory() + @"steamcmd"));
+            ServerStuff.InstallServer(_username, _password, _mainFolder, _steamauth, _mounts);
+
+            ServerStuff.ExtractAndDelete(_mainFolder);
+            ServerStuff.CreateNeededFiles(_mainFolder);
+        }
+
+        public static void SetStuff(String mainfolder,string ocinstall,string mounts,string password,bool steamauth,string username)
+        {
+            _mainFolder = mainfolder;
+            _ocServerInstallPath = ocinstall;
+            _mounts = mounts;
+            _password = password;
+            _steamauth = steamauth;
+            _username = username;
+        }
+    }
     internal class DownloadTheLatestSourceModAndMetamod
     {
         private static readonly string Sourcemodlink = "https://www.sourcemod.net/downloads.php";

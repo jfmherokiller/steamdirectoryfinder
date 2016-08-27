@@ -22,16 +22,16 @@ namespace steamdirectoryfinder
             }
             else
             {
+                if (ass.Contains(":\\obsidian"))
+                {
+                    return ass + "\\obsidian";
+                }
                 if (ass.EndsWith("obsidian"))
                 {
                     return ass;
                 }
-                else
-                {
-                    return ass + "\\obsidian";
-                }
             }
-            return null;
+            return ass + "\\obsidian";
         }
 
         [STAThread]
@@ -84,8 +84,13 @@ namespace steamdirectoryfinder
             }
             else if (args[0].ToLower().Contains(@"-server"))
             {
-                var fun = Checkforrootpath(args[1]);
-                if (fun == null)
+                string fun = null;
+                if (args.Length > 1)
+                {
+                    fun = args[1];
+                    fun = Checkforrootpath(fun);
+                }
+                else
                 {
                     MessageBox.Show("Please create the server directory then rerun the mountfix");
                     Environment.Exit(1);
@@ -171,7 +176,7 @@ namespace steamdirectoryfinder
             {
                 Console.WriteLine(@"Please provide the oc server install path subdirectory");
                 var input = Console.ReadLine();
-                Checkforrootpath(input);
+                input = Checkforrootpath(input);
                 Server(input);
             }
         }
@@ -186,7 +191,7 @@ namespace steamdirectoryfinder
         {
             if (installpath != null & username == "" & password == "")
             {
-                OpenServerForm(installpath);
+                ServerFormStuffs.OpenServerForm(installpath);
             }
             else if (installpath == null)
             {
@@ -198,7 +203,7 @@ namespace steamdirectoryfinder
                 }
                 Console.WriteLine(input);
                 Console.ReadLine();
-                OpenServerForm(input);
+                ServerFormStuffs.OpenServerForm(input);
             }
             else if (username != null & password != null & !steamauth & mounts == "")
             {
@@ -222,13 +227,7 @@ namespace steamdirectoryfinder
             }
         }
 
-        private static void OpenServerForm(string installpath)
-        {
-            using (var serverform = new ServerConfiguration(installpath))
-            {
-                serverform.ShowDialog();
-            }
-        }
+
 
         private static void Shutdown(object sender, EventArgs a)
         {
