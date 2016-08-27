@@ -11,6 +11,14 @@ namespace steamdirectoryfinder.bothServerAndClient
 {
     class ClientAndServer
     {
+        public static void DeleteVpks(IEnumerable<string> listOfVpksToDelete)
+        {
+            foreach (var vpk in listOfVpksToDelete.Where(avv => !avv.Contains(@"platform")))
+            {
+                MiscFunctions.DeleteFile(vpk);
+            }
+        }
+
         public static void ExtractResourcesForBoth()
         {
             File.WriteAllBytes("HLExtract.exe", Resources.HLExtract);

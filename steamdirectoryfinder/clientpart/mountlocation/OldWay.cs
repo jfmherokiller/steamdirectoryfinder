@@ -3,19 +3,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using steamdirectoryfinder.Properties;
 
 namespace steamdirectoryfinder.clientpart.mountlocation
 {
     class OldWay
     {
 
-        public static Tuple<string,string,List<string>> oldwaysetup(List<string> mounts)
+        public static Tuple<string, string, List<string>> oldwaysetup(List<string> mounts)
         {
             var drives = DriveInfo.GetDrives();
             var ocinstalldir = " ";
@@ -48,7 +42,7 @@ namespace steamdirectoryfinder.clientpart.mountlocation
                         Arguments = "/c \"dir /s /b "
                     }
                 };
-                createfile.OutputDataReceived += delegate (object sender, DataReceivedEventArgs args)
+                createfile.OutputDataReceived += delegate(object sender, DataReceivedEventArgs args)
                 {
                     //string[] locations = { "steamapps\\common\\Half-Life 2\\hl2", "steamapps\\common\\Half-Life 2\\episodic", "steamapps\\common\\Half-Life 2\\ep2", "steamapps\\common\\Half-Life 2\\lostcoast", "steamapps\\common\\Half-Life 2\\hl1", "steamapps\\common\\Counter-Strike Source\\cstrike", "steamapps\\common\\Day of Defeat Source\\dod" };
                     if (args.Data == null)
@@ -105,15 +99,7 @@ namespace steamdirectoryfinder.clientpart.mountlocation
             storedlocations.Add(hl1Installdir);
             storedlocations.Add(counterstrikesourceinstalldir);
             storedlocations.Add(dayofdefeatinstalldir);
-            return new Tuple<string, string, List<string>>(ocinstalldir,sourcesdk2007Installdir,storedlocations);
+            return new Tuple<string, string, List<string>>(ocinstalldir, sourcesdk2007Installdir, storedlocations);
         }
-
-
-
-
-
-
-
-
     }
 }

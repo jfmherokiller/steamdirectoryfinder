@@ -1,14 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using steamdirectoryfinder.clientpart.mountlocation;
-using steamdirectoryfinder.Properties;
 using steamdirectoryfinder.serverpart.code;
 
 namespace steamdirectoryfinder
@@ -41,24 +34,18 @@ namespace steamdirectoryfinder
             return null;
         }
 
-
-        public static void DeleteVpks(IEnumerable<string> ass)
-        {
-            foreach (var avv in ass.Where(avv => !avv.Contains(@"platform")))
-            {
-                MiscFunctions.DeleteFile(avv);
-            }
-        }
-
-
-
         [STAThread]
         public static void Main(string[] args)
         {
             AppDomain.CurrentDomain.ProcessExit += Shutdown;
             //using (new ConsoleCopy(@"mylogfile.txt"))
-            //{
-            Perfominitializations();
+                Perfominitializations();
+                SelectArgOptions(args);
+
+        }
+
+        private static void SelectArgOptions(string[] args)
+        {
             if (args.Length == 0)
             {
                 OpenMenuIfnocmdArguments();
@@ -82,17 +69,17 @@ namespace steamdirectoryfinder
             }
             else if (args[0].ToLower().Contains(@"-client"))
             {
-                if ((args.Length == 2) & (args[1] == "-y"))
+                if ((args.Length == 2) && (args[1] == "-y"))
                 {
-                    OldWay.ClientNohook("-y");
+                    BothWays.ClientNohook("-y");
                 }
                 else if (args.Length == 3)
                 {
-                    OldWay.ClientNohook("-n", args[2]);
+                    BothWays.ClientNohook("-n", args[2]);
                 }
                 else
                 {
-                    OldWay.ClientNohook();
+                    BothWays.ClientNohook();
                 }
             }
             else if (args[0].ToLower().Contains(@"-server"))
@@ -106,57 +93,46 @@ namespace steamdirectoryfinder
                 switch (args.Length)
                 {
                     case 2:
-                    {
-                        fun = fun.Trim('"');
-                        fun = NativeMethods.Otherstuff.GetShortPathName(fun);
-                        Server(fun);
-                    }
+                        {
+                            fun = fun.Trim('"');
+                            fun = NativeMethods.Otherstuff.GetShortPathName(fun);
+                            Server(fun);
+                        }
                         break;
 
                     case 4:
-                    {
-                        fun = fun.Trim('"');
-                        fun = NativeMethods.Otherstuff.GetShortPathName(fun);
-                        Server(fun, args[2], args[3]);
-                    }
+                        {
+                            fun = fun.Trim('"');
+                            fun = NativeMethods.Otherstuff.GetShortPathName(fun);
+                            Server(fun, args[2], args[3]);
+                        }
                         break;
 
                     case 5:
-                    {
-                        fun = fun.Trim('"');
-                        fun = NativeMethods.Otherstuff.GetShortPathName(fun);
-                        if (args[4].Contains(@"-steamauth"))
                         {
-                            Server(fun, args[2], args[3], true);
+                            fun = fun.Trim('"');
+                            fun = NativeMethods.Otherstuff.GetShortPathName(fun);
+                            if (args[4].Contains(@"-steamauth"))
+                            {
+                                Server(fun, args[2], args[3], true);
+                            }
+                            else
+                            {
+                                Server(fun, args[2], args[3], false, args[4]);
+                            }
                         }
-                        else
-                        {
-                            Server(fun, args[2], args[3], false, args[4]);
-                        }
-                    }
                         break;
 
                     case 6:
-                    {
-                        fun = fun.Trim('"');
-                        fun = NativeMethods.Otherstuff.GetShortPathName(fun);
-                        Server(fun, args[2], args[3], true, args[5]);
-                    }
+                        {
+                            fun = fun.Trim('"');
+                            fun = NativeMethods.Otherstuff.GetShortPathName(fun);
+                            Server(fun, args[2], args[3], true, args[5]);
+                        }
                         break;
                 }
             }
         }
-
-
-
-
-
-
-
-
-
-
-
 
         private static bool CheckifClientOrServer()
         {
@@ -166,7 +142,7 @@ namespace steamdirectoryfinder
                 var output = Console.ReadLine();
                 if (output != null && output.ToLower() == @"client")
                 {
-                    //PlaySong();
+                    MiscFunctions.PlaySong();
                     return true;
                 }
                 if (output != null && output.ToLower() == @"server")
@@ -189,7 +165,7 @@ namespace steamdirectoryfinder
             var choice = CheckifClientOrServer();
             if (choice)
             {
-                OldWay.ClientNohook();
+                BothWays.ClientNohook();
             }
             else
             {

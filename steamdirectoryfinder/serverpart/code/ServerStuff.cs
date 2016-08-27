@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -10,6 +11,7 @@ using steamdirectoryfinder.Properties;
 
 namespace steamdirectoryfinder.serverpart.code
 {
+
     internal class DownloadTheLatestSourceModAndMetamod
     {
         private static readonly string Sourcemodlink = "https://www.sourcemod.net/downloads.php";
@@ -47,6 +49,7 @@ namespace steamdirectoryfinder.serverpart.code
 
     internal class ServerStuff
     {
+
         private static string _mainFolder;
         private static string _ocServerInstallPath;
         private readonly string _mounts;
@@ -96,7 +99,7 @@ namespace steamdirectoryfinder.serverpart.code
             ClientAndServer.ExtractResourcesForBoth();
 
              ClientAndServer.Runoneachvpk(ClientAndServer.Returndirvpks(theserverfolder));
-            Program.DeleteVpks(ClientAndServer.Returnallvpks(theserverfolder));
+            ClientAndServer.DeleteVpks(ClientAndServer.Returnallvpks(theserverfolder));
             var resourceData = Resources.files_to_delete_1_;
             var words = resourceData.Split(new[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries).ToList();
             Parallel.ForEach(words, lines =>
