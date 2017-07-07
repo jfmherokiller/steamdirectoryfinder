@@ -9,7 +9,7 @@ using steamdirectoryfinder.Properties;
 
 namespace steamdirectoryfinder.bothServerAndClient
 {
-    class ClientAndServer
+    internal static class ClientAndServer
     {
         public static void DeleteVpks(IEnumerable<string> listOfVpksToDelete)
         {
