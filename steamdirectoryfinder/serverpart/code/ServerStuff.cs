@@ -52,7 +52,7 @@ namespace steamdirectoryfinder.serverpart.code
     }
     internal static class DownloadTheLatestSourceModAndMetamod
     {
-        private static readonly string Sourcemodlink = "https://www.sourcemod.net/downloads.php";
+        private static readonly string Sourcemodlink = "http://www.sourcemod.net/downloads.php?branch=stable";
         private static readonly string Metamodlink = "http://www.metamodsource.net";
 
         private static string DownloadString(string address)
