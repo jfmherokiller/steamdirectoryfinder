@@ -153,25 +153,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="bin\Debug\vpk.exe" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="bin\Debug\vstdlib.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="bin\Debug\FileSystem_Stdio.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="bin\Debug\tier0.dll" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Resources\HLExtract.exe" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\HLLib.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="bin\Debug\7za.exe" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\jfmmdl.7z" />
@@ -183,8 +168,6 @@
     <None Include="Resources\CANYON.MID" />
     <None Include="Resources\files to delete%281%29.txt" />
     <None Include="Resources\files to delete.txt" />
-    <None Include="bin\Debug\HLLib.dll" />
-    <None Include="bin\Debug\HLExtract.exe" />
     <Content Include="obsidian.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
