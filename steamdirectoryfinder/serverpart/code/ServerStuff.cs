@@ -50,7 +50,7 @@ namespace steamdirectoryfinder.serverpart.code
             _username = username;
         }
     }
-    internal class DownloadTheLatestSourceModAndMetamod
+    internal static class DownloadTheLatestSourceModAndMetamod
     {
         private static readonly string Sourcemodlink = "https://www.sourcemod.net/downloads.php";
         private static readonly string Metamodlink = "http://www.metamodsource.net";
