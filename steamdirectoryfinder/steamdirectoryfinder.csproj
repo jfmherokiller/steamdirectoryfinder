@@ -163,11 +163,7 @@
     <None Include="Resources\windows.mid" />
     <None Include="Resources\7za.exe" />
     <None Include="Resources\addons.zip" />
-    <None Include="Resources\BrianOrr-Clouds.mp3" />
-    <None Include="Resources\clouds.mid" />
-    <None Include="Resources\CANYON.MID" />
     <None Include="Resources\files to delete%281%29.txt" />
-    <None Include="Resources\files to delete.txt" />
     <Content Include="obsidian.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
