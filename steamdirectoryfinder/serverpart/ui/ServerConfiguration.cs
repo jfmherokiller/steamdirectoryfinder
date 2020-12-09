@@ -1,7 +1,7 @@
-﻿using System;
+﻿using steamdirectoryfinder.serverpart.code;
+using System;
 using System.IO;
 using System.Windows.Forms;
-using steamdirectoryfinder.serverpart.code;
 
 namespace steamdirectoryfinder
 {
@@ -9,17 +9,19 @@ namespace steamdirectoryfinder
     {
         private static string _mainFolder;
         private static string _ocServerInstallPath;
+        private ServerFormStuffs Forminstance;
 
         public ServerConfiguration(string path)
         {
             InitializeComponent();
             _ocServerInstallPath = path;
             _mainFolder = Directory.GetParent(path.TrimEnd('\\')).ToString();
+            Forminstance = new ServerFormStuffs();
         }
 
         private void button1_Click_1(object sender, EventArgs e)
         {
-            var selectedmounts = "";
+            string selectedmounts = "";
             if (ep1.Checked)
             {
                 selectedmounts += "ep1";
@@ -44,7 +46,7 @@ namespace steamdirectoryfinder
             {
                 selectedmounts += "hl2";
             }
-            ServerFormStuffs.SetStuff(_mainFolder,_ocServerInstallPath,selectedmounts, textBox2.Text,SteamAuth.Checked, textBox1.Text);
+            Forminstance.SetStuff(_mainFolder, _ocServerInstallPath, selectedmounts, textBox2.Text, SteamAuth.Checked, textBox1.Text);
             Close();
         }
 

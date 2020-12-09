@@ -20,7 +20,7 @@ namespace steamdirectoryfinder
 
             public static string GetShortPathName(string longPath)
             {
-                var shortPath = new StringBuilder(longPath.Length + 1);
+                StringBuilder shortPath = new StringBuilder(longPath.Length + 1);
 
                 if (0 == GetShortPathName(longPath, shortPath, shortPath.Capacity))
                 {
@@ -55,10 +55,17 @@ namespace steamdirectoryfinder
 
             public static void Play(bool loop)
             {
-                if (!_isOpen) return;
+                if (!_isOpen)
+                {
+                    return;
+                }
+
                 _command = "play MediaFile";
                 if (loop)
+                {
                     _command += " REPEAT";
+                }
+
                 mciSendString(_command, null, 0, IntPtr.Zero);
             }
 

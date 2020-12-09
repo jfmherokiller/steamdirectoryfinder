@@ -1,12 +1,12 @@
-﻿using System;
+﻿using steamdirectoryfinder.clientpart.mountlocation;
+using steamdirectoryfinder.serverpart.code;
+using System;
 using System.IO;
 using System.Windows.Forms;
-using steamdirectoryfinder.clientpart.mountlocation;
-using steamdirectoryfinder.serverpart.code;
 
 namespace steamdirectoryfinder
 {
-    internal static class Program
+    public static class Program
     {
         private static string Checkforrootpath(string ass)
         {
@@ -93,17 +93,15 @@ namespace steamdirectoryfinder
                 }
                 else
                 {
-                    MessageBox.Show("Please create the server directory then rerun the mountfix");
+                    MessageBox.Show(@"Please create the server directory then rerun the mountfix");
                     Environment.Exit(1);
                 }
                 switch (args.Length)
                 {
                     case 2:
-                        {
-                            fun = fun.Trim('"');
-                            fun = NativeMethods.Otherstuff.GetShortPathName(fun);
-                            Server(fun);
-                        }
+                        fun = fun.Trim('"');
+                        fun = NativeMethods.Otherstuff.GetShortPathName(fun);
+                        Server(fun);
                         break;
 
                     case 4:
@@ -145,10 +143,9 @@ namespace steamdirectoryfinder
             while (true)
             {
                 Console.WriteLine(@"Please specify if client or server");
-                var output = Console.ReadLine();
+                string output = Console.ReadLine();
                 if (output != null && output.ToLower() == @"client")
                 {
-                    MiscFunctions.PlaySong();
                     return true;
                 }
                 if (output != null && output.ToLower() == @"server")
@@ -164,11 +161,9 @@ namespace steamdirectoryfinder
             }
         }
 
-
-
         private static void OpenMenuIfnocmdArguments()
         {
-            var choice = CheckifClientOrServer();
+            bool choice = CheckifClientOrServer();
             if (choice)
             {
                 BothWays.ClientNohook();
@@ -176,7 +171,7 @@ namespace steamdirectoryfinder
             else
             {
                 Console.WriteLine(@"Please provide the oc server install path subdirectory");
-                var input = Console.ReadLine();
+                string input = Console.ReadLine();
                 input = Checkforrootpath(input);
                 Server(input);
             }
@@ -192,43 +187,41 @@ namespace steamdirectoryfinder
         {
             if (installpath != null & username == "" & password == "")
             {
-                ServerFormStuffs.OpenServerForm(installpath);
+                new ServerFormStuffs().OpenServerForm(installpath);
             }
             else if (installpath == null)
             {
                 Console.WriteLine(@"Please specify where to install the server");
-                var input = Console.ReadLine();
-                if (input != null && input.Contains(" "))
+                string input = Console.ReadLine();
+                if (input != null && input.Contains(@" "))
                 {
                     input = MiscFunctions.PutIntoQuotes(input);
                 }
                 Console.WriteLine(input);
                 Console.ReadLine();
-                ServerFormStuffs.OpenServerForm(input);
+                new ServerFormStuffs().OpenServerForm(input);
             }
             else if (username != null & password != null & !steamauth & mounts == "")
             {
-                var fun = new ServerStuff(installpath, username, password);
+                ServerStuff fun = new ServerStuff(installpath, username, password);
                 fun.RunFun();
             }
             else if (username != "" & password != "" & steamauth & mounts == "")
             {
-                var fun = new ServerStuff(installpath, username, password, true);
+                ServerStuff fun = new ServerStuff(installpath, username, password, true);
                 fun.RunFun();
             }
             else if (username != "" & password != "" & !steamauth & mounts != "")
             {
-                var fun = new ServerStuff(installpath, username, password, false, mounts);
+                ServerStuff fun = new ServerStuff(installpath, username, password, false, mounts);
                 fun.RunFun();
             }
             else if (username != "" & password != "" & steamauth & mounts != "")
             {
-                var fun = new ServerStuff(installpath, username, password, true, mounts);
+                ServerStuff fun = new ServerStuff(installpath, username, password, true, mounts);
                 fun.RunFun();
             }
         }
-
-
 
         private static void Shutdown(object sender, EventArgs a)
         {
@@ -239,7 +232,6 @@ namespace steamdirectoryfinder
             MiscFunctions.DeleteFile(@"sourcemod.zip");
             MiscFunctions.DeleteFile(@"mmsource.zip");
             MiscFunctions.DeleteFile(@"addons.zip");
-            MiscFunctions.DeleteFile(@"clientpatches.7z");
             MiscFunctions.DeleteDir(@"steamcmd");
         }
     }
