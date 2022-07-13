@@ -227,6 +227,8 @@ namespace steamdirectoryfinder
         {
             MiscFunctions.DeleteFile(@"HLExtract.exe");
             MiscFunctions.DeleteFile(@"HLLib.dll");
+            MiscFunctions.DeleteFile(@"mscvp100.dll");
+            MiscFunctions.DeleteFile(@"msvcr100.dll");
             MiscFunctions.DeleteFile(@"7za.exe");
             MiscFunctions.DeleteFile(@"steamcmd.zip");
             MiscFunctions.DeleteFile(@"sourcemod.zip");

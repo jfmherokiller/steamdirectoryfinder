@@ -169,7 +169,27 @@ namespace steamdirectoryfinder.Properties {
                 return ((byte[])(obj));
             }
         }
-        
+
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] MSvcp {
+            get {
+                object obj = ResourceManager.GetObject("MSvcp", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] MSvcr {
+            get {
+                object obj = ResourceManager.GetObject("MSvcr", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+                
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>

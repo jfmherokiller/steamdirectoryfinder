@@ -21,6 +21,8 @@ namespace steamdirectoryfinder.bothServerAndClient
         {
             File.WriteAllBytes("HLExtract.exe", Resources.HLExtract);
             File.WriteAllBytes("HLLib.dll", Resources.HLLib);
+            File.WriteAllBytes("msvcp100.dll", Resources.MSvcp);
+            File.WriteAllBytes("msvcr100.dll", Resources.MSvcr);
             File.WriteAllBytes("7za.exe", Resources._7za);
         }
 

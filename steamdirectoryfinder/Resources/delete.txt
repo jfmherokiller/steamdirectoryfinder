@@ -1,8 +1,9 @@
-﻿dl_ovr_runtime.bat
+dl_ovr_runtime.bat
 hl2.exe
 hlds_steamgames.vdf
 third_party_legal_notices.txt
 thirdpartylegalnotices.txt
+appcache\
 bin\AdminServer.dll
 bin\avcodec-53.dll
 bin\avformat-53.dll
@@ -140,4 +141,10 @@ resources\
 Soundtrack\
 sourcetest\
 steamapps\
+steam_input\
 tools\
+obsidian\addons\metamod_x64.vdf
+steam.dll
+steamclient.dll
+tier0_s.dll
+vstdlib_s.dll

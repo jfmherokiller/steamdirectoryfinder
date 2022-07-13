@@ -1,4 +1,4 @@
-Mountfix Installer For Obsidian Conflict: (rev 104)
+Mountfix Installer For Obsidian Conflict: (rev 13/7/2022)
 
 Original manual workaround solution discovered by raidensnake (OC Beta) & Neico (OC Dev)
 
@@ -39,15 +39,18 @@ HLLib ©Nemisis (Ryan Gregg) http://nemesis.thewavelength.net/
 
 Confirmed Tested Client OS:
 
-Windows 7 32/64-bit SP1 All Editions
+Windows 7 32/64-bit SP1 ESU All Editions
 Windows 8/8.1 32/64-bit All Editions
-Windows 10 Tech Preview #2 32/64-bit All Editions
+Windows 10 32/64-bit All Editions
+Windowa 11 32/64-bit All Editions
 
 Confirmed Tested Server OS:
 
-Windows Server 2008/R2 64-bit All Editions
+Windows Server 2008/R2 ESU 64-bit All Editions
 Windows Server 2012/R2 64-bit All Editions
-Windows Server 10 Tech Preview #2 64-Bit All Editions
+Windows Server 2016 64-Bit All Editions
+Windows Server 2019 64-Bit All Editions
+Windows Server 2022 64-Bit All Editions
 
 Requirements:
 .NET framework 4.5

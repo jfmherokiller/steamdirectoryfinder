@@ -125,6 +125,18 @@ namespace steamdirectoryfinder.serverpart.code
                     MiscFunctions.DeleteFile(Path.Combine(theserverfolder, lines));
                 }
             });
+            string sourceFile1 = @"steamcmd\steam.dll";
+            string destinationFile1 = theserverfolder + "\\steam.dll";
+            string sourceFile2 = @"steamcmd\steamclient.dll";
+            string destinationFile2 = theserverfolder + "\\steamclient.dll";
+            string sourceFile3 = @"steamcmd\tier0_s.dll";
+            string destinationFile3 = theserverfolder + "\\tier0_s.dll";
+            string sourceFile4 = @"steamcmd\vstdlib_s.dll";
+            string destinationFile4 = theserverfolder +"\\vstdlib_s.dll";
+            System.IO.File.Copy(sourceFile1, destinationFile1);
+            System.IO.File.Copy(sourceFile2, destinationFile2);
+            System.IO.File.Copy(sourceFile3, destinationFile3);
+            System.IO.File.Copy(sourceFile4, destinationFile4);
         }
 
         public static void ExtractServerResources(string ass)
@@ -147,8 +159,7 @@ namespace steamdirectoryfinder.serverpart.code
                 fub.Kill();
             }
             const string endofcmd = " validate +quit";
-            string basecmd = " +login " + username + " " + password + " +force_install_dir " +
-                          NativeMethods.Otherstuff.GetShortPathName(serverdirectory) +
+            string basecmd = " +force_install_dir " + NativeMethods.Otherstuff.GetShortPathName(serverdirectory) + " +login " + username + " " + password + 
                           " +app_update ";
             string currentdir = Directory.GetCurrentDirectory();
             string steamcmdbase = Path.Combine(currentdir, "steamcmd\\steamcmd.exe");
@@ -186,35 +197,35 @@ namespace steamdirectoryfinder.serverpart.code
             string[] fuckme = mounts.Split(',');
             if (!fuckme[0].Contains("1"))
             {
-                ClientAndServer.Performtasks(steamcmdbase, basecmd + "220" + endofcmd);
+                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "220" + endofcmd);
             }
             if (!fuckme[1].Contains("1"))
             {
-                ClientAndServer.Performtasks(steamcmdbase, basecmd + "380" + endofcmd);
+                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "380" + endofcmd);
             }
             if (!fuckme[2].Contains("1"))
             {
-                ClientAndServer.Performtasks(steamcmdbase, basecmd + "340" + endofcmd);
+                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "340" + endofcmd);
             }
             if (!fuckme[3].Contains("1"))
             {
-                ClientAndServer.Performtasks(steamcmdbase, basecmd + "420" + endofcmd);
+                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "420" + endofcmd);
             }
             if (!fuckme[4].Contains("1"))
             {
-                ClientAndServer.Performtasks(steamcmdbase, basecmd + "280" + endofcmd);
+                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "280" + endofcmd);
             }
             if (!fuckme[5].Contains("1"))
             {
-                ClientAndServer.Performtasks(steamcmdbase, basecmd + "240" + endofcmd);
+                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "240" + endofcmd);
             }
             if (!fuckme[6].Contains("1"))
             {
-                ClientAndServer.Performtasks(steamcmdbase, basecmd + "300" + endofcmd);
+                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "300" + endofcmd);
             }
             if (true)
             {
-                ClientAndServer.Performtasks(steamcmdbase, basecmd + "310" + endofcmd);
+                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "310" + endofcmd);
             }
             return 1;
         }

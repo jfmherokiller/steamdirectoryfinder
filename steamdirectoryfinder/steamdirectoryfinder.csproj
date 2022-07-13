@@ -161,6 +161,8 @@
     <EmbeddedResource Include="Resources\HLLib.dll" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\msvcp100.dll" />
+    <EmbeddedResource Include="Resources\msvcr100.dll" />
     <None Include="Resources\delete.txt" />
     <None Include="Resources\windows.mid" />
     <None Include="Resources\7za.exe" />
