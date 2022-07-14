@@ -127,12 +127,6 @@
   <data name="HLLib" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\HLLib.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-    <data name="MSvcp" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\msvcp100.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-    <data name="MSvcr" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\msvcr100.dll;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="addons" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\addons.zip;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
