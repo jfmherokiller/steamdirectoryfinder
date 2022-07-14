@@ -225,6 +225,7 @@ namespace steamdirectoryfinder
 
         private static void Shutdown(object sender, EventArgs a)
         {
+			MiscFunctions.DeleteFile(@"vcredist_x86.exe");
             MiscFunctions.DeleteFile(@"HLExtract.exe");
             MiscFunctions.DeleteFile(@"HLLib.dll");
             MiscFunctions.DeleteFile(@"7za.exe");

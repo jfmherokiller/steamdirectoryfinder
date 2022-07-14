@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
 
 namespace steamdirectoryfinder.bothServerAndClient
 {
@@ -19,6 +20,11 @@ namespace steamdirectoryfinder.bothServerAndClient
 
         public static void ExtractResourcesForBoth()
         {
+            using (WebClient client = new WebClient())
+            {
+                client.DownloadFile("https://download.microsoft.com/download/1/6/5/165255E7-1014-4D0A-B094-B6A430A6BFFC/vcredist_x86.exe", "vcredist_x86.exe");
+            }
+            Process.Start("vcredist_x86.exe", "/q /norestart");
             File.WriteAllBytes("HLExtract.exe", Resources.HLExtract);
             File.WriteAllBytes("HLLib.dll", Resources.HLLib);
             File.WriteAllBytes("7za.exe", Resources._7za);
@@ -100,7 +106,6 @@ namespace steamdirectoryfinder.bothServerAndClient
             task.WaitForExit();
             task.Close();
         }
-
         private static void ExtractGameResources(string ass)
         {
             string quotedVpk = MiscFunctions.PutIntoQuotes(ass);
@@ -109,7 +114,7 @@ namespace steamdirectoryfinder.bothServerAndClient
             string gamedir = Path.GetDirectoryName(vpkwithoutextend);
             string robocopyargs = MiscFunctions.PutIntoQuotes(gamedir + "\\root") + " " + MiscFunctions.PutIntoQuotes(gamedir) + "  /E /MOVE /IS  /MT:" +
                                Environment.ProcessorCount;
-            string hlExtractargs = "-p " + quotedVpk + " -d " + MiscFunctions.PutIntoQuotes(gamedir) + " " + "-e \"/\"";
+			string hlExtractargs = "-p " + quotedVpk + " -d " + MiscFunctions.PutIntoQuotes(gamedir) + " " + "-e \"/\"";
             Performtasks("HLExtract.exe", hlExtractargs);
             Performtasks("robocopy", robocopyargs);
         }
