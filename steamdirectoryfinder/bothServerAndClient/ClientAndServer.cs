@@ -24,7 +24,8 @@ namespace steamdirectoryfinder.bothServerAndClient
             {
                 client.DownloadFile("https://download.microsoft.com/download/1/6/5/165255E7-1014-4D0A-B094-B6A430A6BFFC/vcredist_x86.exe", "vcredist_x86.exe");
             }
-            Process.Start("vcredist_x86.exe", "/q /norestart");
+            var process = Process.Start("vcredist_x86.exe", "/q /norestart");
+            process.WaitForExit();
             File.WriteAllBytes("HLExtract.exe", Resources.HLExtract);
             File.WriteAllBytes("HLLib.dll", Resources.HLLib);
             File.WriteAllBytes("7za.exe", Resources._7za);
