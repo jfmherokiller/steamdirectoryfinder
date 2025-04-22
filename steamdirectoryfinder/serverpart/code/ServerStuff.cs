@@ -29,6 +29,8 @@ namespace steamdirectoryfinder.serverpart.code
 
         private void Dostuff()
         {
+            ServerStuff.DownloadSourcemod();
+            ServerStuff.DownloadMetamod();
             ServerStuff.DownloadSteamcmd();
             ServerStuff.ExtractServerResources(_ocServerInstallPath);
             ServerStuff.CheckifDirectoryexistsorcreateit(_ocServerInstallPath);
@@ -83,16 +85,29 @@ namespace steamdirectoryfinder.serverpart.code
             File.WriteAllText(installpath + "\\StartServer.bat", startBat);
         }
 
+
+        public static void DownloadSourcemod()
+        {
+            using (WebClient client = new WebClient())
+            {
+                client.DownloadFile("https://sm.alliedmods.net/smdrop/1.10/sourcemod-1.10.0-git6545-windows.zip", "sourcemod.zip");
+            }
+        }
+
+        public static void DownloadMetamod()
+        {
+            using (WebClient client = new WebClient())
+            {
+                client.DownloadFile("https://mms.alliedmods.net/mmsdrop/1.10/mmsource-1.10.7-git971-windows.zip", "mmsource.zip");
+            }
+        }
+
+
         public static void DownloadSteamcmd()
         {
             using (WebClient client = new WebClient())
             {
-                Tuple<string, string> cool = DownloadTheLatestSourceModAndMetamod.DownloadPAges();
-                client.DownloadFile("http://media.steampowered.com/installer/steamcmd.zip", "steamcmd.zip");
-                client.DownloadFile(cool.Item1,
-                    "mmsource.zip");
-                client.DownloadFile(cool.Item2,
-                    "sourcemod.zip");
+            client.DownloadFile("http://media.steampowered.com/installer/steamcmd.zip", "steamcmd.zip");
             }
         }
 
@@ -179,6 +194,8 @@ namespace steamdirectoryfinder.serverpart.code
         {
             CheckifDirectoryexistsorcreateit(_ocServerInstallPath);
             CheckifDirectoryexistsorcreateit(Directory.GetCurrentDirectory() + "\\steamcmd");
+            DownloadSourcemod();
+            DownloadMetamod();
             DownloadSteamcmd();
             ExtractServerResources(_ocServerInstallPath);
             InstallServer(_username, _password, _mainFolder, _steamauth, _mounts);
@@ -186,8 +203,7 @@ namespace steamdirectoryfinder.serverpart.code
             CreateNeededFiles(_mainFolder);
         }
 
-        private static int InstallMountsFromintstring(string mounts, string steamcmdbase, string basecmd,
-            string endofcmd)
+        private static int InstallMountsFromintstring(string mounts, string steamcmdbase, string basecmd, string endofcmd)
         {
             if (!(mounts != "" & mounts.Contains(@"0")))
             {
@@ -197,31 +213,31 @@ namespace steamdirectoryfinder.serverpart.code
             string[] fuckme = mounts.Split(',');
             if (!fuckme[0].Contains("1"))
             {
-                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "220" + endofcmd);
+                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "220 -beta steam_legacy" + endofcmd);
             }
             if (!fuckme[1].Contains("1"))
             {
-                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "380" + endofcmd);
+                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "380 -beta steam_legacy" + endofcmd);
             }
             if (!fuckme[2].Contains("1"))
             {
-                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "340" + endofcmd);
+                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "340 -beta steam_legacy" + endofcmd);
             }
             if (!fuckme[3].Contains("1"))
             {
-                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "420" + endofcmd);
+                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "420 -beta steam_legacy" + endofcmd);
             }
             if (!fuckme[4].Contains("1"))
             {
-                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "280" + endofcmd);
+                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "280 -beta previous" + endofcmd);
             }
             if (!fuckme[5].Contains("1"))
             {
-                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "240" + endofcmd);
+                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "240 -beta previous_build" + endofcmd);
             }
             if (!fuckme[6].Contains("1"))
             {
-                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "300" + endofcmd);
+                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "300 -beta previous_build" + endofcmd);
             }
             if (true)
             {

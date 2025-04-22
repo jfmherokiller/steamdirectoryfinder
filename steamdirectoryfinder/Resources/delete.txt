@@ -1,5 +1,10 @@
 dl_ovr_runtime.bat
 hl2.exe
+cstrike.exe
+cstrike_win64.exe
+dod.exe
+dod_win64.exe
+srcds_win64.exe
 hlds_steamgames.vdf
 third_party_legal_notices.txt
 thirdpartylegalnotices.txt
@@ -137,12 +142,15 @@ drivers\
 hl1\maps\c4a1y.bsp
 hl1_hd\
 hl2\maps\d2_coast_02.bsp
+hl2_complete
+hl2mp
 resources\
 Soundtrack\
 sourcetest\
 steamapps\
 steam_input\
 tools\
+obsidian\addons\metamod\sourcemod.vdf
 obsidian\addons\metamod_x64.vdf
 steam.dll
 steamclient.dll
