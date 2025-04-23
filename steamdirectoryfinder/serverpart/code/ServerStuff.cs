@@ -29,10 +29,12 @@ namespace steamdirectoryfinder.serverpart.code
 
         private void Dostuff()
         {
+            ServerStuff.DownloadSourcemod();
+            ServerStuff.DownloadMetamod();
+            ServerStuff.DownloadSteamcmd();
             ServerStuff.DownloadSteamcmd();
             ServerStuff.ExtractServerResources(_ocServerInstallPath);
             ServerStuff.CheckifDirectoryexistsorcreateit(_ocServerInstallPath);
-            ServerStuff.CheckifDirectoryexistsorcreateit(Path.Combine(Directory.GetCurrentDirectory() + @"steamcmd"));
             ServerStuff.InstallServer(_username, _password, _mainFolder, _steamauth, _mounts);
 
             ServerStuff.ExtractAndDelete(_mainFolder);
@@ -83,16 +85,28 @@ namespace steamdirectoryfinder.serverpart.code
             File.WriteAllText(installpath + "\\StartServer.bat", startBat);
         }
 
+        public static void DownloadSourcemod()
+        {
+            using (WebClient client = new WebClient())
+            {
+                client.DownloadFile("https://sm.alliedmods.net/smdrop/1.10/sourcemod-1.10.0-git6545-windows.zip", "sourcemod.zip");
+            }
+        }
+
+        public static void DownloadMetamod()
+        {
+            using (WebClient client = new WebClient())
+            {
+                client.DownloadFile("https://mms.alliedmods.net/mmsdrop/1.10/mmsource-1.10.7-git971-windows.zip", "mmsource.zip");
+            }
+        }
+
         public static void DownloadSteamcmd()
         {
             using (WebClient client = new WebClient())
             {
-                Tuple<string, string> cool = DownloadTheLatestSourceModAndMetamod.DownloadPAges();
                 client.DownloadFile("http://media.steampowered.com/installer/steamcmd.zip", "steamcmd.zip");
-                client.DownloadFile(cool.Item1,
-                    "mmsource.zip");
-                client.DownloadFile(cool.Item2,
-                    "sourcemod.zip");
+
             }
         }
 
