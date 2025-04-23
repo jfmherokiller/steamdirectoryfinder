@@ -1,8 +1,10 @@
 ﻿using steamdirectoryfinder.clientpart.mountlocation;
 using steamdirectoryfinder.serverpart.code;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
+using static System.Windows.Forms.LinkLabel;
 
 namespace steamdirectoryfinder
 {
@@ -58,15 +60,15 @@ namespace steamdirectoryfinder
                 Console.WriteLine(@"-server ""<serverdirectory\obsidian>"" <username> <password>");
                 Console.WriteLine(@"-server ""<serverdirectory\obsidian>"" <username> <password> -steamauth");
                 Console.WriteLine(
-                    @"-server ""<serverdirectory\obsidian>"" <username> <password> ""hl2,ep1,lostcoast,ep2,hl1,css,dod""");
+                    @"-server ""<serverdirectory\obsidian>"" <username> <password> ""hl1,hl2,ep1,lostcoast,ep2,css,dod""");
                 Console.WriteLine(@"-server ""<serverdirectory\obsidian>"" <username> <password> ""0,0,0,0,0,0,0,0""");
                 Console.WriteLine(
-                    @"-server ""<serverdirectory\obsidian>"" <username> <password> -steamauth ""hl2,ep1,lostcoast,ep2,hl1,css,dod""");
+                    @"-server ""<serverdirectory\obsidian>"" <username> <password> -steamauth ""hl1,hl2,ep1,lostcoast,ep2,css,dod""");
                 Console.WriteLine(
                     @"-server ""<serverdirectory\obsidian>"" <username> <password> -steamauth ""0,0,0,0,0,0,0,0""");
                 Console.WriteLine(@"-client");
                 Console.WriteLine(@"-client -y");
-                Console.WriteLine(@"-client -n ""hl2,ep1,lostcoast,ep2,hl1,css,dod""");
+                Console.WriteLine(@"-client -n ""hl1,hl2,ep1,lostcoast,ep2,css,dod""");
             }
             else if (args[0].ToLower().Contains(@"-client"))
             {
@@ -142,7 +144,13 @@ namespace steamdirectoryfinder
         {
             while (true)
             {
-                Console.WriteLine(@"Please specify if client or server");
+                Console.WriteLine(@"Please specify if you are using a client or server");
+                Console.WriteLine(@"Notice: For client mode please follow the instructions at the following link first before proceeding.");
+                Console.WriteLine(@" ");
+                Console.WriteLine(@" < link placeholder > ");
+                Console.WriteLine(@" ");
+                Console.WriteLine(@"If you have followed the steps and wish to continue type 'client' without ' and press enter.");
+                Console.WriteLine(@"For server mode you can continue by typing 'server' without ' and press enter to proceed the next steps.");
                 string output = Console.ReadLine();
                 if (output != null && output.ToLower() == @"client")
                 {
