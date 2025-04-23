@@ -197,31 +197,31 @@ namespace steamdirectoryfinder.serverpart.code
             string[] fuckme = mounts.Split(',');
             if (!fuckme[0].Contains("1"))
             {
-                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "220" + endofcmd);
+                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "220 -beta steam_legacy" + endofcmd);
             }
             if (!fuckme[1].Contains("1"))
             {
-                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "380" + endofcmd);
+                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "380 -beta steam_legacy" + endofcmd);
             }
             if (!fuckme[2].Contains("1"))
             {
-                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "340" + endofcmd);
+                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "340 -beta steam_legacy" + endofcmd);
             }
             if (!fuckme[3].Contains("1"))
             {
-                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "420" + endofcmd);
+                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "420 -beta steam_legacy" + endofcmd);
             }
             if (!fuckme[4].Contains("1"))
             {
-                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "280" + endofcmd);
+                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "280 -beta previous" + endofcmd);
             }
             if (!fuckme[5].Contains("1"))
             {
-                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "240" + endofcmd);
+                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "240 -beta previous_build" + endofcmd);
             }
             if (!fuckme[6].Contains("1"))
             {
-                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "300" + endofcmd);
+                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "300 -beta previous_build" + endofcmd);
             }
             if (true)
             {
@@ -234,31 +234,31 @@ namespace steamdirectoryfinder.serverpart.code
         {
             if (mounts == "" || !mounts.Contains("hl2"))
             {
-                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "220" + endofcmd);
+                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "220 -beta steam_legacy" + endofcmd);
             }
             if (mounts == "" || !mounts.Contains("ep1"))
             {
-                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "380" + endofcmd);
+                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "380 -beta steam_legacy" + endofcmd);
             }
             if (mounts == "" || !mounts.Contains("lostcoast"))
             {
-                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "340" + endofcmd);
+                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "340 -beta steam_legacy" + endofcmd);
             }
             if (mounts == "" || !mounts.Contains("ep2"))
             {
-                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "420" + endofcmd);
+                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "420 -beta steam_legacy" + endofcmd);
             }
             if (mounts == "" || !mounts.Contains("hl1"))
             {
-                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "280" + endofcmd);
+                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "280 -beta previous" + endofcmd);
             }
             if (mounts == "" || !mounts.Contains("css"))
             {
-                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "240" + endofcmd);
+                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "240 -beta previous_build" + endofcmd);
             }
             if (mounts == "" || !mounts.Contains("dod"))
             {
-                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "300" + endofcmd);
+                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "300 -beta previous_build" + endofcmd);
             }
             if (true)
             {
