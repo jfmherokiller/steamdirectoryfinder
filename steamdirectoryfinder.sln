@@ -1,13 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26430.15
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35931.197 d17.13
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "steamdirectoryfinder", "steamdirectoryfinder\steamdirectoryfinder.csproj", "{DD084DFC-4EFF-4FA4-B29A-F88C8665BAA7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F83C55D7-11B5-477A-BD6E-A2EF1C5E0A9D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mountfix-tests", "mountfix-tests\mountfix-tests.csproj", "{85670D3D-C567-4835-A0A6-FF29F27BED5A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,26 +40,6 @@ Global
 		{DD084DFC-4EFF-4FA4-B29A-F88C8665BAA7}.Release|x64.ActiveCfg = Release|Any CPU
 		{DD084DFC-4EFF-4FA4-B29A-F88C8665BAA7}.Release|x86.ActiveCfg = Release|x86
 		{DD084DFC-4EFF-4FA4-B29A-F88C8665BAA7}.Release|x86.Build.0 = Release|x86
-		{85670D3D-C567-4835-A0A6-FF29F27BED5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{85670D3D-C567-4835-A0A6-FF29F27BED5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{85670D3D-C567-4835-A0A6-FF29F27BED5A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{85670D3D-C567-4835-A0A6-FF29F27BED5A}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{85670D3D-C567-4835-A0A6-FF29F27BED5A}.Debug|Win32.ActiveCfg = Debug|Any CPU
-		{85670D3D-C567-4835-A0A6-FF29F27BED5A}.Debug|Win32.Build.0 = Debug|Any CPU
-		{85670D3D-C567-4835-A0A6-FF29F27BED5A}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{85670D3D-C567-4835-A0A6-FF29F27BED5A}.Debug|x64.Build.0 = Debug|Any CPU
-		{85670D3D-C567-4835-A0A6-FF29F27BED5A}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{85670D3D-C567-4835-A0A6-FF29F27BED5A}.Debug|x86.Build.0 = Debug|Any CPU
-		{85670D3D-C567-4835-A0A6-FF29F27BED5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{85670D3D-C567-4835-A0A6-FF29F27BED5A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{85670D3D-C567-4835-A0A6-FF29F27BED5A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{85670D3D-C567-4835-A0A6-FF29F27BED5A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{85670D3D-C567-4835-A0A6-FF29F27BED5A}.Release|Win32.ActiveCfg = Release|Any CPU
-		{85670D3D-C567-4835-A0A6-FF29F27BED5A}.Release|Win32.Build.0 = Release|Any CPU
-		{85670D3D-C567-4835-A0A6-FF29F27BED5A}.Release|x64.ActiveCfg = Release|Any CPU
-		{85670D3D-C567-4835-A0A6-FF29F27BED5A}.Release|x64.Build.0 = Release|Any CPU
-		{85670D3D-C567-4835-A0A6-FF29F27BED5A}.Release|x86.ActiveCfg = Release|Any CPU
-		{85670D3D-C567-4835-A0A6-FF29F27BED5A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -111,7 +111,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="serverpart\code\DownloadTheLatestSourceModAndMetamod.cs" />
     <Compile Include="serverpart\ui\ServerConfiguration.cs">
       <SubType>Form</SubType>
     </Compile>
