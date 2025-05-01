@@ -64,6 +64,7 @@ bin\libcef.dll
 bin\libfbxsdk.dll
 bin\libsasl.dll
 bin\mdllib.dll
+bin\makescenesimage.exe
 bin\mksheet.exe
 bin\motionmapper.exe
 bin\Mss32.dll
