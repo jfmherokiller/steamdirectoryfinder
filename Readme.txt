@@ -1,4 +1,4 @@
-Mountfix Installer For Obsidian Conflict: (rev 23/4/2025)
+Mountfix Installer For Obsidian Conflict: (rev 3/5/2025)
 
 Original manual workaround solution discovered by raidensnake (OC Beta) & Neico (OC Dev)
 
@@ -73,14 +73,14 @@ When prompted type server and press enter
 a dialogue will ask for the installation location.
 Enter the location including the obsidian folder in the path using quotes " and press enter. eg. "c:\obsidian conflict\obsidian"
 Please Note: The obsidian folder will not be touched only the path that leads to it will be used for the mounts eg. "c:\obsidian conflict" during the installation process.
-A new window will appear asking for a valid steam username and password and a steamguard authorisation option for code verification as well as options to disable mounts you don't need or have. To proceed enter your steam username and password and click install server. The mountfix will begin the process.
+A new window will appear asking for a valid steam username and password. To proceed enter your steam username and password and click install server. The mountfix will begin the process.
 
 PRIVACY & DATA PROTECTION LEGAL DISCLAIMER: 
 The steam username and password that is requested by the mountfix is only ever used for the login to Official Valve SteamCMD background commands and is never logged or stored in any way shape or form.
 The login details entered are automatically purged when the mountfix has completed the SteamCMD downloading tasks.
 We respect people's privacy and data protection.
 
-Please Note: Even if people don't have mounts both client and server side and forget to disable the mounts the mountfix will simply ignore those mounts with the exception of source sdk base 2007 which IS required.
+Please Note: Even if people don't have mounts both client and server side the mountfix will simply ignore those mounts with the exception of source sdk base 2007 which IS required.
 
 
 Command Line Method:
@@ -103,14 +103,14 @@ Just like the double click method the process will be automated
 
 Server side:
 
-To run the server side commands, use the following syntax on cmd -server "<steammountfolder\obsidian>" steamusername steampassword "mounts to remove"
+To run the server side commands, use the following syntax on cmd -server "<steammountfolder\obsidian>" steamusername steampassword
 
 Example:
 
 cd c:\mountfix
 
-mountfix.exe -server "c:\obsidian conflict\obsidian" steamusername steampassword "ep2,episodic,hl2,css,dod,hl1"
+mountfix.exe -server "c:\obsidian conflict\obsidian" steamusername steampassword
 
-Pease Note: The mounts listed in the brackets are the ones that can be removed. As stated before even if the mounts part isn't entered and people don't have some mounts the mountfix will ignore them if they are not found.
+Pease Note: As stated before even if the mounts part isn't entered and people don't have some mounts the mountfix will ignore them if they are not found.
 
 Just like before in the earlier disclaimer. The login details used are only used for SteamCMD commands and are never logged or stored in any way shape or form.

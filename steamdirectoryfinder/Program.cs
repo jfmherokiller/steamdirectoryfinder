@@ -56,19 +56,8 @@ namespace steamdirectoryfinder
             else if (args[0].ToLower().Contains(@"-help"))
             {
                 Console.WriteLine(@"Usage!");
-                Console.WriteLine(@"-server ""<serverdirectory\obsidian>""");
                 Console.WriteLine(@"-server ""<serverdirectory\obsidian>"" <username> <password>");
-                Console.WriteLine(@"-server ""<serverdirectory\obsidian>"" <username> <password> -steamauth");
-                Console.WriteLine(
-                    @"-server ""<serverdirectory\obsidian>"" <username> <password> ""hl1,hl2,ep1,lostcoast,ep2,css,dod""");
-                Console.WriteLine(@"-server ""<serverdirectory\obsidian>"" <username> <password> ""0,0,0,0,0,0,0,0""");
-                Console.WriteLine(
-                    @"-server ""<serverdirectory\obsidian>"" <username> <password> -steamauth ""hl1,hl2,ep1,lostcoast,ep2,css,dod""");
-                Console.WriteLine(
-                    @"-server ""<serverdirectory\obsidian>"" <username> <password> -steamauth ""0,0,0,0,0,0,0,0""");
                 Console.WriteLine(@"-client");
-                Console.WriteLine(@"-client -y");
-                Console.WriteLine(@"-client -n ""hl1,hl2,ep1,lostcoast,ep2,css,dod""");
             }
             else if (args[0].ToLower().Contains(@"-client"))
             {
@@ -144,13 +133,16 @@ namespace steamdirectoryfinder
         {
             while (true)
             {
-                Console.WriteLine(@"Please specify if you are using a client or server");
+                Console.WriteLine(@"Source SDK 2007 Mountfix Tool for Obsidian Conflict");
+                Console.WriteLine(@" ");
                 Console.WriteLine(@"Notice: For client mode please follow the instructions at the following link first before proceeding.");
                 Console.WriteLine(@" ");
-                Console.WriteLine(@" < link placeholder > ");
+                Console.WriteLine(@"https://github.com/RSDNTWK/steamdirectoryfinder/blob/master/install.txt");
                 Console.WriteLine(@" ");
                 Console.WriteLine(@"If you have followed the steps and wish to continue type 'client' without ' and press enter.");
                 Console.WriteLine(@"For server mode you can continue by typing 'server' without ' and press enter to proceed the next steps.");
+                Console.WriteLine(@" ");
+                Console.WriteLine(@"Please specify if you are using a client or server:");
                 string output = Console.ReadLine();
                 if (output != null && output.ToLower() == @"client")
                 {
@@ -187,7 +179,7 @@ namespace steamdirectoryfinder
 
         private static void Perfominitializations()
         {
-            Console.Title = @"Source Sdk 2007 steampipe fix";
+            Console.Title = @"Mountfix Tool for Obsidian Conflict 0.1.3.5";
         }
 
         private static void Server(string installpath, string username = "", string password = "",

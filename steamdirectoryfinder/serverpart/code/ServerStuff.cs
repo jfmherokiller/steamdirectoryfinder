@@ -4,6 +4,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -60,6 +61,11 @@ namespace steamdirectoryfinder.serverpart.code
         private readonly string _password;
         private readonly bool _steamauth;
         private readonly string _username;
+
+        public static class InstallerContext
+        {
+            public static string ServerDirectory { get; set; }
+        }
 
         public ServerStuff(string path, string username, string password, bool steamfun = false, string mounts = "")
         {
@@ -139,18 +145,19 @@ namespace steamdirectoryfinder.serverpart.code
                     MiscFunctions.DeleteFile(Path.Combine(theserverfolder, lines));
                 }
             });
-            string sourceFile1 = @"steamcmd\steam.dll";
-            string destinationFile1 = theserverfolder + "\\steam.dll";
-            string sourceFile2 = @"steamcmd\steamclient.dll";
-            string destinationFile2 = theserverfolder + "\\steamclient.dll";
-            string sourceFile3 = @"steamcmd\tier0_s.dll";
-            string destinationFile3 = theserverfolder + "\\tier0_s.dll";
-            string sourceFile4 = @"steamcmd\vstdlib_s.dll";
-            string destinationFile4 = theserverfolder +"\\vstdlib_s.dll";
-            System.IO.File.Copy(sourceFile1, destinationFile1);
-            System.IO.File.Copy(sourceFile2, destinationFile2);
-            System.IO.File.Copy(sourceFile3, destinationFile3);
-            System.IO.File.Copy(sourceFile4, destinationFile4);
+            // Copy Updated Steam Files from steamcmd to allow srcds to connect to steam servers
+            string steamdllsrc = @"steamcmd\steam.dll";
+            string steamdlldes = theserverfolder + "\\steam.dll";
+            string steamclientsrc = @"steamcmd\steamclient.dll";
+            string steamclientdes = theserverfolder + "\\steamclient.dll";
+            string tier0_ssrc = @"steamcmd\tier0_s.dll";
+            string tier0_sdes = theserverfolder + "\\tier0_s.dll";
+            string vstdlib_ssrc = @"steamcmd\vstdlib_s.dll";
+            string vstdlib_sdes = theserverfolder + "\\vstdlib_s.dll";
+            System.IO.File.Copy(steamdllsrc, steamdlldes);
+            System.IO.File.Copy(steamclientsrc, steamclientdes);
+            System.IO.File.Copy(tier0_ssrc, tier0_sdes);
+            System.IO.File.Copy(vstdlib_ssrc, vstdlib_sdes);
         }
 
         public static void ExtractServerResources(string ass)
@@ -172,7 +179,7 @@ namespace steamdirectoryfinder.serverpart.code
             {
                 fub.Kill();
             }
-            const string endofcmd = " validate +quit";
+            string endofcmd = " validate +quit";
             string basecmd = " +force_install_dir " + NativeMethods.Otherstuff.GetShortPathName(serverdirectory) + " +login " + username + " " + password + 
                           " +app_update ";
             string currentdir = Directory.GetCurrentDirectory();
@@ -201,82 +208,257 @@ namespace steamdirectoryfinder.serverpart.code
         }
 
         private static int InstallMountsFromintstring(string mounts, string steamcmdbase, string basecmd,
-            string endofcmd)
+    string endofcmd)
         {
+            // Extract installation directory from basecmd
+            string forceInstallDirPrefix = "+force_install_dir ";
+            string loginPrefix = " +login ";
+
+            int startIndex = basecmd.IndexOf(forceInstallDirPrefix);
+            if (startIndex == -1)
+            {
+                throw new InvalidOperationException("force_install_dir not found in basecmd.");
+            }
+
+            startIndex += forceInstallDirPrefix.Length;
+            int endIndex = basecmd.IndexOf(loginPrefix, startIndex);
+            if (endIndex == -1)
+            {
+                throw new InvalidOperationException("login not found in basecmd after force_install_dir.");
+            }
+
+            string installationDirectory = basecmd.Substring(startIndex, endIndex - startIndex).Trim();
+            if (string.IsNullOrEmpty(installationDirectory))
+            {
+                throw new InvalidOperationException("Installation directory is empty.");
+            }
+
+            // Normalize the path by replacing double backslashes with single backslashes
+            InstallerContext.ServerDirectory = installationDirectory.Replace("\\\\", "\\");
+
             if (!(mounts != "" & mounts.Contains(@"0")))
             {
                 return 0;
             }
 
             string[] fuckme = mounts.Split(',');
+            string SteamcmdCleanup = Path.Combine(InstallerContext.ServerDirectory, "steamapps");
+            string hl2FolderPathForCleanup = Path.Combine(InstallerContext.ServerDirectory, "hl2");
+            string tempHl2FolderPathForCleanup = Path.Combine(InstallerContext.ServerDirectory, "temp_hl2");
+
             if (!fuckme[0].Contains("1"))
             {
                 ClientAndServer.Performtasksi(steamcmdbase, basecmd + "220 -beta steam_legacy" + endofcmd);
+
+                // Delete Steamapps folder after every download to allow proper verification of each download
+                if (Directory.Exists(SteamcmdCleanup))
+                {
+                    Directory.Delete(SteamcmdCleanup, true);
+                }
+
+                // Rename the hl2 folder after the first download (appid 220)
+                if (Directory.Exists(hl2FolderPathForCleanup))
+                {
+                    Directory.Move(hl2FolderPathForCleanup, tempHl2FolderPathForCleanup);
+                }
             }
             if (!fuckme[1].Contains("1"))
             {
                 ClientAndServer.Performtasksi(steamcmdbase, basecmd + "380 -beta steam_legacy" + endofcmd);
+
+                // Delete Steamapps folder after every download to allow proper verification of each download
+                if (Directory.Exists(SteamcmdCleanup))
+                {
+                    Directory.Delete(SteamcmdCleanup, true);
+                }
             }
             if (!fuckme[2].Contains("1"))
             {
                 ClientAndServer.Performtasksi(steamcmdbase, basecmd + "340 -beta steam_legacy" + endofcmd);
+
+                // Delete Steamapps folder after every download to allow proper verification of each download
+                if (Directory.Exists(SteamcmdCleanup))
+                {
+                    Directory.Delete(SteamcmdCleanup, true);
+                }
             }
             if (!fuckme[3].Contains("1"))
             {
                 ClientAndServer.Performtasksi(steamcmdbase, basecmd + "420 -beta steam_legacy" + endofcmd);
+
+                // Delete Steamapps folder after every download to allow proper verification of each download
+                if (Directory.Exists(SteamcmdCleanup))
+                {
+                    Directory.Delete(SteamcmdCleanup, true);
+                }
             }
             if (!fuckme[4].Contains("1"))
             {
                 ClientAndServer.Performtasksi(steamcmdbase, basecmd + "280 -beta previous" + endofcmd);
+
+                // Delete Steamapps folder after every download to allow proper verification of each download
+                if (Directory.Exists(SteamcmdCleanup))
+                {
+                    Directory.Delete(SteamcmdCleanup, true);
+                }
             }
             if (!fuckme[5].Contains("1"))
             {
                 ClientAndServer.Performtasksi(steamcmdbase, basecmd + "240 -beta previous_build" + endofcmd);
+
+                // Delete Steamapps folder after every download to allow proper verification of each download
+                if (Directory.Exists(SteamcmdCleanup))
+                {
+                    Directory.Delete(SteamcmdCleanup, true);
+                }
             }
             if (!fuckme[6].Contains("1"))
             {
                 ClientAndServer.Performtasksi(steamcmdbase, basecmd + "300 -beta previous_build" + endofcmd);
+
+                // Delete Steamapps folder after every download to allow proper verification of each download
+                if (Directory.Exists(SteamcmdCleanup))
+                {
+                    Directory.Delete(SteamcmdCleanup, true);
+                }
             }
             if (true)
             {
                 ClientAndServer.Performtasksi(steamcmdbase, basecmd + "310" + endofcmd);
+
+                // Delete the newly created hl2 folder and rename the temp_hl2 folder back to hl2 after the last download (appid 310)
+                if (Directory.Exists(hl2FolderPathForCleanup))
+                {
+                    Directory.Delete(hl2FolderPathForCleanup, true);
+                }
+                if (Directory.Exists(tempHl2FolderPathForCleanup))
+                {
+                    Directory.Move(tempHl2FolderPathForCleanup, hl2FolderPathForCleanup);
+                }
             }
             return 1;
         }
 
         private static void InstallMountsFromnames(string mounts, string steamcmdbase, string basecmd, string endofcmd)
         {
+            // Extract installation directory from basecmd
+            string forceInstallDirPrefix = "+force_install_dir ";
+            string loginPrefix = " +login ";
+
+            int startIndex = basecmd.IndexOf(forceInstallDirPrefix);
+            if (startIndex == -1)
+            {
+                throw new InvalidOperationException("force_install_dir not found in basecmd.");
+            }
+
+            startIndex += forceInstallDirPrefix.Length;
+            int endIndex = basecmd.IndexOf(loginPrefix, startIndex);
+            if (endIndex == -1)
+            {
+                throw new InvalidOperationException("login not found in basecmd after force_install_dir.");
+            }
+
+            string installationDirectory = basecmd.Substring(startIndex, endIndex - startIndex).Trim();
+            if (string.IsNullOrEmpty(installationDirectory))
+            {
+                throw new InvalidOperationException("Installation directory is empty.");
+            }
+            // Normalize the path by replacing double backslashes with single backslashes
+            InstallerContext.ServerDirectory = installationDirectory.Replace("\\\\", "\\");
+
+            string SteamcmdCleanup = Path.Combine(InstallerContext.ServerDirectory, "steamapps");
+            string hl2FolderPathForCleanup = Path.Combine(InstallerContext.ServerDirectory, "hl2");
+            string tempHl2FolderPathForCleanup = Path.Combine(InstallerContext.ServerDirectory, "temp_hl2");
+
             if (mounts == "" || !mounts.Contains("hl2"))
             {
                 ClientAndServer.Performtasksi(steamcmdbase, basecmd + "220 -beta steam_legacy" + endofcmd);
+
+                // Delete Steamapps folder after every download to allow proper verification of each download
+                if (Directory.Exists(SteamcmdCleanup))
+                {
+                    Directory.Delete(SteamcmdCleanup, true);
+                }
+
+                // Rename the hl2 folder after the first download (appid 220)
+                if (Directory.Exists(hl2FolderPathForCleanup))
+                {
+                    Directory.Move(hl2FolderPathForCleanup, tempHl2FolderPathForCleanup);
+                }
             }
             if (mounts == "" || !mounts.Contains("ep1"))
             {
                 ClientAndServer.Performtasksi(steamcmdbase, basecmd + "380 -beta steam_legacy" + endofcmd);
+
+                // Delete Steamapps folder after every download to allow proper verification of each download
+                if (Directory.Exists(SteamcmdCleanup))
+                {
+                    Directory.Delete(SteamcmdCleanup, true);
+                }
             }
             if (mounts == "" || !mounts.Contains("lostcoast"))
             {
                 ClientAndServer.Performtasksi(steamcmdbase, basecmd + "340 -beta steam_legacy" + endofcmd);
+
+                // Delete Steamapps folder after every download to allow proper verification of each download
+                if (Directory.Exists(SteamcmdCleanup))
+                {
+                    Directory.Delete(SteamcmdCleanup, true);
+                }
             }
             if (mounts == "" || !mounts.Contains("ep2"))
             {
                 ClientAndServer.Performtasksi(steamcmdbase, basecmd + "420 -beta steam_legacy" + endofcmd);
+
+                // Delete Steamapps folder after every download to allow proper verification of each download
+                if (Directory.Exists(SteamcmdCleanup))
+                {
+                    Directory.Delete(SteamcmdCleanup, true);
+                }
             }
             if (mounts == "" || !mounts.Contains("hl1"))
             {
                 ClientAndServer.Performtasksi(steamcmdbase, basecmd + "280 -beta previous" + endofcmd);
+
+                // Delete Steamapps folder after every download to allow proper verification of each download
+                if (Directory.Exists(SteamcmdCleanup))
+                {
+                    Directory.Delete(SteamcmdCleanup, true);
+                }
             }
             if (mounts == "" || !mounts.Contains("css"))
             {
                 ClientAndServer.Performtasksi(steamcmdbase, basecmd + "240 -beta previous_build" + endofcmd);
+
+                // Delete Steamapps folder after every download to allow proper verification of each download
+                if (Directory.Exists(SteamcmdCleanup))
+                {
+                    Directory.Delete(SteamcmdCleanup, true);
+                }
             }
             if (mounts == "" || !mounts.Contains("dod"))
             {
                 ClientAndServer.Performtasksi(steamcmdbase, basecmd + "300 -beta previous_build" + endofcmd);
+
+                // Delete Steamapps folder after every download to allow proper verification of each download
+                if (Directory.Exists(SteamcmdCleanup))
+                {
+                    Directory.Delete(SteamcmdCleanup, true);
+                }
             }
             if (true)
             {
                 ClientAndServer.Performtasksi(steamcmdbase, basecmd + "310" + endofcmd);
+
+                // Delete the newly created hl2 folder and rename the temp_hl2 folder back to hl2 after the last download (appid 310)
+                if (Directory.Exists(hl2FolderPathForCleanup))
+                {
+                    Directory.Delete(hl2FolderPathForCleanup, true);
+                }
+                if (Directory.Exists(tempHl2FolderPathForCleanup))
+                {
+                    Directory.Move(tempHl2FolderPathForCleanup, hl2FolderPathForCleanup);
+                }
             }
         }
     }

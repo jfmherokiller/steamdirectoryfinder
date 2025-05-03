@@ -57,5 +57,15 @@ namespace steamdirectoryfinder
         private void ServerConfiguration_Load(object sender, EventArgs e)
         {
         }
+
+        private void SteamAuth_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
+        }
     }
 }
