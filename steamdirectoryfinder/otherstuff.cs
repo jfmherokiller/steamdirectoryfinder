@@ -5,16 +5,8 @@ using steamdirectoryfinder.Properties;
 
 namespace steamdirectoryfinder
 {
-    public class MiscFunctions
+    public static class MiscFunctions
     {
-        public static void PlaySong()
-        {
-            var tehfile = Path.GetTempFileName();
-            File.WriteAllBytes(tehfile, Resources.windows);
-            NativeMethods.Mp3Play.Open(tehfile);
-            NativeMethods.Mp3Play.Play(true);
-            File.Delete(tehfile);
-        }
         public static string PutIntoQuotes(string value)
         {
             return "\"" + value + "\"";
