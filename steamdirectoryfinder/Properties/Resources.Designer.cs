@@ -19,7 +19,7 @@ namespace steamdirectoryfinder.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -81,21 +81,17 @@ namespace steamdirectoryfinder.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] clientpatches {
-            get {
-                object obj = ResourceManager.GetObject("clientpatches", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to dl_ovr_runtime.bat
         ///hl2.exe
+        ///cstrike.exe
+        ///cstrike_win64.exe
+        ///dod.exe
+        ///dod_win64.exe
+        ///srcds_win64.exe
         ///hlds_steamgames.vdf
         ///third_party_legal_notices.txt
         ///thirdpartylegalnotices.txt
+        ///appcache\
         ///bin\AdminServer.dll
         ///bin\avcodec-53.dll
         ///bin\avformat-53.dll
@@ -111,11 +107,42 @@ namespace steamdirectoryfinder.Properties {
         ///bin\check_sdk_env.bat
         ///bin\chromehtml.dll
         ///bin\CmdSeq.wc
-        ///bin\cstrike.fgd
-        ///bin\datamodel.dll
-        ///bin\demoinfo.exe
-        ///bin\dmserializers.dll
-        ///bin\dmxconvert [rest of string was truncated]&quot;;.
+        ///bin\cst [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string delete {
+            get {
+                return ResourceManager.GetString("delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to dl_ovr_runtime.bat
+        ///hl2.exe
+        ///cstrike.exe
+        ///cstrike_win64.exe
+        ///dod.exe
+        ///dod_win64.exe
+        ///srcds_win64.exe
+        ///hlds_steamgames.vdf
+        ///third_party_legal_notices.txt
+        ///thirdpartylegalnotices.txt
+        ///appcache\
+        ///bin\AdminServer.dll
+        ///bin\avcodec-53.dll
+        ///bin\avformat-53.dll
+        ///bin\avutil-51.dll
+        ///bin\base.fgd
+        ///bin\basehaptics.txt
+        ///bin\bsppack.dll
+        ///bin\bspzip.exe
+        ///bin\bugreporter.dll
+        ///bin\bugreporter_filequeue.dll
+        ///bin\bugreporter_public.dll
+        ///bin\captioncompiler.exe
+        ///bin\check_sdk_env.bat
+        ///bin\chromehtml.dll
+        ///bin\CmdSeq.wc
+        ///bin\cst [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string files_to_delete_1_ {
             get {

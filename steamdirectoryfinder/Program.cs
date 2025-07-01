@@ -1,12 +1,14 @@
-﻿using System;
+﻿using steamdirectoryfinder.clientpart.mountlocation;
+using steamdirectoryfinder.serverpart.code;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
-using steamdirectoryfinder.clientpart.mountlocation;
-using steamdirectoryfinder.serverpart.code;
+using static System.Windows.Forms.LinkLabel;
 
 namespace steamdirectoryfinder
 {
-    internal static class Program
+    public static class Program
     {
         private static string Checkforrootpath(string ass)
         {
@@ -54,19 +56,8 @@ namespace steamdirectoryfinder
             else if (args[0].ToLower().Contains(@"-help"))
             {
                 Console.WriteLine(@"Usage!");
-                Console.WriteLine(@"-server ""<serverdirectory\obsidian>""");
                 Console.WriteLine(@"-server ""<serverdirectory\obsidian>"" <username> <password>");
-                Console.WriteLine(@"-server ""<serverdirectory\obsidian>"" <username> <password> -steamauth");
-                Console.WriteLine(
-                    @"-server ""<serverdirectory\obsidian>"" <username> <password> ""hl2,ep1,lostcoast,ep2,hl1,css,dod""");
-                Console.WriteLine(@"-server ""<serverdirectory\obsidian>"" <username> <password> ""0,0,0,0,0,0,0,0""");
-                Console.WriteLine(
-                    @"-server ""<serverdirectory\obsidian>"" <username> <password> -steamauth ""hl2,ep1,lostcoast,ep2,hl1,css,dod""");
-                Console.WriteLine(
-                    @"-server ""<serverdirectory\obsidian>"" <username> <password> -steamauth ""0,0,0,0,0,0,0,0""");
                 Console.WriteLine(@"-client");
-                Console.WriteLine(@"-client -y");
-                Console.WriteLine(@"-client -n ""hl2,ep1,lostcoast,ep2,hl1,css,dod""");
             }
             else if (args[0].ToLower().Contains(@"-client"))
             {
@@ -93,17 +84,15 @@ namespace steamdirectoryfinder
                 }
                 else
                 {
-                    MessageBox.Show("Please create the server directory then rerun the mountfix");
+                    MessageBox.Show(@"Please create the server directory then rerun the mountfix");
                     Environment.Exit(1);
                 }
                 switch (args.Length)
                 {
                     case 2:
-                        {
-                            fun = fun.Trim('"');
-                            fun = NativeMethods.Otherstuff.GetShortPathName(fun);
-                            Server(fun);
-                        }
+                        fun = fun.Trim('"');
+                        fun = NativeMethods.Otherstuff.GetShortPathName(fun);
+                        Server(fun);
                         break;
 
                     case 4:
@@ -144,11 +133,19 @@ namespace steamdirectoryfinder
         {
             while (true)
             {
-                Console.WriteLine(@"Please specify if client or server");
-                var output = Console.ReadLine();
+                Console.WriteLine(@"Source SDK 2007 Mountfix Tool for Obsidian Conflict");
+                Console.WriteLine(@" ");
+                Console.WriteLine(@"Notice: For client mode please follow the instructions at the following link first before proceeding.");
+                Console.WriteLine(@" ");
+                Console.WriteLine(@"https://github.com/RSDNTWK/steamdirectoryfinder/blob/master/install.txt");
+                Console.WriteLine(@" ");
+                Console.WriteLine(@"If you have followed the steps and wish to continue type 'client' without ' and press enter.");
+                Console.WriteLine(@"For server mode you can continue by typing 'server' without ' and press enter to proceed the next steps.");
+                Console.WriteLine(@" ");
+                Console.WriteLine(@"Please specify if you are using a client or server:");
+                string output = Console.ReadLine();
                 if (output != null && output.ToLower() == @"client")
                 {
-                    MiscFunctions.PlaySong();
                     return true;
                 }
                 if (output != null && output.ToLower() == @"server")
@@ -164,11 +161,9 @@ namespace steamdirectoryfinder
             }
         }
 
-
-
         private static void OpenMenuIfnocmdArguments()
         {
-            var choice = CheckifClientOrServer();
+            bool choice = CheckifClientOrServer();
             if (choice)
             {
                 BothWays.ClientNohook();
@@ -176,7 +171,7 @@ namespace steamdirectoryfinder
             else
             {
                 Console.WriteLine(@"Please provide the oc server install path subdirectory");
-                var input = Console.ReadLine();
+                string input = Console.ReadLine();
                 input = Checkforrootpath(input);
                 Server(input);
             }
@@ -184,7 +179,7 @@ namespace steamdirectoryfinder
 
         private static void Perfominitializations()
         {
-            Console.Title = @"Source Sdk 2007 steampipe fix";
+            Console.Title = @"Mountfix Tool for Obsidian Conflict 0.1.3.5";
         }
 
         private static void Server(string installpath, string username = "", string password = "",
@@ -192,46 +187,45 @@ namespace steamdirectoryfinder
         {
             if (installpath != null & username == "" & password == "")
             {
-                ServerFormStuffs.OpenServerForm(installpath);
+                new ServerFormStuffs().OpenServerForm(installpath);
             }
             else if (installpath == null)
             {
                 Console.WriteLine(@"Please specify where to install the server");
-                var input = Console.ReadLine();
-                if (input != null && input.Contains(" "))
+                string input = Console.ReadLine();
+                if (input != null && input.Contains(@" "))
                 {
                     input = MiscFunctions.PutIntoQuotes(input);
                 }
                 Console.WriteLine(input);
                 Console.ReadLine();
-                ServerFormStuffs.OpenServerForm(input);
+                new ServerFormStuffs().OpenServerForm(input);
             }
             else if (username != null & password != null & !steamauth & mounts == "")
             {
-                var fun = new ServerStuff(installpath, username, password);
+                ServerStuff fun = new ServerStuff(installpath, username, password);
                 fun.RunFun();
             }
             else if (username != "" & password != "" & steamauth & mounts == "")
             {
-                var fun = new ServerStuff(installpath, username, password, true);
+                ServerStuff fun = new ServerStuff(installpath, username, password, true);
                 fun.RunFun();
             }
             else if (username != "" & password != "" & !steamauth & mounts != "")
             {
-                var fun = new ServerStuff(installpath, username, password, false, mounts);
+                ServerStuff fun = new ServerStuff(installpath, username, password, false, mounts);
                 fun.RunFun();
             }
             else if (username != "" & password != "" & steamauth & mounts != "")
             {
-                var fun = new ServerStuff(installpath, username, password, true, mounts);
+                ServerStuff fun = new ServerStuff(installpath, username, password, true, mounts);
                 fun.RunFun();
             }
         }
 
-
-
         private static void Shutdown(object sender, EventArgs a)
         {
+			MiscFunctions.DeleteFile(@"vcredist_x86.exe");
             MiscFunctions.DeleteFile(@"HLExtract.exe");
             MiscFunctions.DeleteFile(@"HLLib.dll");
             MiscFunctions.DeleteFile(@"7za.exe");
@@ -239,7 +233,6 @@ namespace steamdirectoryfinder
             MiscFunctions.DeleteFile(@"sourcemod.zip");
             MiscFunctions.DeleteFile(@"mmsource.zip");
             MiscFunctions.DeleteFile(@"addons.zip");
-            MiscFunctions.DeleteFile(@"clientpatches.7z");
             MiscFunctions.DeleteDir(@"steamcmd");
         }
     }

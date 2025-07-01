@@ -6,31 +6,30 @@ using System.IO;
 
 namespace steamdirectoryfinder.clientpart.mountlocation
 {
-    class OldWay
+    internal class OldWay
     {
-
         public static Tuple<string, string, List<string>> oldwaysetup(List<string> mounts)
         {
-            var drives = DriveInfo.GetDrives();
-            var ocinstalldir = " ";
-            var sourcesdk2007Installdir = "";
-            var ep2Installdir = " ";
-            var hl2Installdir = " ";
-            var hl1Installdir = " ";
-            var lostcoastinstalldir = " ";
-            var episodicinstalldir = " ";
-            var dayofdefeatinstalldir = " ";
-            var counterstrikesourceinstalldir = " ";
-            var storedlocations = new List<string>();
+            DriveInfo[] drives = DriveInfo.GetDrives();
+            string ocinstalldir = " ";
+            string sourcesdk2007Installdir = "";
+            string ep2Installdir = " ";
+            string hl2Installdir = " ";
+            string hl1Installdir = " ";
+            string lostcoastinstalldir = " ";
+            string episodicinstalldir = " ";
+            string dayofdefeatinstalldir = " ";
+            string counterstrikesourceinstalldir = " ";
+            List<string> storedlocations = new List<string>();
             Console.WriteLine(@"Now looking for the installation directories");
 
-            foreach (var drive in drives)
+            foreach (DriveInfo drive in drives)
             {
                 if (!drive.IsReady)
                 {
                     continue;
                 }
-                var createfile = new Process
+                Process createfile = new Process
                 {
                     StartInfo =
                     {
@@ -42,7 +41,7 @@ namespace steamdirectoryfinder.clientpart.mountlocation
                         Arguments = "/c \"dir /s /b "
                     }
                 };
-                createfile.OutputDataReceived += delegate(object sender, DataReceivedEventArgs args)
+                createfile.OutputDataReceived += delegate (object sender, DataReceivedEventArgs args)
                 {
                     //string[] locations = { "steamapps\\common\\Half-Life 2\\hl2", "steamapps\\common\\Half-Life 2\\episodic", "steamapps\\common\\Half-Life 2\\ep2", "steamapps\\common\\Half-Life 2\\lostcoast", "steamapps\\common\\Half-Life 2\\hl1", "steamapps\\common\\Counter-Strike Source\\cstrike", "steamapps\\common\\Day of Defeat Source\\dod" };
                     if (args.Data == null)

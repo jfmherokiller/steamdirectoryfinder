@@ -1,11 +1,10 @@
-﻿using System;
+﻿using steamdirectoryfinder.Properties;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using steamdirectoryfinder.Properties;
+using System.Net;
 
 namespace steamdirectoryfinder.bothServerAndClient
 {
@@ -13,7 +12,7 @@ namespace steamdirectoryfinder.bothServerAndClient
     {
         public static void DeleteVpks(IEnumerable<string> listOfVpksToDelete)
         {
-            foreach (var vpk in listOfVpksToDelete.Where(avv => !avv.Contains(@"platform")))
+            foreach (string vpk in listOfVpksToDelete.Where(avv => !avv.Contains(@"platform")))
             {
                 MiscFunctions.DeleteFile(vpk);
             }
@@ -21,6 +20,12 @@ namespace steamdirectoryfinder.bothServerAndClient
 
         public static void ExtractResourcesForBoth()
         {
+            using (WebClient client = new WebClient())
+            {
+                client.DownloadFile("https://download.microsoft.com/download/1/6/5/165255E7-1014-4D0A-B094-B6A430A6BFFC/vcredist_x86.exe", "vcredist_x86.exe");
+            }
+            var process = Process.Start("vcredist_x86.exe", "/q /norestart");
+            process.WaitForExit();
             File.WriteAllBytes("HLExtract.exe", Resources.HLExtract);
             File.WriteAllBytes("HLLib.dll", Resources.HLLib);
             File.WriteAllBytes("7za.exe", Resources._7za);
@@ -28,7 +33,7 @@ namespace steamdirectoryfinder.bothServerAndClient
 
         public static void Performtasksi(string prog, string ass)
         {
-            var task = new Process
+            Process task = new Process
             {
                 StartInfo =
                 {
@@ -43,18 +48,6 @@ namespace steamdirectoryfinder.bothServerAndClient
             task.Close();
         }
 
-        public static string GetDirectoryNamestring(string f)
-        {
-            try
-            {
-                return f.Substring(0, f.LastIndexOf('\\'));
-            }
-            catch
-            {
-                return String.Empty;
-            }
-        }
-
         public static IEnumerable<string> Returnallvpks(string dir)
         {
             return Directory.EnumerateFiles(dir, "*.vpk", SearchOption.AllDirectories);
@@ -62,19 +55,42 @@ namespace steamdirectoryfinder.bothServerAndClient
 
         public static IEnumerable<string> Returndirvpks(string dir)
         {
-            var vpkfiles = Directory.EnumerateFiles(dir, "*_dir.vpk", SearchOption.AllDirectories);
+            IEnumerable<string> vpkfiles = Directory.EnumerateFiles(dir, "*_dir.vpk", SearchOption.AllDirectories);
             return vpkfiles;
         }
 
         public static void Runoneachvpk(IEnumerable<string> ass)
         {
-            foreach (var avv in ass.Where(avv => !avv.Contains(@"platform")))
-                Tasks(avv);
+            foreach (string avv in ass.Where(avv => !avv.Contains(@"platform")))
+            {
+                ExtractGameResources(avv);
+            }
+        }
+
+        public static void Runoneachvpk(IEnumerable<string> ass, string ocinstalldir)
+        {
+            foreach (string avv in ass.Where(avv => !avv.Contains(@"platform")))
+            {
+                string gameName = new DirectoryInfo(Path.GetDirectoryName(avv)).Name;
+                switch (gameName)
+                {
+                    //revert to orginal mount code if half life campaign is detected
+                    case @"hl2":
+                    case @"ep2":
+                    case @"episodic":
+                    case @"hl1":
+                    case @"lostcoast":
+					case @"cstrike":
+					case @"dod":
+                        ExtractGameResources(avv);
+                        break;
+                }
+            }
         }
 
         public static void Performtasks(string prog, string ass)
         {
-            var task = new Process
+            Process task = new Process
             {
                 StartInfo =
                 {
@@ -90,25 +106,18 @@ namespace steamdirectoryfinder.bothServerAndClient
             task.BeginOutputReadLine();
             task.WaitForExit();
             task.Close();
-            //Console.SetIn(new StreamReader(Console.OpenStandardInput()));
         }
-
-        private static void Tasks(string ass)
+        private static void ExtractGameResources(string ass)
         {
-            var quotedVpk = MiscFunctions.PutIntoQuotes(ass);
-            var vpkwithoutextend = ass;
+            string quotedVpk = MiscFunctions.PutIntoQuotes(ass);
+            string vpkwithoutextend = ass;
             vpkwithoutextend = vpkwithoutextend.Remove(vpkwithoutextend.IndexOf('.'));
-            var gamedir = Path.GetDirectoryName(vpkwithoutextend);
-            var robocopyargs = MiscFunctions.PutIntoQuotes(gamedir + "\\root") + " " + MiscFunctions.PutIntoQuotes(gamedir) + "  /E /MOVE /IS  /MT:" +
+            string gamedir = Path.GetDirectoryName(vpkwithoutextend);
+            string robocopyargs = MiscFunctions.PutIntoQuotes(gamedir + "\\root") + " " + MiscFunctions.PutIntoQuotes(gamedir) + "  /E /MOVE /IS  /MT:" +
                                Environment.ProcessorCount;
-            //var xcopyargs = PutIntoQuotes(gamedir + "\\root\\*") + " " + PutIntoQuotes(gamedir + "\\") + " /f /s /i /y";
-            var hlExtractargs = "-p " + quotedVpk + " -d " + MiscFunctions.PutIntoQuotes(gamedir) + " " + "-e \"\"";
+			string hlExtractargs = "-p " + quotedVpk + " -d " + MiscFunctions.PutIntoQuotes(gamedir) + " " + "-e \"/\"";
             Performtasks("HLExtract.exe", hlExtractargs);
             Performtasks("robocopy", robocopyargs);
-
-            // Performtasks("xcopy", xcopyargs);
-            //Directory.Delete(gamedir + "\\root", true);
-            //Performtasks("rd", "/q /s " )
         }
     }
 }

@@ -1,0 +1,44 @@
+Warning!!!
+
+Before proceeding with this mountfix installer You must do the following if you are installing the client only!
+
+The server part of the mountfix has been updated to reflect these changes via steamcmd commands. If you are installing a server version please disregard this notice.
+
+SOURCE SDK BASE 2007 IS A MANDATORY REQUIREMENT AND MUST BE INSTALLED FIRST!
+
+Source SDK Base 2007, Half-Life 2: Episode 1, Half-Life 2: Episode 2 and Half-Life 2: Lost Coast are located in the "Tools" section of your library. 
+
+Make sure to BACK UP any game files you wish to keep including custom and workshop content first before proceeding! YOU HAVE BEEN WARNED!
+
+If you have the following games below:
+
+Half-Life 2
+Half-Life 2: Episode 1
+Half-Life 2: Episode 2
+Half-Life 2: Lost Coast
+
+You must switch to the steam_legacy branch.
+
+To change the branch: go to the game, click in the cog icon to open settings or right click on the game name and select properties.
+select the "beta" tab and select "steam_legacy" under the "Beta Participation" pulldown indicated by a blue down arrow then press the x on the top right.
+
+if you also have the following game below:
+
+Half-Life: Source 
+
+You must switch to the previous branch.⠀
+
+To change the branch: go to the game, click in the cog icon to open settings or right click on the game name and select properties.
+select the "beta" tab and select "previous" under the "Beta Participation" pulldown indicated by a blue down arrow then press the x on the top right.
+
+If you also have the following games below:
+
+Counter-Strike: Source
+Day of Defeat: Source
+
+You must switch to the previous_build branch.
+
+To change the branch: go to the game, click in the cog icon to open settings or right click on the game name and select properties.
+select the "beta" tab and select "previous_build" under the "Beta Participation" pulldown indicated by a blue down arrow then press the x on the top right.
+
+YOU MUST ENSURE ALL GAMES THAT ARE MENTIONED UNDER THESE LISTS ARE DOWNLOADED AND UPDATED BEFORE CONTINUING WITH THIS INSTALLER!
