@@ -33,7 +33,6 @@ namespace steamdirectoryfinder.serverpart.code
             ServerStuff.DownloadSourcemod();
             ServerStuff.DownloadMetamod();
             ServerStuff.DownloadSteamcmd();
-            ServerStuff.DownloadSteamcmd();
             ServerStuff.ExtractServerResources(_ocServerInstallPath);
             ServerStuff.CheckifDirectoryexistsorcreateit(_ocServerInstallPath);
             ServerStuff.InstallServer(_username, _password, _mainFolder, _steamauth, _mounts);
