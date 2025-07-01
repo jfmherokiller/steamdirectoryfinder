@@ -16,6 +16,7 @@ namespace steamdirectoryfinder
             {
                 Directory.CreateDirectory(ass);
             }
+
             DirectoryInfo d = new DirectoryInfo(ass);
             if (d.Parent == null)
             {
@@ -28,11 +29,13 @@ namespace steamdirectoryfinder
                 {
                     return ass + "\\obsidian";
                 }
+
                 if (ass.EndsWith("obsidian"))
                 {
                     return ass;
                 }
             }
+
             return ass + "\\obsidian";
         }
 
@@ -47,86 +50,97 @@ namespace steamdirectoryfinder
             }
         }
 
+
         private static void SelectArgOptions(string[] args)
         {
             if (args.Length == 0)
             {
                 OpenMenuIfnocmdArguments();
+                return;
             }
-            else if (args[0].ToLower().Contains(@"-help"))
+
+            string mainCommand = args[0].ToLower();
+
+            if (mainCommand.Contains("-help"))
             {
                 Console.WriteLine(@"Usage!");
                 Console.WriteLine(@"-server ""<serverdirectory\obsidian>"" <username> <password>");
                 Console.WriteLine(@"-client");
+                return;
             }
-            else if (args[0].ToLower().Contains(@"-client"))
+
+            if (mainCommand.Contains("-client"))
             {
-                switch (args.Length)
-                {
-                    case 2 when (args[1] == "-y"):
-                        BothWays.ClientNohook("-y");
-                        break;
-                    case 3:
-                        BothWays.ClientNohook("-n", args[2]);
-                        break;
-                    default:
-                        BothWays.ClientNohook();
-                        break;
-                }
+                HandleClientArgs(args);
+                return;
             }
-            else if (args[0].ToLower().Contains(@"-server"))
+
+            if (mainCommand.Contains("-server"))
             {
-                string fun = null;
-                if (args.Length > 1)
-                {
-                    fun = args[1];
-                    fun = Checkforrootpath(fun);
-                }
-                else
-                {
-                    MessageBox.Show(@"Please create the server directory then rerun the mountfix");
-                    Environment.Exit(1);
-                }
-                switch (args.Length)
-                {
-                    case 2:
-                        fun = fun.Trim('"');
-                        fun = NativeMethods.Otherstuff.GetShortPathName(fun);
-                        Server(fun);
-                        break;
+                HandleServerArgs(args);
+            }
+        }
 
-                    case 4:
-                        {
-                            fun = fun.Trim('"');
-                            fun = NativeMethods.Otherstuff.GetShortPathName(fun);
-                            Server(fun, args[2], args[3]);
-                        }
-                        break;
+        private static void HandleClientArgs(string[] args)
+        {
+            switch (args.Length)
+            {
+                case 2 when (args[1] == "-y"):
+                    BothWays.ClientNohook("-y");
+                    break;
+                case 3:
+                    BothWays.ClientNohook("-n", args[2]);
+                    break;
+                default:
+                    BothWays.ClientNohook();
+                    break;
+            }
+        }
 
-                    case 5:
-                        {
-                            fun = fun.Trim('"');
-                            fun = NativeMethods.Otherstuff.GetShortPathName(fun);
-                            //handle steamauth here
-                            if (args[4].Contains(@"-steamauth"))
-                            {
-                                Server(fun, args[2], args[3], true);
-                            }
-                            else
-                            {
-                                Server(fun, args[2], args[3], false, args[4]);
-                            }
-                        }
-                        break;
+        private static void HandleServerArgs(string[] args)
+        {
+            if (args.Length <= 1)
+            {
+                MessageBox.Show(@"Please create the server directory then rerun the mountfix");
+                Environment.Exit(1);
+                return;
+            }
 
-                    case 6:
-                        {
-                            fun = fun.Trim('"');
-                            fun = NativeMethods.Otherstuff.GetShortPathName(fun);
-                            Server(fun, args[2], args[3], true, args[5]);
-                        }
-                        break;
-                }
+            string fun = Checkforrootpath(args[1]);
+
+            switch (args.Length)
+            {
+                case 2:
+                    fun = fun.Trim('"');
+                    fun = NativeMethods.Otherstuff.GetShortPathName(fun);
+                    Server(fun);
+                    break;
+
+                case 4:
+                    fun = fun.Trim('"');
+                    fun = NativeMethods.Otherstuff.GetShortPathName(fun);
+                    Server(fun, args[2], args[3]);
+                    break;
+
+                case 5:
+                    fun = fun.Trim('"');
+                    fun = NativeMethods.Otherstuff.GetShortPathName(fun);
+                    if (args[4].Contains("-steamauth"))
+                    {
+                        Server(fun, args[2], args[3], true);
+                    }
+                    else
+                    {
+                        Server(fun, args[2], args[3], false, args[4]);
+                    }
+
+                    break;
+
+                case 6:
+                    fun = fun.Trim('"');
+                    fun = NativeMethods.Otherstuff.GetShortPathName(fun);
+                    Server(fun, args[2], args[3], true, args[5]);
+                    break;
             }
         }
 
@@ -136,12 +150,15 @@ namespace steamdirectoryfinder
             {
                 Console.WriteLine(@"Source SDK 2007 Mountfix Tool for Obsidian Conflict");
                 Console.WriteLine(@" ");
-                Console.WriteLine(@"Notice: For client mode please follow the instructions at the following link first before proceeding.");
+                Console.WriteLine(
+                    @"Notice: For client mode please follow the instructions at the following link first before proceeding.");
                 Console.WriteLine(@" ");
                 Console.WriteLine(@"https://github.com/RSDNTWK/steamdirectoryfinder/blob/master/install.txt");
                 Console.WriteLine(@" ");
-                Console.WriteLine(@"If you have followed the steps and wish to continue type 'client' without ' and press enter.");
-                Console.WriteLine(@"For server mode you can continue by typing 'server' without ' and press enter to proceed the next steps.");
+                Console.WriteLine(
+                    @"If you have followed the steps and wish to continue type 'client' without ' and press enter.");
+                Console.WriteLine(
+                    @"For server mode you can continue by typing 'server' without ' and press enter to proceed the next steps.");
                 Console.WriteLine(@" ");
                 Console.WriteLine(@"Please specify if you are using a client or server:");
                 string output = Console.ReadLine();
@@ -149,10 +166,12 @@ namespace steamdirectoryfinder
                 {
                     return true;
                 }
+
                 if (output != null && output.ToLower() == @"server")
                 {
                     return false;
                 }
+
                 Console.WriteLine(@"Error server or client not found");
             }
         }
@@ -193,6 +212,7 @@ namespace steamdirectoryfinder
                 {
                     input = MiscFunctions.PutIntoQuotes(input);
                 }
+
                 Console.WriteLine(input);
                 Console.ReadLine();
                 new ServerFormStuffs().OpenServerForm(input);
@@ -221,7 +241,7 @@ namespace steamdirectoryfinder
 
         private static void Shutdown(object sender, EventArgs a)
         {
-			MiscFunctions.DeleteFile(@"vcredist_x86.exe");
+            MiscFunctions.DeleteFile(@"vcredist_x86.exe");
             MiscFunctions.DeleteFile(@"HLExtract.exe");
             MiscFunctions.DeleteFile(@"HLLib.dll");
             MiscFunctions.DeleteFile(@"7za.exe");
