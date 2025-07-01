@@ -5,15 +5,6 @@ namespace steamdirectoryfinder
 {
     public static class MiscFunctions
     {
-        public static void PlaySong()
-        {
-            string tehfile = Path.GetTempFileName();
-            File.WriteAllBytes(tehfile, Resources.windows);
-            NativeMethods.Mp3Play.Open(tehfile);
-            NativeMethods.Mp3Play.Play(true);
-            File.Delete(tehfile);
-        }
-
         public static string PutIntoQuotes(string value)
         {
             return "\"" + value + "\"";
