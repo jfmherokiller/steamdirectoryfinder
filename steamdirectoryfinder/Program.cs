@@ -61,17 +61,17 @@ namespace steamdirectoryfinder
             }
             else if (args[0].ToLower().Contains(@"-client"))
             {
-                if ((args.Length == 2) && (args[1] == "-y"))
+                switch (args.Length)
                 {
-                    BothWays.ClientNohook("-y");
-                }
-                else if (args.Length == 3)
-                {
-                    BothWays.ClientNohook("-n", args[2]);
-                }
-                else
-                {
-                    BothWays.ClientNohook();
+                    case 2 when (args[1] == "-y"):
+                        BothWays.ClientNohook("-y");
+                        break;
+                    case 3:
+                        BothWays.ClientNohook("-n", args[2]);
+                        break;
+                    default:
+                        BothWays.ClientNohook();
+                        break;
                 }
             }
             else if (args[0].ToLower().Contains(@"-server"))
@@ -107,6 +107,7 @@ namespace steamdirectoryfinder
                         {
                             fun = fun.Trim('"');
                             fun = NativeMethods.Otherstuff.GetShortPathName(fun);
+                            //handle steamauth here
                             if (args[4].Contains(@"-steamauth"))
                             {
                                 Server(fun, args[2], args[3], true);

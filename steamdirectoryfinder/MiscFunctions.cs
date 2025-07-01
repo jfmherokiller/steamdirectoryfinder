@@ -5,10 +5,7 @@ namespace steamdirectoryfinder
 {
     public static class MiscFunctions
     {
-        public static string PutIntoQuotes(string value)
-        {
-            return "\"" + value + "\"";
-        }
+        public static string PutIntoQuotes(string value) => $"\"{value}\"";
 
         public static void DeleteDir(string fun)
         {
