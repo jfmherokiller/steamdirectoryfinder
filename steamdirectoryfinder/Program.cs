@@ -153,11 +153,6 @@ namespace steamdirectoryfinder
                 {
                     return false;
                 }
-                if (output != null && output.ToLower() == @"fun")
-                {
-                    MiscFunctions.PlaySong();
-                    continue;
-                }
                 Console.WriteLine(@"Error server or client not found");
             }
         }
