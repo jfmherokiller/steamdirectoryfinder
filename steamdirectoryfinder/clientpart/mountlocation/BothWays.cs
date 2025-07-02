@@ -11,41 +11,19 @@ namespace steamdirectoryfinder.clientpart.mountlocation
 {
     internal static class BothWays
     {
-        private static List<string> OpenClientFormOrCheckForCommandLineMounts(string fun, List<string> mounts, string imounts)
-        {
-            if (fun == "-y")
-            {
-                using (Client_Configuration myform = new Client_Configuration())
-                {
-                    DialogResult formresults = myform.ShowDialog();
-                    mounts = myform.Mounts;
-                }
-            }
-            if (imounts != "")
-            {
-                mounts = imounts.Split(',').ToList();
-            }
-            return mounts;
-        }
-
         public static void ClientNohook(string fun = "-n", string imounts = "")
         {
-            List<string> mounts = new List<string>();
             string sourcesdk2007Installdir = "";
             string ocinstalldir = "";
             ClientAndServer.ExtractResourcesForBoth();
-            mounts = OpenClientFormOrCheckForCommandLineMounts(fun, mounts, imounts);
-            if (mounts == null)
-            {
-                mounts = new List<string>();
-            }
-            Tuple<string, string, List<string>> ocAnd2007AndLocations = NewWay.NewWayStart(mounts);
+            
+            Tuple<string, string, List<string>> ocAnd2007AndLocations = NewWay.NewWayStart();
             if (ocAnd2007AndLocations != null)
             {
             }
             if (ocAnd2007AndLocations == null || (ocAnd2007AndLocations.Item1 == "" | ocAnd2007AndLocations.Item2 == "" | ocAnd2007AndLocations.Item3.Count == 0))
             {
-                ocAnd2007AndLocations = OldWay.oldwaysetup(mounts);
+                ocAnd2007AndLocations = OldWay.oldwaysetup();
             }
 
             if (ocAnd2007AndLocations != null)
