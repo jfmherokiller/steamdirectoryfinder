@@ -124,7 +124,7 @@ namespace steamdirectoryfinder.serverpart.code
 
             // var words = resourceData.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).ToList();
 
-            string[] items = resourceData.Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] items = resourceData.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
             Parallel.ForEach(items, lines =>
             {
                 string fun = Path.Combine(theserverfolder, lines);
@@ -153,9 +153,9 @@ namespace steamdirectoryfinder.serverpart.code
             string vstdlib_ssrc = @"steamcmd\vstdlib_s.dll";
             string vstdlib_sdes = theserverfolder + "\\vstdlib_s.dll";
             File.Copy(steamdllsrc, steamdlldes);
-            System.IO.File.Copy(steamclientsrc, steamclientdes);
-            System.IO.File.Copy(tier0_ssrc, tier0_sdes);
-            System.IO.File.Copy(vstdlib_ssrc, vstdlib_sdes);
+            File.Copy(steamclientsrc, steamclientdes);
+            File.Copy(tier0_ssrc, tier0_sdes);
+            File.Copy(vstdlib_ssrc, vstdlib_sdes);
         }
 
         public static void ExtractServerResources(string ass)
