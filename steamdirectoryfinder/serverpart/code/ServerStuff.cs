@@ -4,7 +4,6 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -153,7 +152,7 @@ namespace steamdirectoryfinder.serverpart.code
             string tier0_sdes = theserverfolder + "\\tier0_s.dll";
             string vstdlib_ssrc = @"steamcmd\vstdlib_s.dll";
             string vstdlib_sdes = theserverfolder + "\\vstdlib_s.dll";
-            System.IO.File.Copy(steamdllsrc, steamdlldes);
+            File.Copy(steamdllsrc, steamdlldes);
             System.IO.File.Copy(steamclientsrc, steamclientdes);
             System.IO.File.Copy(tier0_ssrc, tier0_sdes);
             System.IO.File.Copy(vstdlib_ssrc, vstdlib_sdes);
@@ -240,100 +239,83 @@ namespace steamdirectoryfinder.serverpart.code
                 return 0;
             }
 
-            string[] fuckme = mounts.Split(',');
             string SteamcmdCleanup = Path.Combine(InstallerContext.ServerDirectory, "steamapps");
             string hl2FolderPathForCleanup = Path.Combine(InstallerContext.ServerDirectory, "hl2");
             string tempHl2FolderPathForCleanup = Path.Combine(InstallerContext.ServerDirectory, "temp_hl2");
+            
+            //handle hl2 mount
+            ClientAndServer.Performtasksi(steamcmdbase, basecmd + "220 -beta steam_legacy" + endofcmd);
 
-            if (!fuckme[0].Contains("1"))
+            // Delete Steamapps folder after every download to allow proper verification of each download
+            if (Directory.Exists(SteamcmdCleanup))
             {
-                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "220 -beta steam_legacy" + endofcmd);
-
-                // Delete Steamapps folder after every download to allow proper verification of each download
-                if (Directory.Exists(SteamcmdCleanup))
-                {
-                    Directory.Delete(SteamcmdCleanup, true);
-                }
-
-                // Rename the hl2 folder after the first download (appid 220)
-                if (Directory.Exists(hl2FolderPathForCleanup))
-                {
-                    Directory.Move(hl2FolderPathForCleanup, tempHl2FolderPathForCleanup);
-                }
+                Directory.Delete(SteamcmdCleanup, true);
             }
-            if (!fuckme[1].Contains("1"))
-            {
-                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "380 -beta steam_legacy" + endofcmd);
 
-                // Delete Steamapps folder after every download to allow proper verification of each download
-                if (Directory.Exists(SteamcmdCleanup))
-                {
-                    Directory.Delete(SteamcmdCleanup, true);
-                }
+            // Rename the hl2 folder after the first download (appid 220)
+            if (Directory.Exists(hl2FolderPathForCleanup))
+            {
+                Directory.Move(hl2FolderPathForCleanup, tempHl2FolderPathForCleanup);
             }
-            if (!fuckme[2].Contains("1"))
-            {
-                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "340 -beta steam_legacy" + endofcmd);
+            //handle ep1 mount
+            ClientAndServer.Performtasksi(steamcmdbase, basecmd + "380 -beta steam_legacy" + endofcmd);
 
-                // Delete Steamapps folder after every download to allow proper verification of each download
-                if (Directory.Exists(SteamcmdCleanup))
-                {
-                    Directory.Delete(SteamcmdCleanup, true);
-                }
+            // Delete Steamapps folder after every download to allow proper verification of each download
+            if (Directory.Exists(SteamcmdCleanup))
+            {
+                Directory.Delete(SteamcmdCleanup, true);
             }
-            if (!fuckme[3].Contains("1"))
-            {
-                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "420 -beta steam_legacy" + endofcmd);
+            //handle lostcoast mount
+            ClientAndServer.Performtasksi(steamcmdbase, basecmd + "340 -beta steam_legacy" + endofcmd);
 
-                // Delete Steamapps folder after every download to allow proper verification of each download
-                if (Directory.Exists(SteamcmdCleanup))
-                {
-                    Directory.Delete(SteamcmdCleanup, true);
-                }
+            // Delete Steamapps folder after every download to allow proper verification of each download
+            if (Directory.Exists(SteamcmdCleanup))
+            {
+                Directory.Delete(SteamcmdCleanup, true);
             }
-            if (!fuckme[4].Contains("1"))
-            {
-                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "280 -beta previous" + endofcmd);
+            //handle ep2 mount
+            ClientAndServer.Performtasksi(steamcmdbase, basecmd + "420 -beta steam_legacy" + endofcmd);
 
-                // Delete Steamapps folder after every download to allow proper verification of each download
-                if (Directory.Exists(SteamcmdCleanup))
-                {
-                    Directory.Delete(SteamcmdCleanup, true);
-                }
+            // Delete Steamapps folder after every download to allow proper verification of each download
+            if (Directory.Exists(SteamcmdCleanup))
+            {
+                Directory.Delete(SteamcmdCleanup, true);
             }
-            if (!fuckme[5].Contains("1"))
-            {
-                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "240 -beta previous_build" + endofcmd);
+            //handle hl1 mount
+            ClientAndServer.Performtasksi(steamcmdbase, basecmd + "280 -beta previous" + endofcmd);
 
-                // Delete Steamapps folder after every download to allow proper verification of each download
-                if (Directory.Exists(SteamcmdCleanup))
-                {
-                    Directory.Delete(SteamcmdCleanup, true);
-                }
+            // Delete Steamapps folder after every download to allow proper verification of each download
+            if (Directory.Exists(SteamcmdCleanup))
+            {
+                Directory.Delete(SteamcmdCleanup, true);
             }
-            if (!fuckme[6].Contains("1"))
-            {
-                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "300 -beta previous_build" + endofcmd);
+            //handle css mount
+            ClientAndServer.Performtasksi(steamcmdbase, basecmd + "240 -beta previous_build" + endofcmd);
 
-                // Delete Steamapps folder after every download to allow proper verification of each download
-                if (Directory.Exists(SteamcmdCleanup))
-                {
-                    Directory.Delete(SteamcmdCleanup, true);
-                }
+            // Delete Steamapps folder after every download to allow proper verification of each download
+            if (Directory.Exists(SteamcmdCleanup))
+            {
+                Directory.Delete(SteamcmdCleanup, true);
             }
-            if (true)
-            {
-                ClientAndServer.Performtasksi(steamcmdbase, basecmd + "310" + endofcmd);
+            //handle dod mount
+            ClientAndServer.Performtasksi(steamcmdbase, basecmd + "300 -beta previous_build" + endofcmd);
 
-                // Delete the newly created hl2 folder and rename the temp_hl2 folder back to hl2 after the last download (appid 310)
-                if (Directory.Exists(hl2FolderPathForCleanup))
-                {
-                    Directory.Delete(hl2FolderPathForCleanup, true);
-                }
-                if (Directory.Exists(tempHl2FolderPathForCleanup))
-                {
-                    Directory.Move(tempHl2FolderPathForCleanup, hl2FolderPathForCleanup);
-                }
+            // Delete Steamapps folder after every download to allow proper verification of each download
+            if (Directory.Exists(SteamcmdCleanup))
+            {
+                Directory.Delete(SteamcmdCleanup, true);
+            }
+            //handle 2007 server content
+            ClientAndServer.Performtasksi(steamcmdbase, basecmd + "310" + endofcmd);
+
+            // Delete the newly created hl2 folder and rename the temp_hl2 folder back to hl2 after the last download (appid 310)
+            if (Directory.Exists(hl2FolderPathForCleanup))
+            {
+                Directory.Delete(hl2FolderPathForCleanup, true);
+            }
+            if (Directory.Exists(tempHl2FolderPathForCleanup))
+            {
+                Directory.Move(tempHl2FolderPathForCleanup, hl2FolderPathForCleanup);
             }
             return 1;
         }
