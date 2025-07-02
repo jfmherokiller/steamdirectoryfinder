@@ -83,18 +83,7 @@ namespace steamdirectoryfinder
 
         private static void HandleClientArgs(string[] args)
         {
-            switch (args.Length)
-            {
-                case 2 when (args[1] == "-y"):
-                    BothWays.ClientNohook("-y");
-                    break;
-                case 3:
-                    BothWays.ClientNohook("-n", args[2]);
-                    break;
-                default:
-                    BothWays.ClientNohook();
-                    break;
-            }
+            BothWays.ClientNohook("-y");
         }
 
         private static void HandleServerArgs(string[] args)
