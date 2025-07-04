@@ -13,7 +13,6 @@ namespace steamdirectoryfinder.serverpart.code
     {
         private static string _mainFolder;
         private static string _ocServerInstallPath;
-        private static string _mounts;
         private static string _password;
         private static string _username;
 
@@ -33,17 +32,16 @@ namespace steamdirectoryfinder.serverpart.code
             ServerStuff.DownloadSteamcmd();
             ServerStuff.ExtractServerResources(_ocServerInstallPath);
             ServerStuff.CheckifDirectoryexistsorcreateit(_ocServerInstallPath);
-            ServerStuff.InstallServer(_username, _password, _mainFolder, _mounts);
+            ServerStuff.InstallServer(_username, _password, _mainFolder);
 
             ServerStuff.ExtractAndDelete(_mainFolder);
             ServerStuff.CreateNeededFiles(_mainFolder);
         }
 
-        public void SetStuff(string mainfolder, string ocinstall, string mounts, string password, string username)
+        public void SetStuff(string mainfolder, string ocinstall, string password, string username)
         {
             _mainFolder = mainfolder;
             _ocServerInstallPath = ocinstall;
-            _mounts = mounts;
             _password = password;
             _username = username;
         }
@@ -53,7 +51,6 @@ namespace steamdirectoryfinder.serverpart.code
     {
         private static string _mainFolder;
         private static string _ocServerInstallPath;
-        private readonly string _mounts;
         private readonly string _password;
         private readonly string _username;
 
@@ -62,13 +59,12 @@ namespace steamdirectoryfinder.serverpart.code
             public static string ServerDirectory { get; set; }
         }
 
-        public ServerStuff(string path, string username, string password, string mounts = "")
+        public ServerStuff(string path, string username, string password)
         {
             _ocServerInstallPath = path;
             _mainFolder = Directory.GetParent(path.TrimEnd('\\')).ToString();
             _username = username;
             _password = password;
-            _mounts = mounts;
         }
 
         public static void CheckifDirectoryexistsorcreateit(string fun)
@@ -166,8 +162,7 @@ namespace steamdirectoryfinder.serverpart.code
             ClientAndServer.Performtasks("7za.exe", "x addons.zip -o" + MiscFunctions.PutIntoQuotes(ass) + " -aoa");
         }
 
-        public static void InstallServer(string username, string password, string serverdirectory,
-            string mounts = "")
+        public static void InstallServer(string username, string password, string serverdirectory)
         {
             foreach (Process fub in Process.GetProcessesByName("steamcmd.exe"))
             {
@@ -187,7 +182,7 @@ namespace steamdirectoryfinder.serverpart.code
             CheckifDirectoryexistsorcreateit(Directory.GetCurrentDirectory() + "\\steamcmd");
             DownloadSteamcmd();
             ExtractServerResources(_ocServerInstallPath);
-            InstallServer(_username, _password, _mainFolder, _mounts);
+            InstallServer(_username, _password, _mainFolder);
             ExtractAndDelete(_mainFolder);
             CreateNeededFiles(_mainFolder);
         }

@@ -110,19 +110,9 @@ namespace steamdirectoryfinder
                     fun = NativeMethods.Otherstuff.GetShortPathName(fun);
                     Server(fun, args[2], args[3]);
                     break;
-
-                case 5:
-                    fun = fun.Trim('"');
-                    fun = NativeMethods.Otherstuff.GetShortPathName(fun);
-                    Server(fun, args[2], args[3], false, args[4]);
-                    
-
-                    break;
-
-                case 6:
-                    fun = fun.Trim('"');
-                    fun = NativeMethods.Otherstuff.GetShortPathName(fun);
-                    Server(fun, args[2], args[3], true, args[5]);
+                default:
+                    MessageBox.Show(@"Please provide the correct amount of arguments");
+                    Application.Exit();
                     break;
             }
         }
@@ -180,8 +170,7 @@ namespace steamdirectoryfinder
             Console.Title = @"Mountfix Tool for Obsidian Conflict 0.1.3.5";
         }
 
-        private static void Server(string installpath, string username = "", string password = "",
-            bool steamauth = false, string mounts = "")
+        private static void Server(string installpath, string username = "", string password = "")
         {
             if (installpath != null & username == "" & password == "")
             {
@@ -200,14 +189,9 @@ namespace steamdirectoryfinder
                 Console.ReadLine();
                 new ServerFormStuffs().OpenServerForm(input);
             }
-            else if (username != null & password != null & mounts == "")
+            else if (username != null & password != null)
             {
                 ServerStuff fun = new ServerStuff(installpath, username, password);
-                fun.RunFun();
-            }
-            else if (username != "" & password != "" & mounts != "")
-            {
-                ServerStuff fun = new ServerStuff(installpath, username, password, mounts);
                 fun.RunFun();
             }
         }
