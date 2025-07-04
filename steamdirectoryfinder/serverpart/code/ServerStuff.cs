@@ -178,10 +178,6 @@ namespace steamdirectoryfinder.serverpart.code
                           " +app_update ";
             string currentdir = Directory.GetCurrentDirectory();
             string steamcmdbase = Path.Combine(currentdir, "steamcmd\\steamcmd.exe");
-            //get auth token
-            ClientAndServer.Performtasksi(steamcmdbase, " +login " + username + " " + password + " +quit");
-            Thread.Sleep(5000);
-
             InstallMounts( steamcmdbase, basecmd, endofcmd);
         }
 
