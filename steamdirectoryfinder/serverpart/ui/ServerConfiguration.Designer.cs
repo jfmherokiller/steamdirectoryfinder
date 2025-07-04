@@ -37,7 +37,6 @@ namespace steamdirectoryfinder
             this.button1 = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.SteamAuth = new System.Windows.Forms.RadioButton();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.hl2 = new System.Windows.Forms.CheckBox();
             this.hl1 = new System.Windows.Forms.CheckBox();
@@ -135,7 +134,6 @@ namespace steamdirectoryfinder
         private Button button1;
         private Label label2;
         private Label label3;
-        private RadioButton SteamAuth;
         private GroupBox groupBox1;
         private CheckBox ep1;
         private CheckBox lostcoast;
