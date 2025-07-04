@@ -91,12 +91,6 @@
     <Compile Include="clientpart\mountlocation\BothWays.cs" />
     <Compile Include="clientpart\mountlocation\OldWay.cs" />
     <Compile Include="clientpart\mountlocation\NewWay.cs" />
-    <Compile Include="clientpart\ui\Client Configuration.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="clientpart\ui\Client Configuration.Designer.cs">
-      <DependentUpon>Client Configuration.cs</DependentUpon>
-    </Compile>
     <Compile Include="MiscFunctions.cs" />
     <Compile Include="NativeMethods.cs" />
     <Compile Include="ConsoleCopy.cs" />
@@ -131,9 +125,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="clientpart\ui\Client Configuration.resx">
-      <DependentUpon>Client Configuration.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

@@ -107,7 +107,8 @@ namespace steamdirectoryfinder.Properties {
         ///bin\check_sdk_env.bat
         ///bin\chromehtml.dll
         ///bin\CmdSeq.wc
-        ///bin\cst [rest of string was truncated]&quot;;.
+        ///bin\cstrike.fgd
+        ///bin\datamodel.dll [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string delete {
             get {
@@ -142,7 +143,8 @@ namespace steamdirectoryfinder.Properties {
         ///bin\check_sdk_env.bat
         ///bin\chromehtml.dll
         ///bin\CmdSeq.wc
-        ///bin\cst [rest of string was truncated]&quot;;.
+        ///bin\cstrike.fgd
+        ///bin\datamodel.dll [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string files_to_delete_1_ {
             get {
