@@ -235,7 +235,7 @@ namespace steamdirectoryfinder.serverpart.code
             string hl2FolderPathForCleanup = Path.Combine(InstallerContext.ServerDirectory, "hl2");
             string tempHl2FolderPathForCleanup = Path.Combine(InstallerContext.ServerDirectory, "temp_hl2");
             
-            //handle hl2 mount
+            //handle hl2+ep1+ep2+lostcoast mount
             ClientAndServer.Performtasksi(steamcmdbase, basecmd + "220 -beta steam_legacy" + endofcmd);
 
             // Delete Steamapps folder after every download to allow proper verification of each download
@@ -249,30 +249,7 @@ namespace steamdirectoryfinder.serverpart.code
             {
                 Directory.Move(hl2FolderPathForCleanup, tempHl2FolderPathForCleanup);
             }
-            //handle ep1 mount
-            ClientAndServer.Performtasksi(steamcmdbase, basecmd + "380 -beta steam_legacy" + endofcmd);
 
-            // Delete Steamapps folder after every download to allow proper verification of each download
-            if (Directory.Exists(SteamcmdCleanup))
-            {
-                Directory.Delete(SteamcmdCleanup, true);
-            }
-            //handle lostcoast mount
-            ClientAndServer.Performtasksi(steamcmdbase, basecmd + "340 -beta steam_legacy" + endofcmd);
-
-            // Delete Steamapps folder after every download to allow proper verification of each download
-            if (Directory.Exists(SteamcmdCleanup))
-            {
-                Directory.Delete(SteamcmdCleanup, true);
-            }
-            //handle ep2 mount
-            ClientAndServer.Performtasksi(steamcmdbase, basecmd + "420 -beta steam_legacy" + endofcmd);
-
-            // Delete Steamapps folder after every download to allow proper verification of each download
-            if (Directory.Exists(SteamcmdCleanup))
-            {
-                Directory.Delete(SteamcmdCleanup, true);
-            }
             //handle hl1 mount
             ClientAndServer.Performtasksi(steamcmdbase, basecmd + "280 -beta previous" + endofcmd);
 
@@ -281,6 +258,7 @@ namespace steamdirectoryfinder.serverpart.code
             {
                 Directory.Delete(SteamcmdCleanup, true);
             }
+
             //handle css mount
             ClientAndServer.Performtasksi(steamcmdbase, basecmd + "240 -beta previous_build" + endofcmd);
 
@@ -289,6 +267,7 @@ namespace steamdirectoryfinder.serverpart.code
             {
                 Directory.Delete(SteamcmdCleanup, true);
             }
+
             //handle dod mount
             ClientAndServer.Performtasksi(steamcmdbase, basecmd + "300 -beta previous_build" + endofcmd);
 
@@ -297,6 +276,7 @@ namespace steamdirectoryfinder.serverpart.code
             {
                 Directory.Delete(SteamcmdCleanup, true);
             }
+
             //handle 2007 server content
             ClientAndServer.Performtasksi(steamcmdbase, basecmd + "310" + endofcmd);
 
