@@ -56,7 +56,7 @@ namespace steamdirectoryfinder
             this.label1.Size = new System.Drawing.Size(134, 20);
             this.label1.TabIndex = 0;
             this.label1.Text = "Steam Username";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
+            this.label1.Click += new System.EventHandler(this.Label1_Click);
             // 
             // textBox1
             // 
@@ -84,7 +84,7 @@ namespace steamdirectoryfinder
             this.button1.TabIndex = 3;
             this.button1.Text = "Install server";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click_1);
+            this.button1.Click += new System.EventHandler(this.Button1_Click_1);
             // 
             // label2
             // 
