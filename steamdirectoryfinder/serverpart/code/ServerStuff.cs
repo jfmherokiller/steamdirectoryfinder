@@ -15,7 +15,6 @@ namespace steamdirectoryfinder.serverpart.code
         private static string _ocServerInstallPath;
         private static string _mounts;
         private static string _password;
-        private static bool _steamauth;
         private static string _username;
 
         public void OpenServerForm(string installpath)
@@ -34,19 +33,18 @@ namespace steamdirectoryfinder.serverpart.code
             ServerStuff.DownloadSteamcmd();
             ServerStuff.ExtractServerResources(_ocServerInstallPath);
             ServerStuff.CheckifDirectoryexistsorcreateit(_ocServerInstallPath);
-            ServerStuff.InstallServer(_username, _password, _mainFolder, _steamauth, _mounts);
+            ServerStuff.InstallServer(_username, _password, _mainFolder, _mounts);
 
             ServerStuff.ExtractAndDelete(_mainFolder);
             ServerStuff.CreateNeededFiles(_mainFolder);
         }
 
-        public void SetStuff(string mainfolder, string ocinstall, string mounts, string password, bool steamauth, string username)
+        public void SetStuff(string mainfolder, string ocinstall, string mounts, string password, string username)
         {
             _mainFolder = mainfolder;
             _ocServerInstallPath = ocinstall;
             _mounts = mounts;
             _password = password;
-            _steamauth = steamauth;
             _username = username;
         }
     }
@@ -57,7 +55,6 @@ namespace steamdirectoryfinder.serverpart.code
         private static string _ocServerInstallPath;
         private readonly string _mounts;
         private readonly string _password;
-        private readonly bool _steamauth;
         private readonly string _username;
 
         public static class InstallerContext
@@ -65,13 +62,12 @@ namespace steamdirectoryfinder.serverpart.code
             public static string ServerDirectory { get; set; }
         }
 
-        public ServerStuff(string path, string username, string password, bool steamfun = false, string mounts = "")
+        public ServerStuff(string path, string username, string password, string mounts = "")
         {
             _ocServerInstallPath = path;
             _mainFolder = Directory.GetParent(path.TrimEnd('\\')).ToString();
             _username = username;
             _password = password;
-            _steamauth = steamfun;
             _mounts = mounts;
         }
 
@@ -170,7 +166,7 @@ namespace steamdirectoryfinder.serverpart.code
             ClientAndServer.Performtasks("7za.exe", "x addons.zip -o" + MiscFunctions.PutIntoQuotes(ass) + " -aoa");
         }
 
-        public static void InstallServer(string username, string password, string serverdirectory, bool steamauth,
+        public static void InstallServer(string username, string password, string serverdirectory,
             string mounts = "")
         {
             foreach (Process fub in Process.GetProcessesByName("steamcmd.exe"))
@@ -182,10 +178,8 @@ namespace steamdirectoryfinder.serverpart.code
                           " +app_update ";
             string currentdir = Directory.GetCurrentDirectory();
             string steamcmdbase = Path.Combine(currentdir, "steamcmd\\steamcmd.exe");
-            if (steamauth)
-            {
-                ClientAndServer.Performtasksi(steamcmdbase, " +login " + username + " " + password + " +quit");
-            }
+            //get auth token
+            ClientAndServer.Performtasksi(steamcmdbase, " +login " + username + " " + password + " +quit");
             Thread.Sleep(5000);
 
             InstallMounts( steamcmdbase, basecmd, endofcmd);
@@ -197,7 +191,7 @@ namespace steamdirectoryfinder.serverpart.code
             CheckifDirectoryexistsorcreateit(Directory.GetCurrentDirectory() + "\\steamcmd");
             DownloadSteamcmd();
             ExtractServerResources(_ocServerInstallPath);
-            InstallServer(_username, _password, _mainFolder, _steamauth, _mounts);
+            InstallServer(_username, _password, _mainFolder, _mounts);
             ExtractAndDelete(_mainFolder);
             CreateNeededFiles(_mainFolder);
         }

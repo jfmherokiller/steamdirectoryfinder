@@ -46,7 +46,7 @@ namespace steamdirectoryfinder
             {
                 selectedmounts += "hl2";
             }
-            Forminstance.SetStuff(_mainFolder, _ocServerInstallPath, selectedmounts, textBox2.Text, SteamAuth.Checked, textBox1.Text);
+            Forminstance.SetStuff(_mainFolder, _ocServerInstallPath, selectedmounts, textBox2.Text, textBox1.Text);
             Close();
         }
 

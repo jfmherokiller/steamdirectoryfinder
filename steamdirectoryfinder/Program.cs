@@ -114,14 +114,8 @@ namespace steamdirectoryfinder
                 case 5:
                     fun = fun.Trim('"');
                     fun = NativeMethods.Otherstuff.GetShortPathName(fun);
-                    if (args[4].Contains("-steamauth"))
-                    {
-                        Server(fun, args[2], args[3], true);
-                    }
-                    else
-                    {
-                        Server(fun, args[2], args[3], false, args[4]);
-                    }
+                    Server(fun, args[2], args[3], false, args[4]);
+                    
 
                     break;
 
@@ -206,14 +200,14 @@ namespace steamdirectoryfinder
                 Console.ReadLine();
                 new ServerFormStuffs().OpenServerForm(input);
             }
-            else if (username != null & password != null & !steamauth & mounts == "")
+            else if (username != null & password != null & mounts == "")
             {
                 ServerStuff fun = new ServerStuff(installpath, username, password);
                 fun.RunFun();
             }
-            else if (username != "" & password != "" & !steamauth & mounts != "")
+            else if (username != "" & password != "" & mounts != "")
             {
-                ServerStuff fun = new ServerStuff(installpath, username, password, false, mounts);
+                ServerStuff fun = new ServerStuff(installpath, username, password, mounts);
                 fun.RunFun();
             }
         }
