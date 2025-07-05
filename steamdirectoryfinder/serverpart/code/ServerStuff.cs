@@ -18,11 +18,9 @@ namespace steamdirectoryfinder.serverpart.code
 
         public void OpenServerForm(string installpath)
         {
-            using (ServerConfiguration serverform = new ServerConfiguration(installpath))
-            {
-                serverform.ShowDialog();
-                Dostuff();
-            }
+            using ServerConfiguration serverform = new ServerConfiguration(installpath);
+            serverform.ShowDialog();
+            Dostuff();
         }
 
         private void Dostuff()
@@ -83,27 +81,20 @@ namespace steamdirectoryfinder.serverpart.code
 
         public static void DownloadSourcemod()
         {
-            using (WebClient client = new WebClient())
-            {
-                client.DownloadFile("https://sm.alliedmods.net/smdrop/1.10/sourcemod-1.10.0-git6545-windows.zip", "sourcemod.zip");
-            }
+            using WebClient client = new WebClient();
+            client.DownloadFile("https://sm.alliedmods.net/smdrop/1.10/sourcemod-1.10.0-git6545-windows.zip", "sourcemod.zip");
         }
 
         public static void DownloadMetamod()
         {
-            using (WebClient client = new WebClient())
-            {
-                client.DownloadFile("https://mms.alliedmods.net/mmsdrop/1.10/mmsource-1.10.7-git971-windows.zip", "mmsource.zip");
-            }
+            using WebClient client = new WebClient();
+            client.DownloadFile("https://mms.alliedmods.net/mmsdrop/1.10/mmsource-1.10.7-git971-windows.zip", "mmsource.zip");
         }
 
         public static void DownloadSteamcmd()
         {
-            using (WebClient client = new WebClient())
-            {
-                client.DownloadFile("http://media.steampowered.com/installer/steamcmd.zip", "steamcmd.zip");
-
-            }
+            using WebClient client = new WebClient();
+            client.DownloadFile("http://media.steampowered.com/installer/steamcmd.zip", "steamcmd.zip");
         }
 
         public static void ExtractAndDelete(string theserverfolder)
