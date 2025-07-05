@@ -64,7 +64,7 @@ namespace steamdirectoryfinder
             if (mainCommand.Contains("-help"))
             {
                 Console.WriteLine(@"Usage!");
-                Console.WriteLine(@"-server ""<serverdirectory\obsidian>"" <username> <password>");
+                Console.WriteLine(@"-server ""<serverdirectory\obsidian>"" ""<username>"" ""<password>""");
                 Console.WriteLine(@"-client");
                 return;
             }
