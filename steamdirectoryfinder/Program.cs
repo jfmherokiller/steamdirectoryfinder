@@ -64,7 +64,7 @@ namespace steamdirectoryfinder
                 Console.WriteLine(@"Usage!");
                 Console.WriteLine(@"-server ""<serverdirectory\obsidian>"" ""<username>"" ""<password>""");
                 Console.WriteLine(@"To avoid errors when using complex usernames or passwords please encase them in '""' before proceeding.");
-                Console.WriteLine(@"e.g. -server ""<serverdirectory\obsidian>"" ""<username>"" <password>""");
+                Console.WriteLine(@"e.g. -server ""<serverdirectory\obsidian>"" ""<username>"" ""<password>""");
                 Console.WriteLine(@"-client");
                 return;
             }
