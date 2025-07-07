@@ -1,4 +1,4 @@
-﻿using Microsoft.Win32;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -85,19 +85,10 @@ namespace steamdirectoryfinder.clientpart.mountlocation
                 return null;
             }
 
-            List<string> thing =
-                File.ReadLines(steaminstallpath + @"\steamapps\libraryfolders.vdf")
-                    .Where(line => line.Contains(":"))
-                    .ToList();
-            for (int index = 0; index < thing.Count; index++)
-            {
-                string line = thing[index];
-                int pathlength = (line.LastIndexOf("\"", StringComparison.Ordinal) - line.IndexOf(":", StringComparison.Ordinal) - 1) + 2;
-                line = line.Substring(line.IndexOf(":", StringComparison.Ordinal) - 1, pathlength)
-                    .Replace(@"\\", Path.DirectorySeparatorChar.ToString());
-                thing[index] = line.ToLower();
-            }
-            return thing;
+            List<string> librarypaths = File.ReadAllLines(steaminstallpath + @"\steamapps\libraryfolders.vdf")
+                .Where(line => line.Contains("path")).Select(line => line.Split('"')[3])
+                .Select(line => line.Replace(@"\\", Path.DirectorySeparatorChar.ToString())).ToList();
+            return librarypaths;
         }
 
         private static string GetSteamInstallFromReg()
