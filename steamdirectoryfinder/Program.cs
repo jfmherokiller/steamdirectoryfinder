@@ -61,11 +61,18 @@ namespace steamdirectoryfinder
 
             if (mainCommand.Contains("-help"))
             {
-                Console.WriteLine(@"Usage!");
-                Console.WriteLine(@"-server ""<serverdirectory\obsidian>"" ""<username>"" ""<password>""");
+                Console.WriteLine(@"Available Commands:");
+                Console.WriteLine(@" ");
+                Console.WriteLine(@"For Clients:");
+                Console.WriteLine(@" ");
+                Console.WriteLine(@"Type -client");
+                Console.WriteLine(@" ");
+                Console.WriteLine(@"For Servers:");
+                Console.WriteLine(@" ");
                 Console.WriteLine(@"To avoid errors when using complex usernames or passwords please encase them in '""' before proceeding.");
-                Console.WriteLine(@"e.g. -server ""<serverdirectory\obsidian>"" ""<username>"" ""<password>""");
-                Console.WriteLine(@"-client");
+                Console.WriteLine(@" ");
+                Console.WriteLine(@"e.g. Type -server ""<serverdirectory\obsidian>"" ""<username>"" ""<password>""");
+
                 return;
             }
 
