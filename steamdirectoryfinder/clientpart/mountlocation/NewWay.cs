@@ -1,4 +1,4 @@
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -21,53 +21,47 @@ namespace steamdirectoryfinder.clientpart.mountlocation
             {
                 return new Tuple<string, string, List<string>>(ocinstallpath, source2007Path, gamepaths);
             }
+
             return null;
         }
 
         private static List<string> GetGamePaths(List<string> libraryPaths)
         {
-            List<string> storedlocations = new List<string>();
-            string[][] searchpaths = {
-        new[] {@"\steamapps\common\Half-Life 2\hl2", "hl2"},
-        new[] {@"\steamapps\common\Half-Life 2\episodic", "ep1"},
-        new[] {@"\steamapps\common\Half-Life 2\ep2", "ep2"},
-        new[] {@"\steamapps\common\Half-Life 2\lostcoast", "lostcoast"},
-        new[] {@"\steamapps\common\Half-Life 2\hl1", "hl1"},
-        new[] {@"\steamapps\common\Counter-Strike Source\cstrike", "css"},
-        new[] {@"\steamapps\common\Day of Defeat Source\dod", "dod"},
-        new[] {@"\steamapps\common\Source SDK Base 2007", "2007"}
-    };
+            string[][] searchpaths =
+            {
+                new[] { @"\steamapps\common\Half-Life 2\hl2", "hl2" },
+                new[] { @"\steamapps\common\Half-Life 2\episodic", "ep1" },
+                new[] { @"\steamapps\common\Half-Life 2\ep2", "ep2" },
+                new[] { @"\steamapps\common\Half-Life 2\lostcoast", "lostcoast" },
+                new[] { @"\steamapps\common\Half-Life 2\hl1", "hl1" },
+                new[] { @"\steamapps\common\Counter-Strike Source\cstrike", "css" },
+                new[] { @"\steamapps\common\Day of Defeat Source\dod", "dod" },
+                new[] { @"\steamapps\common\Source SDK Base 2007", "2007" }
+            };
 
             Console.WriteLine("found " + libraryPaths.Count() + " library paths");
-            foreach (string libpath in libraryPaths)
-            {
-                foreach (string[] pathset in searchpaths)
-                {
-                    if (Directory.Exists(libpath + pathset[0]))
-                    {
-                        if (Directory.GetFiles(libpath + pathset[0]).Length != 0)
-                        {
-                            storedlocations.Add(libpath + pathset[0]);
-                        }
-                    }
-                }
-            }
+            List<string> storedlocations = (libraryPaths
+                .SelectMany(libpath => searchpaths, (libpath, pathset) => new { libpath, pathset })
+                .Where(@t => Directory.Exists(@t.libpath + @t.pathset[0]))
+                .Where(@t => Directory.GetFiles(@t.libpath + @t.pathset[0]).Length != 0)
+                .Select(@t => @t.libpath + @t.pathset[0])).Distinct().ToList();
 
             bool foundDupe = false;
             foreach (string[] pathset in searchpaths)
             {
                 List<string> loclist = storedlocations.Where(value => value.Contains(pathset[0])).ToList();
-                if (loclist.Count() > 1)
+                if (loclist.Count > 1)
                 {
-
                     Console.WriteLine("found duplicate paths for " + pathset[1] + ":");
                     foreach (string path in loclist)
                     {
                         Console.WriteLine(path);
                     }
+
                     foundDupe = true;
                 }
             }
+
             if (foundDupe)
             {
                 Console.WriteLine("Unable to continue. Please remove the duplicate files/folders and try again.");
@@ -84,10 +78,10 @@ namespace steamdirectoryfinder.clientpart.mountlocation
             {
                 return null;
             }
-
+            //Todo possibly check if the file exists before reading it and maybe replace this with a library or regex.
             List<string> librarypaths = File.ReadAllLines(steaminstallpath + @"\steamapps\libraryfolders.vdf")
                 .Where(line => line.Contains("path")).Select(line => line.Split('"')[3])
-                .Select(line => line.Replace(@"\\", Path.DirectorySeparatorChar.ToString())).ToList();
+                .Select(line => line.Replace(@"\\", Path.DirectorySeparatorChar.ToString())).Distinct().ToList();
             return librarypaths;
         }
 
@@ -95,21 +89,17 @@ namespace steamdirectoryfinder.clientpart.mountlocation
         {
             try
             {
-                using (RegistryKey key = Registry.CurrentUser.OpenSubKey("Software\\Valve\\Steam"))
+                using RegistryKey key = Registry.CurrentUser.OpenSubKey("Software\\Valve\\Steam");
+                if (key?.GetValue("SteamPath") is string path)
                 {
-                    if (key != null)
-                    {
-                        if (key.GetValue("SteamPath") is string path)
-                        {
-                            return path.Replace("/", Path.DirectorySeparatorChar.ToString());
-                        }
-                    }
+                    return path.Replace("/", Path.DirectorySeparatorChar.ToString());
                 }
             }
-            catch (Exception)  //just for demonstration...it's always best to handle specific exceptions
+            catch (Exception) //just for demonstration...it's always best to handle specific exceptions
             {
                 //react appropriately
             }
+
             return null;
         }
     }
