@@ -44,7 +44,7 @@ namespace steamdirectoryfinder.clientpart.mountlocation
                 .SelectMany(libpath => searchpaths, (libpath, pathset) => new { libpath, pathset })
                 .Where(@t => Directory.Exists(@t.libpath + @t.pathset[0]))
                 .Where(@t => Directory.GetFiles(@t.libpath + @t.pathset[0]).Length != 0)
-                .Select(@t => @t.libpath + @t.pathset[0])).ToList();
+                .Select(@t => @t.libpath + @t.pathset[0])).Distinct().ToList();
 
             bool foundDupe = false;
             foreach (string[] pathset in searchpaths)
@@ -81,7 +81,7 @@ namespace steamdirectoryfinder.clientpart.mountlocation
             //Todo possibly check if the file exists before reading it and maybe replace this with a library or regex.
             List<string> librarypaths = File.ReadAllLines(steaminstallpath + @"\steamapps\libraryfolders.vdf")
                 .Where(line => line.Contains("path")).Select(line => line.Split('"')[3])
-                .Select(line => line.Replace(@"\\", Path.DirectorySeparatorChar.ToString())).ToList();
+                .Select(line => line.Replace(@"\\", Path.DirectorySeparatorChar.ToString())).Distinct().ToList();
             return librarypaths;
         }
 
