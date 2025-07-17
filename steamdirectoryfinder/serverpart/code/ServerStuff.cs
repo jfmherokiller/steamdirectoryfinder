@@ -126,18 +126,17 @@ namespace steamdirectoryfinder.serverpart.code
                 }
             });
             // Copy Updated Steam Files from steamcmd to allow srcds to connect to steam servers
-            string steamdllsrc = @"steamcmd\steam.dll";
-            string steamdlldes = theserverfolder + "\\steam.dll";
-            string steamclientsrc = @"steamcmd\steamclient.dll";
-            string steamclientdes = theserverfolder + "\\steamclient.dll";
-            string tier0_ssrc = @"steamcmd\tier0_s.dll";
-            string tier0_sdes = theserverfolder + "\\tier0_s.dll";
-            string vstdlib_ssrc = @"steamcmd\vstdlib_s.dll";
-            string vstdlib_sdes = theserverfolder + "\\vstdlib_s.dll";
-            File.Copy(steamdllsrc, steamdlldes);
-            File.Copy(steamclientsrc, steamclientdes);
-            File.Copy(tier0_ssrc, tier0_sdes);
-            File.Copy(vstdlib_ssrc, vstdlib_sdes);
+            string[][] steamFiles = {
+                new[] { @"steamcmd\steam.dll", "\\steam.dll"},
+                new[] { @"steamcmd\steamclient.dll", "\\steamclient.dll" },
+                new[] { @"steamcmd\tier0_s.dll", "\\tier0_s.dll" },
+                new[] { @"steamcmd\vstdlib_s.dll", "\\vstdlib_s.dll" }
+            };
+            
+            foreach (var steamFile in steamFiles)
+            {
+                File.Copy(steamFile[0], theserverfolder + steamFile[1], true);
+            }
         }
 
         public static void ExtractServerResources(string ass)
