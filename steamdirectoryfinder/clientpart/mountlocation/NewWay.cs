@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace steamdirectoryfinder.clientpart.mountlocation
 {
@@ -40,11 +41,25 @@ namespace steamdirectoryfinder.clientpart.mountlocation
             };
 
             Console.WriteLine("found " + libraryPaths.Count() + " library paths");
-            List<string> storedlocations = (libraryPaths
-                .SelectMany(libpath => searchpaths, (libpath, pathset) => new { libpath, pathset })
-                .Where(@t => Directory.Exists(@t.libpath + @t.pathset[0]))
-                .Where(@t => Directory.GetFiles(@t.libpath + @t.pathset[0]).Length != 0)
-                .Select(@t => @t.libpath + @t.pathset[0])).Distinct().ToList();
+            List<string> storedlocations = new List<string>();
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                storedlocations = (libraryPaths
+                        .SelectMany(libpath => searchpaths, (libpath, pathset) => new { libpath, pathset })
+                        .Where(@t => Directory.Exists(@t.libpath + @t.pathset[0]))
+                        .Where(@t => Directory.GetFiles(@t.libpath + @t.pathset[0]).Length != 0)
+                        .Select(@t => @t.libpath + @t.pathset[0])).Select(x => x.ToLower())
+                    .Distinct().ToList();
+            }
+            else
+            {
+                storedlocations = (libraryPaths
+                        .SelectMany(libpath => searchpaths, (libpath, pathset) => new { libpath, pathset })
+                        .Where(@t => Directory.Exists(@t.libpath + @t.pathset[0]))
+                        .Where(@t => Directory.GetFiles(@t.libpath + @t.pathset[0]).Length != 0)
+                        .Select(@t => @t.libpath + @t.pathset[0]))
+                    .Distinct().ToList();
+            }
 
             bool foundDupe = false;
             foreach (string[] pathset in searchpaths)
@@ -78,10 +93,22 @@ namespace steamdirectoryfinder.clientpart.mountlocation
             {
                 return null;
             }
-            //Todo possibly check if the file exists before reading it and maybe replace this with a library or regex.
-            List<string> librarypaths = File.ReadAllLines(steaminstallpath + @"\steamapps\libraryfolders.vdf")
-                .Where(line => line.Contains("path")).Select(line => line.Split('"')[3])
-                .Select(line => line.Replace(@"\\", Path.DirectorySeparatorChar.ToString())).Distinct().ToList();
+            List<string> librarypaths = new List<string>();
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                //Todo possibly check if the file exists before reading it and maybe replace this with a library or regex.
+                librarypaths = File.ReadAllLines(steaminstallpath + @"\steamapps\libraryfolders.vdf")
+                    .Where(line => line.Contains("path")).Select(line => line.Split('"')[3])
+                    .Select(line => line.Replace(@"\\", Path.DirectorySeparatorChar.ToString())).Select(x => x.ToLower()).Distinct().ToList();
+            }
+            else
+            {
+                //Todo possibly check if the file exists before reading it and maybe replace this with a library or regex.
+                librarypaths = File.ReadAllLines(steaminstallpath + @"\steamapps\libraryfolders.vdf")
+                    .Where(line => line.Contains("path")).Select(line => line.Split('"')[3])
+                    .Select(line => line.Replace(@"\\", Path.DirectorySeparatorChar.ToString())).Distinct().ToList();
+            }
+
             return librarypaths;
         }
 
