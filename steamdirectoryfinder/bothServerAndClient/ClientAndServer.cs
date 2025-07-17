@@ -20,20 +20,9 @@ namespace steamdirectoryfinder.bothServerAndClient
 
         public static void ExtractResourcesForBoth()
         {
-            DownloadAndInstallVcRedist();
             File.WriteAllBytes("HLExtract.exe", Resources.HLExtract);
             File.WriteAllBytes("HLLib.dll", Resources.HLLib);
             File.WriteAllBytes("7za.exe", Resources._7za);
-        }
-
-        private static void DownloadAndInstallVcRedist()
-        {
-            using (WebClient client = new WebClient())
-            {
-                client.DownloadFile("https://download.microsoft.com/download/1/6/5/165255E7-1014-4D0A-B094-B6A430A6BFFC/vcredist_x86.exe", "vcredist_x86.exe");
-            }
-            var process = Process.Start("vcredist_x86.exe", "/q /norestart");
-            process?.WaitForExit();
         }
 
         public static void Performtasksi(string prog, string ass)
